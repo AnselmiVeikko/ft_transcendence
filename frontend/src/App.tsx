@@ -4,6 +4,7 @@ import viteLogo from '/vite.svg'
 import './App.css' */
 
 import React from 'react';
+import Landing from './components/Landing'
 
 const App: React.FC = () => {
   const handleButtonClick = (buttonName: string) => {
@@ -11,30 +12,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center p-4">
-      <div className="flex flex-col items-center gap-6">
-        <button
-          onClick={() => handleButtonClick('Button 1')}
-          className="px-8 py-4 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors duration-200 shadow-md hover:shadow-lg min-w-[200px]"
-        >
-          Button 1
-        </button>
-        
-        <button
-          onClick={() => handleButtonClick('Button 2')}
-          className="px-8 py-4 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors duration-200 shadow-md hover:shadow-lg min-w-[200px]"
-        >
-          Button 2
-        </button>
-        
-        <button
-          onClick={() => handleButtonClick('Button 3')}
-          className="px-8 py-4 bg-purple-500 text-white rounded-full hover:bg-purple-600 transition-colors duration-200 shadow-md hover:shadow-lg min-w-[200px]"
-        >
-          Button 3
-        </button>
-      </div>
-    </div>
+	<Landing ></Landing>
   );
 };
 
