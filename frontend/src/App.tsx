@@ -7,10 +7,6 @@ import React from 'react';
 import Landing from './components/Landing'
 
 const App: React.FC = () => {
-  const handleButtonClick = (buttonName: string) => {
-    console.log(`${buttonName} clicked`);
-  };
-
   return (
 	<Landing ></Landing>
   );
