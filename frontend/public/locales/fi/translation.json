@@ -1,0 +1,19 @@
+{
+  "already_registered": "Oletko jo rekisteröitynyt?",
+  "app_title": "Pong",
+  "create_account_message": "Luo tili pelataksesi",
+  "email": "Sähköpostiosoite",
+  "enter-email": "Kirjoita sähköpostiosoitteesi",
+  "enter-password": "Kirjoita salasanasi",
+  "enter-username": "Kirjoita käyttäjänimesi",
+  "landing_welcome_message": "Tervetuloa Pongiin!",
+  "change_language": "Vaihda kieli",
+  "language_en": "englanti",
+  "language_fi": "suomi",
+  "password": "Salasana",
+  "register": "Liity",
+  "registration_failed": "Rekisteröityminen epäonnistui",
+   "registration_success": "Rekisteröityminen onnistui",
+  "sign_in": "Kirjaudu sisään",
+  "username": "Käyttäjänimi"
+}

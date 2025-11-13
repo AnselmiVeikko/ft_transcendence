@@ -1,6 +1,6 @@
 import React from 'react';
 
-const App: React.FC = () => {
+const Menu = () => {
   const handleButtonClick = (buttonName: string) => {
     console.log(`${buttonName} clicked`);
   };
@@ -33,4 +33,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default Menu;

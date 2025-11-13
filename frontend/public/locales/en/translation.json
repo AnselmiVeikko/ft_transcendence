@@ -1,0 +1,19 @@
+{
+  "already_registered": "Already registered?",
+  "app_title": "My React App",
+  "create_account_message": "Create an account to play",
+  "email": "Email",
+  "enter-email": "Enter your email",
+  "enter-password": "Enter your password",
+  "enter-username": "Enter your username",
+  "landing_welcome_message": "Welcome to Pong!",
+  "change_language": "Change Language",
+  "language_en": "English",
+  "language_fi": "Finnish",
+  "password": "Password",
+  "register": "Get Started",
+  "registration_failed": "Registration failed",
+  "registration_success": "Registration successful",
+  "sign_in": "Sign in",
+  "username": "Username"
+}
