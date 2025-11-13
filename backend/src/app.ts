@@ -1,12 +1,15 @@
 import Fastify from "fastify";
 import dotenv from "dotenv"
+import registrationRoutes from "./routes/register";
 
 dotenv.config();
 
 const app = Fastify({ logger: true });
 const port = process.env.BACKEND_PORT? Number(process.env.BACKEND_PORT) : 3000
 
-app.get("/health", async() => ({Hello: "Backend is Running"}));
+app.get("/health", async() => ({Hello: "Backend is running...." }));
+
+app.register(registrationRoutes);
 
 const start = async () => {
 
@@ -23,3 +26,4 @@ const start = async () => {
 start();
 
 export default app;
+
