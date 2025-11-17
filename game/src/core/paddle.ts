@@ -4,6 +4,9 @@ export class Paddle {
   width = 12;
   height = 100;
   speed = 10;
+  defaultLife = 3;
+  life = 3;
+
 
   constructor(x: number, y: number) {
     this.x = x;
