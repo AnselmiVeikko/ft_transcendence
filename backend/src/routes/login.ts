@@ -1,5 +1,6 @@
 import { FastifyInstance } from "fastify";
-import  { prisma } from "../plugins/prisma";
+import { prisma } from "../plugins/prisma";
+import { bcrypt } from "bcrypt";
 
 export default async function loginRoutes(app: FastifyInstance) {
     app.post("/user/login", async (request, reply) => {
@@ -17,7 +18,10 @@ export default async function loginRoutes(app: FastifyInstance) {
         return reply.status(401).send({ error: "User does not exist"});
     }
 
-    if (existingUser.password !== password) {
+    //Check the crypted password
+    const passCheck = await bcrypt.compare(password, existingUser.password);
+
+    if (!passCheck) {
         return reply.status(401).send({ error: "Invalid credentials."});
     }
 
