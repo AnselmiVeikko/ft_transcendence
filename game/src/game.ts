@@ -4,68 +4,52 @@ import { checkCollision } from "./core/physics";
 import { aiMove } from "./AI/simpleAI";
 import { render } from "./renderer/canvasRenderer";
 
+type GameMode = "2P" | "AI" | null;
+
 export function initGame() {
   const canvas = document.getElementById("pongCanvas") as HTMLCanvasElement;
   const ctx = canvas.getContext("2d")!;
   const ball = new Ball(canvas.width / 2, canvas.height / 2);
   const leftPlayer = new Paddle(30, canvas.height / 2 - 50);
   const rightPlayer = new Paddle(canvas.width - 40, canvas.height / 2 - 50);
-  // const ai = new Paddle(canvas.width - 40, canvas.height / 2 - 50);
 
-  let isRunning2P = false;
-  let isRunningAI = false;
+  let gameMode: GameMode = null;
+  let gameMessage: string | null = null;
 
-  const keys = {
-    ArrowUp: false,
-    ArrowDown: false,
-    W: false,
-    S: false,
-  };
+  // Input handling
+  const keys: Record<string, boolean> = {};
 
-  window.addEventListener('keydown', (e) => {
-  	if (e.key === 'ArrowUp') keys.ArrowUp = true;
-  	if (e.key === 'ArrowDown') keys.ArrowDown = true;
-    if (e.key === 'w') keys.W = true;
-  	if (e.key === 's') keys.S = true;
-  });
+  function normalizeKey(key: string) {
+    if (key.length === 1) return key.toLowerCase();
+    return key;
+  }
 
-  window.addEventListener('keyup', (e) => {
-  	if (e.key === 'ArrowUp') keys.ArrowUp = false;
-  	if (e.key === 'ArrowDown') keys.ArrowDown = false;
-    if (e.key === 'w') keys.W = false;
-  	if (e.key === 's') keys.S = false;
-  });
+  window.addEventListener("keydown", (e) => keys[normalizeKey(e.key)] = true);
+  window.addEventListener("keyup", (e) => keys[normalizeKey(e.key)] = false);
 
+
+  // Paddle movement
   function moveLeftPaddle() {
-    if (keys.W && leftPlayer.y > 0) {
-      leftPlayer.moveUp();
-    }
-    if (keys.S && leftPlayer.y + leftPlayer.height < canvas.height) {
-      leftPlayer.moveDown();
-    }
+    if ((keys["w"]) && leftPlayer.y > 0) leftPlayer.moveUp();
+    if ((keys["s"]) && leftPlayer.y + leftPlayer.height < canvas.height) leftPlayer.moveDown();
   }
 
   function moveRightPaddle() {
-    if (keys.ArrowUp && rightPlayer.y > 0) {
-      rightPlayer.moveUp();
-    }
-    if (keys.ArrowDown && rightPlayer.y + rightPlayer.height < canvas.height) {
-      rightPlayer.moveDown();
-    }
+    if (keys["ArrowUp"] && rightPlayer.y > 0) rightPlayer.moveUp();
+    if (keys["ArrowDown"] && rightPlayer.y + rightPlayer.height < canvas.height) rightPlayer.moveDown();
   }
 
-  const playWAiBtn = document.getElementById("playWAiBtn")!;
-  const playBtn = document.getElementById("2PlayerBtn")!;
+  // Buttons
+  const playAIButton = document.getElementById("playAIButton")!;
+  const play2PButton = document.getElementById("play2PButton")!;
 
-  playWAiBtn.addEventListener("click", () => {
-    if (isRunning2P) isRunning2P = false;
-    isRunningAI = true;
+  playAIButton.addEventListener("click", () => {
+    gameMode = "AI";
     resetGame();
   });
 
-  playBtn.addEventListener("click", () => {
-    if (isRunningAI) isRunningAI = false;
-    isRunning2P = true;
+  play2PButton.addEventListener("click", () => {
+    gameMode = "2P";
     resetGame();
   });
 
@@ -73,25 +57,51 @@ export function initGame() {
     ball.reset(canvas.width, canvas.height);
     leftPlayer.y = canvas.height / 2 - leftPlayer.height / 2;
     rightPlayer.y = canvas.height / 2 - rightPlayer.height / 2;
+    leftPlayer.life = leftPlayer.defaultLife;
+    rightPlayer.life = rightPlayer.defaultLife;
+    gameMessage = null;
   }
 
-  loop()
-
-  function loop() {
-    if (isRunning2P || isRunningAI) {
+  function gameLoop() {
+  
+    if (gameMode) {
       ball.move();
       ball.bounce(canvas.height);
+
       checkCollision(ball, leftPlayer);
       checkCollision(ball, rightPlayer);
-      moveLeftPaddle()
-      if (isRunning2P) moveRightPaddle();
-      else aiMove(rightPlayer, ball, canvas.height);
 
-      if (ball.x < 0 || ball.x > canvas.width) ball.reset(canvas.width, canvas.height);
+      moveLeftPaddle();
 
+      if (gameMode === "2P") {
+        moveRightPaddle();
+      } else {
+        aiMove(rightPlayer, ball, canvas.height);
+      }
+
+      if (ball.x < 0) {
+        leftPlayer.life -= 1;
+        ball.reset(canvas.width, canvas.height);
+      }
+
+      if (ball.x > canvas.width) {
+        rightPlayer.life -= 1;
+        ball.reset(canvas.width, canvas.height);
+      }
+      if (leftPlayer.life <= 0) {
+        gameMessage = "Player 2 wins!";
+        gameMode = null;
+      }
+
+      if (rightPlayer.life <= 0) {
+        gameMessage = "Player 1 wins!";
+        gameMode = null;
+      }
     }
 
-    render(ctx, ball, leftPlayer, rightPlayer);
-    requestAnimationFrame(loop);
+    render(ctx, ball, leftPlayer, rightPlayer, gameMessage);
+    requestAnimationFrame(gameLoop);
   }
+
+  gameLoop();
 }
