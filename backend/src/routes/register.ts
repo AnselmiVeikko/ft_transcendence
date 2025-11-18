@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { prisma } from '../plugins/prisma';
-import { bcrypt } from "bcrypt";
+import bcrypt from "bcrypt";
 
 export default async function registrationRoutes(app: FastifyInstance) {
 	app.post("/user/registration", async (request, reply) => {
@@ -20,10 +20,12 @@ export default async function registrationRoutes(app: FastifyInstance) {
 		}
 
 		//Encrypt the password
-		const cryptedPass = await bcrypt.hash(password, 10);
+		const hashedPassword = await bcrypt.hash(password, 10);
 
 		const newUser = await prisma.user_info.create({
-			data: { username, email, cryptedPass },
+			data: { username,
+					email,
+					password: hashedPassword },
 		});
 
 		return reply.status(201).send({
