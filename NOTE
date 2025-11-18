@@ -55,14 +55,22 @@ ORM: Prisma
 	npm install @prisma/adapter-better-sqlite3 (Prisma adapter)
 	npm install better-sqlite3 (better-sqlite3 driver)
 
+REGISTRATION:
 
 curl -X POST http://localhost:3000/user/registration \
   -H "Content-Type: application/json" \
   -d '{"username":"john","email":"john@example.com","password":"secret123"}'
 
-docker compose --env-file .env --file docker-compose.yml up --build -d
+LOGIN:
 
-docker compose --env-file .env --file docker-compose.yml down
+curl -X POST http://localhost:3000/user/login \
+  -H "Content-Type: application/json" \
+  -d '{"username":"john","password":"secret123"}'
+
+docker compose --env-file ./backend/.env --file docker-compose.yml up --build -d
+
+
+docker compose --env-file ./backend/.env --file docker-compose.yml down
 
 
 How to run prisma studio inside the container:
