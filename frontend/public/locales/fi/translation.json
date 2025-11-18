@@ -1,4 +1,5 @@
 {
+  "all_fields_required": "Muistathan täyttää kaikki tiedot",
   "already_registered": "Oletko jo rekisteröitynyt?",
   "app_title": "Pong",
   "create_account_message": "Luo tili pelataksesi",
@@ -7,13 +8,18 @@
   "enter-password": "Kirjoita salasanasi",
   "enter-username": "Kirjoita käyttäjänimesi",
   "landing_welcome_message": "Tervetuloa Pongiin!",
+  "not_registered_yet": "Etkö ole vielä rekisteröitynyt?",
   "change_language": "Vaihda kieli",
   "language_en": "englanti",
   "language_fi": "suomi",
   "password": "Salasana",
+  "password_mismatch": "Salasanat eivät täsmää",
+  "confirm_password": "Vahvista salasana",
   "register": "Liity",
+  "register_here": "Luo tili",
   "registration_failed": "Rekisteröityminen epäonnistui",
-   "registration_success": "Rekisteröityminen onnistui",
-  "sign_in": "Kirjaudu sisään",
+  "registration_success": "Rekisteröityminen onnistui",
+  "log_in": "Kirjaudu sisään",
+  "log_in_play": "Kirjaudu sisään pelataksesi Pongia!",
   "username": "Käyttäjänimi"
 }

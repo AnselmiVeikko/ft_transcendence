@@ -29,8 +29,8 @@ const Landing = ()=> {
 						{t('create_account_message')}</h2>
 					<h3 className="text-sm sm:text-base lg:text-lg mb-6 sm:mb-8">
 						{t('already_registered')}{' '}
-						<Link to="/SignIn" className="text-blue-600 underline hover:text-blue-800">
-						{t('sign_in')}</Link>
+						<Link to="/login" className="text-blue-600 underline hover:text-blue-800">
+						{t('log_in')}</Link>
 					</h3>
 					
 					<RegisterForm />

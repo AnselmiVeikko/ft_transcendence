@@ -1,4 +1,5 @@
 {
+  "all_fields_required": "Please fill all the fields",
   "already_registered": "Already registered?",
   "app_title": "My React App",
   "create_account_message": "Create an account to play",
@@ -10,10 +11,15 @@
   "change_language": "Change Language",
   "language_en": "English",
   "language_fi": "Finnish",
+  "not_registered_yet": "Not registered yet?",
   "password": "Password",
+  "password_mismatch": "Passwords don't match",
+  "confirm_password": "Confirm password",
   "register": "Get Started",
+  "register_here": "Register here",
   "registration_failed": "Registration failed",
   "registration_success": "Registration successful",
-  "sign_in": "Sign in",
+  "log_in": "Log in",
+  "log_in_play": "Log in to play Pong!",
   "username": "Username"
 }
