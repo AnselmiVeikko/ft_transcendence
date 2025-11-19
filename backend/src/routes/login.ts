@@ -1,7 +1,9 @@
 import { FastifyInstance } from "fastify";
 import { prisma } from "../plugins/prisma";
-import { bcrypt } from "bcrypt";
-import { jwt } from "jsonwebtoken";
+import dotenv from "dotenv";
+import bcrypt from "bcrypt";
+
+dotenv.config();
 
 export default async function loginRoutes(app: FastifyInstance) {
     app.post("/user/login", async (request, reply) => {
@@ -26,15 +28,10 @@ export default async function loginRoutes(app: FastifyInstance) {
         return reply.status(401).send({ error: "Invalid credentials."});
     }
 
-    const token = jwt.sign(
-        { userId: existingUser.id, username: existingUser.username },
-        ProcessingInstruction.env.JWT_SECRET || "dev-secret",
-        { expiresIn: "7d" }
-    )
-
     return reply.status(200).send({
         user: "Login succesful",
-        token,
-        user: { id: existingUser.id, username: existingUser.username }
+
+    });
     });
 }
+
