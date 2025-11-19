@@ -9,3 +9,28 @@ services:
       - ./frontend:/frontend
       - /frontend/node_modules
     command: sh -c "npm install && npm run dev -- --host"
+
+  backend:
+    container_name: transcendence_be
+    restart: unless-stopped
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+      - "5555:5555"
+    command: >
+      sh -c "
+        npx prisma migrate dev --name init &&
+        npx prisma generate &&
+        npm run dev
+      "
+    networks:
+      - transcendence
+
+networks:
+  transcendence:
+    name: transcendence
+    driver: bridge
