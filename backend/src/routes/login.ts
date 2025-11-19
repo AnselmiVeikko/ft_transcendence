@@ -2,7 +2,6 @@ import { FastifyInstance } from "fastify";
 import { prisma } from "../plugins/prisma";
 import dotenv from "dotenv";
 import bcrypt from "bcrypt";
-//import jwt from "jsonwebtoken";
 
 dotenv.config();
 
@@ -12,13 +11,12 @@ export default async function loginRoutes(app: FastifyInstance) {
             username?: string;
             password?: string;
         };
-
+    
     if (!username || !password) {
         return reply.status(400).send({ error: "All fields are required."});
     }
 
     const existingUser = await prisma.user_info.findUnique({ where: { username }});
-
     if (!existingUser) {
         return reply.status(401).send({ error: "User does not exist"});
     }
