@@ -8,6 +8,8 @@ pnpm-debug.log*
 lerna-debug.log*
 
 .env
+migrations
+dev.db
 
 node_modules
 dist
