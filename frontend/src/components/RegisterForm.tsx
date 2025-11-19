@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useTranslation, Trans } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
 const RegisterForm = ()=> {
 
@@ -10,6 +11,7 @@ const RegisterForm = ()=> {
 
 	// 't' is for translation, 'i18n' is the instance for control
 	const { t, i18n } = useTranslation();
+	const navigate = useNavigate();
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -58,6 +60,13 @@ const RegisterForm = ()=> {
 				throw new Error(data.message || t('registration_failed'));
 			}
 			setSuccess(t('registration_success'));
+
+			setTimeout(() => 
+			{
+				navigate('/login');
+			}, 1500);
+
+
 		} catch (err: unknown) {
 			//const message = err instanceof Error ? err.message : String(err);
 			setError(/* message ||  */t('registration_failed'));

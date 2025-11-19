@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useTranslation, Trans } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
 const LogInForm = ()=> {
 
@@ -9,6 +10,7 @@ const LogInForm = ()=> {
 	const LogInAPI = 'http://localhost:3000/user/login';
 
 	const { t, i18n } = useTranslation();
+	const navigate = useNavigate();
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -50,6 +52,11 @@ const LogInForm = ()=> {
 				throw new Error(data.message || t('registration_failed'));
 			}
 			setSuccess(t('registration_success'));
+
+			setTimeout(() => {
+				navigate('/HomePage');
+			}, 1000);
+
 		} catch (err: unknown) {
 			setError(t('registration_failed'));
 		} finally {
