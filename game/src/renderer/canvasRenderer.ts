@@ -4,16 +4,16 @@ import { Paddle } from "../core/paddle";
 function renderLives(ctx: CanvasRenderingContext2D, leftLife: number, rightLife: number) {
   ctx.fillStyle = "red";
   ctx.font = "20px Arial";
-  ctx.textAlign = "start";
+  ctx.textAlign = "center";
 
   // Left player
   for (let i = 0; i < leftLife; i++) {
-    ctx.fillText("♥", 50 + i * 25, 30); // 25px is the distance between hearts
+    ctx.fillText("♥", ctx.canvas.width/4 + (i - 1) * 25, 30); // 25px is the distance between hearts
   }
 
   // Right player
   for (let i = 0; i < rightLife; i++) {
-    ctx.fillText("♥", ctx.canvas.width - 50 - i * 25, 30);
+    ctx.fillText("♥", ctx.canvas.width * 3 / 4 + (i - 1) * 25, 30);
   }
 }
 
