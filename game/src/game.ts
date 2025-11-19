@@ -1,7 +1,7 @@
 import { Ball } from "./core/ball";
 import { Paddle } from "./core/paddle";
 import { checkCollision } from "./core/physics";
-import { aiMove } from "./AI/simpleAI";
+import { AIPlayer } from "./AI/aiPlayer";
 import { render } from "./renderer/canvasRenderer";
 
 type GameMode = "2P" | "AI" | null;
@@ -18,6 +18,9 @@ export function initGame() {
 
   // Input handling
   const keys: Record<string, boolean> = {};
+
+  // create AI player
+  const aiPlayer = new AIPlayer(keys, canvas.height);
 
   function normalizeKey(key: string) {
     if (key.length === 1) return key.toLowerCase();
@@ -43,9 +46,19 @@ export function initGame() {
   const playAIButton = document.getElementById("playAIButton")!;
   const play2PButton = document.getElementById("play2PButton")!;
 
+  let aiInterval: number | null = null;
+
   playAIButton.addEventListener("click", () => {
     gameMode = "AI";
     resetGame();
+
+    // clear previous interval 
+    if (aiInterval) clearInterval(aiInterval);
+
+    // create an AI update once per second
+    aiInterval = window.setInterval(() => {
+      aiPlayer.update(ball, rightPlayer);
+    }, 1000);
   });
 
   play2PButton.addEventListener("click", () => {
@@ -71,13 +84,12 @@ export function initGame() {
       checkCollision(ball, leftPlayer);
       checkCollision(ball, rightPlayer);
 
-      moveLeftPaddle();
-
-      if (gameMode === "2P") {
-        moveRightPaddle();
-      } else {
-        aiMove(rightPlayer, ball, canvas.height);
+      if (gameMode === "AI") {
+        setInterval(() => aiPlayer.update(ball, rightPlayer), 1000);
       }
+
+      moveLeftPaddle();
+      moveRightPaddle();
 
       if (ball.x < 0) {
         leftPlayer.life -= 1;
