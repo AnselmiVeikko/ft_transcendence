@@ -6,7 +6,7 @@ const LogInForm = ()=> {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState('');
 	const [success, setSuccess] = useState('');
-	const LogInAPI = 'http://localhost:3000/api/login';
+	const LogInAPI = 'http://localhost:3000/user/login';
 
 	const { t, i18n } = useTranslation();
 
@@ -21,7 +21,7 @@ const LogInForm = ()=> {
 			//email: { value: string };
 			password: { value: string };
 		};
-		
+
 		const username = target.username.value;
 		//const email = target.email.value;
 		const password = target.password.value;

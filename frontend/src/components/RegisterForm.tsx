@@ -6,7 +6,7 @@ const RegisterForm = ()=> {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState('');
 	const [success, setSuccess] = useState('');
-	const RegisterAPI = 'http://localhost:3000/api/register';
+	const RegisterAPI = 'http://localhost:3000/user/registration';
 
 	// 't' is for translation, 'i18n' is the instance for control
 	const { t, i18n } = useTranslation();
@@ -23,7 +23,7 @@ const RegisterForm = ()=> {
 			password: { value: string };
 			confirmPassword: { value: string };
 		};
-		
+
 		const username = target.username.value;
 		const email = target.email.value;
 		const password = target.password.value;
