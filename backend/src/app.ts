@@ -14,12 +14,12 @@ async function buildServer() {
   await app.register(cors, {
     origin: "*"
   });
-
   app.get("/health", async () => ({ Hello: "Backend is running...." }));
 
   app.register(registrationRoutes);
   app.register(loginRoutes);
 }
+
 
 const start = async () => {
 
