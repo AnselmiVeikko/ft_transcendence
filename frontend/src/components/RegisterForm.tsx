@@ -1,15 +1,17 @@
 import { useState } from 'react'
 import { useTranslation, Trans } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
 const RegisterForm = ()=> {
 
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState('');
 	const [success, setSuccess] = useState('');
-	const RegisterAPI = 'http://localhost:3000/api/register';
+	const RegisterAPI = 'http://localhost:3000/user/registration';
 
 	// 't' is for translation, 'i18n' is the instance for control
 	const { t, i18n } = useTranslation();
+	const navigate = useNavigate();
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -23,7 +25,7 @@ const RegisterForm = ()=> {
 			password: { value: string };
 			confirmPassword: { value: string };
 		};
-		
+
 		const username = target.username.value;
 		const email = target.email.value;
 		const password = target.password.value;
@@ -58,6 +60,13 @@ const RegisterForm = ()=> {
 				throw new Error(data.message || t('registration_failed'));
 			}
 			setSuccess(t('registration_success'));
+
+			setTimeout(() => 
+			{
+				navigate('/login');
+			}, 1500);
+
+
 		} catch (err: unknown) {
 			//const message = err instanceof Error ? err.message : String(err);
 			setError(/* message ||  */t('registration_failed'));

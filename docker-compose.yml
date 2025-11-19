@@ -9,6 +9,8 @@ services:
       - ./frontend:/frontend
       - /frontend/node_modules
     command: sh -c "npm install && npm run dev -- --host"
+    networks:
+      - transcendence
 
   backend:
     container_name: transcendence_be
