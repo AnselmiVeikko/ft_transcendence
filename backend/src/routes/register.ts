@@ -3,7 +3,7 @@ import { prisma } from '../plugins/prisma';
 import bcrypt from "bcrypt";
 
 export default async function registrationRoutes(app: FastifyInstance) {
-	app.post("/user/registration", async (request, reply) => {
+	app.post("/api/user/registration", async (request, reply) => {
 		const { username, email, password } = request.body as {
 			username?: string;
 			email?: string;
@@ -11,12 +11,17 @@ export default async function registrationRoutes(app: FastifyInstance) {
 		};
 
 		if (!username || !email || !password) {
-			return reply.status(400).send({ error: "All fields are required." });
+			return reply.status(400).send({ message: "User information missing." });
 		}
 
-		const existingUser = await prisma.user_info.findUnique({ where: { email } });
-		if (existingUser) {
-			return reply.status(400).send({ error: "Email already registered." });
+		const isUsernameDup = await prisma.user_info.findUnique({ where: { username } });
+		if (isUsernameDup) {
+			return reply.status(400).send({ message: "Username " + username + " is already taken." });
+		}
+
+		const isEmailDup = await prisma.user_info.findUnique({ where: { email } });
+		if (isEmailDup) {
+			return reply.status(400).send({ message: "Email " + email + " already exists." });
 		}
 
 		//Encrypt the password
@@ -30,6 +35,7 @@ export default async function registrationRoutes(app: FastifyInstance) {
 
 		return reply.status(201).send({
 			message: "User registered successfully!",
+			// Do frontend need this??? *****
 			user: {
 				id: newUser.id,
 				username: newUser.username,
