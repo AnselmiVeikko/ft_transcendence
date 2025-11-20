@@ -1,7 +1,7 @@
 import { Ball } from "./core/ball";
 import { Paddle } from "./core/paddle";
 import { checkCollision } from "./core/physics";
-import { AIPlayer } from "./AI/aiPlayer";
+import { AIController  } from "./AI/aiController";
 import { render } from "./renderer/canvasRenderer";
 
 type GameMode = "2P" | "AI" | null;
@@ -18,9 +18,6 @@ export function initGame() {
 
   // Input handling
   const keys: Record<string, boolean> = {};
-
-  // create AI player
-  const aiPlayer = new AIPlayer(keys, canvas.height);
 
   function normalizeKey(key: string) {
     if (key.length === 1) return key.toLowerCase();
@@ -47,17 +44,19 @@ export function initGame() {
   const play2PButton = document.getElementById("play2PButton")!;
 
   let aiInterval: number | null = null;
+  let aiController: AIController  | null;
+  let stepDiff: number = 0;
 
   playAIButton.addEventListener("click", () => {
     gameMode = "AI";
     resetGame();
 
-    // clear previous interval 
-    if (aiInterval) clearInterval(aiInterval);
-
-    // create an AI update once per second
-    aiInterval = window.setInterval(() => {
-      aiPlayer.update(ball, rightPlayer);
+    // create AI controller
+    aiController = new AIController(keys, canvas.height);
+    aiInterval = window.setInterval(() => { 
+      if (aiController) {
+        stepDiff = aiController!.stepCalculate(ball, rightPlayer); 
+      }
     }, 1000);
   });
 
@@ -73,10 +72,40 @@ export function initGame() {
     leftPlayer.life = leftPlayer.defaultLife;
     rightPlayer.life = rightPlayer.defaultLife;
     gameMessage = null;
+
+    for (let k in keys) {
+      keys[k] = false;
+    }
+
+    // clear aiController
+    if (aiController) aiController = null;
+
+    // clear previous interval 
+    if (aiInterval) {
+      clearInterval(aiInterval);
+      aiInterval = null;
+    }
+  }
+
+  function checkState() {
+    if (ball.x < 0) {
+      ball.reset(canvas.width, canvas.height);
+      if (--leftPlayer.life <= 0) {
+        gameMessage = "Player 2 wins!";
+        gameMode = null;
+      }
+    }
+
+    if (ball.x > canvas.width) {
+      ball.reset(canvas.width, canvas.height);
+      if (--rightPlayer.life <= 0) {
+        gameMessage = "Player1 wins!";
+        gameMode = null;
+      }
+    }
   }
 
   function gameLoop() {
-  
     if (gameMode) {
       ball.move();
       ball.bounce(canvas.height);
@@ -84,33 +113,15 @@ export function initGame() {
       checkCollision(ball, leftPlayer);
       checkCollision(ball, rightPlayer);
 
-      if (gameMode === "AI") {
-        setInterval(() => aiPlayer.update(ball, rightPlayer), 1000);
+      if (aiController) {
+        stepDiff= aiController.control(keys, stepDiff);
       }
 
       moveLeftPaddle();
       moveRightPaddle();
 
-      if (ball.x < 0) {
-        leftPlayer.life -= 1;
-        ball.reset(canvas.width, canvas.height);
-      }
-
-      if (ball.x > canvas.width) {
-        rightPlayer.life -= 1;
-        ball.reset(canvas.width, canvas.height);
-      }
-      if (leftPlayer.life <= 0) {
-        gameMessage = "Player 2 wins!";
-        gameMode = null;
-      }
-
-      if (rightPlayer.life <= 0) {
-        gameMessage = "Player 1 wins!";
-        gameMode = null;
-      }
+      checkState();
     }
-
     render(ctx, ball, leftPlayer, rightPlayer, gameMessage);
     requestAnimationFrame(gameLoop);
   }
