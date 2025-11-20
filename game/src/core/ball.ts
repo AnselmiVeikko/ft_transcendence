@@ -2,8 +2,8 @@ export class Ball {
   x: number;
   y: number;
   radius = 8;
-  speedX = 5;
-  speedY = 3;
+  speedX = Math.random() + 2;
+  speedY = Math.random() + 2;
 
   constructor(x: number, y: number) {
     this.x = x;
