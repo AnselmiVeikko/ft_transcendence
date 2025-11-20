@@ -6,32 +6,28 @@ import bcrypt from "bcrypt";
 dotenv.config();
 
 export default async function loginRoutes(app: FastifyInstance) {
-    app.post("/user/login", async (request, reply) => {
-        const { username, password } = request.body as {
-            username?: string;
-            password?: string;
-        };
-    
-    if (!username || !password) {
-        return reply.status(400).send({ error: "All fields are required."});
-    }
+	app.post("/api/user/login", async (request, reply) => {
+		const { username, password } = request.body as {
+			username?: string;
+			password?: string;
+		};
 
-    const existingUser = await prisma.user_info.findUnique({ where: { username }});
-    if (!existingUser) {
-        return reply.status(401).send({ error: "User does not exist"});
-    }
+		if (!username || !password) {
+			return reply.status(400).send({ message: "Enter your username and password."});
+		}
 
-    //Check the crypted password
-    const passCheck = await bcrypt.compare(password, existingUser.password);
+		const existingUser = await prisma.user_info.findUnique({ where: { username }});
+		if (!existingUser) {
+			return reply.status(401).send({ message: "User does not exist"});
+		}
 
-    if (!passCheck) {
-        return reply.status(401).send({ error: "Invalid credentials."});
-    }
+		//Compare the crypted password
+		const passCheck = await bcrypt.compare(password, existingUser.password);
 
-    return reply.status(200).send({
-        user: "Login succesful",
+		if (!passCheck) {
+			return reply.status(401).send({ message: "Invalid Password."});
+		}
 
-    });
-    });
+		return reply.status(200).send({ message: "User registered successfully!" });
+	});
 }
-
