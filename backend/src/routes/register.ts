@@ -14,12 +14,12 @@ export default async function registrationRoutes(app: FastifyInstance) {
 			return reply.status(400).send({ message: "User information missing." });
 		}
 
-		const isUsernameDup = await prisma.user_info.findUnique({ where: { username } });
+		const isUsernameDup = await prisma.user_info.findUnique({ where: { userName: username } });
 		if (isUsernameDup) {
 			return reply.status(400).send({ message: "Username " + username + " is already taken." });
 		}
 
-		const isEmailDup = await prisma.user_info.findUnique({ where: { email } });
+		const isEmailDup = await prisma.user_info.findUnique({ where: { email: email } });
 		if (isEmailDup) {
 			return reply.status(400).send({ message: "Email " + email + " already exists." });
 		}
@@ -28,8 +28,8 @@ export default async function registrationRoutes(app: FastifyInstance) {
 		const hashedPassword = await bcrypt.hash(password, 10);
 
 		const newUser = await prisma.user_info.create({
-			data: { username,
-					email,
+			data: { userName: username,
+					email: email,
 					password: hashedPassword },
 		});
 
@@ -37,9 +37,8 @@ export default async function registrationRoutes(app: FastifyInstance) {
 			message: "User registered successfully!",
 			// Do frontend need this??? *****
 			user: {
-				id: newUser.id,
-				username: newUser.username,
-				email: newUser.email,
+				userId: newUser.userId,
+				username: newUser.userName,
 			},
 		});
 	});
