@@ -16,7 +16,7 @@ export default async function loginRoutes(app: FastifyInstance) {
 			return reply.status(400).send({ message: "Enter your username and password."});
 		}
 
-		const existingUser = await prisma.user_info.findUnique({ where: { username }});
+		const existingUser = await prisma.user_info.findUnique({ where: { userName: username }});
 		if (!existingUser) {
 			return reply.status(401).send({ message: "User does not exist"});
 		}
@@ -28,6 +28,14 @@ export default async function loginRoutes(app: FastifyInstance) {
 			return reply.status(401).send({ message: "Invalid Password."});
 		}
 
-		return reply.status(200).send({ message: "Login successful!" });
+		return reply.status(200).send({
+			message: "Login successful!",
+			// Do frontend need this??? *****
+			user: {
+				userId: existingUser.userId,
+				userName: existingUser.userName,
+			},
+
+		});
 	});
 }
