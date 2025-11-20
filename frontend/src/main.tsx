@@ -8,7 +8,7 @@ import App from './App.tsx'
 import './i18n.ts';
 import Landing from './components/Landing.tsx'
 import LogIn from './components/LogIn.tsx'
-import HomePage from './components/HomePage.tsx'
+import Menu from './components/Menu.tsx'
 
 const router = createBrowserRouter([
 	{
@@ -17,7 +17,7 @@ const router = createBrowserRouter([
 		children: [
 			{ path: "/", element: <Landing /> },
 			{ path: "/login", element: <LogIn /> },
-			{path: "/HomePage", element: <HomePage/>}
+			{ path: "/menu", element: <Menu/>},
 		],
 	},
 ]);
