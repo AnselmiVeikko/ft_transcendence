@@ -33,7 +33,7 @@ RUN npm install -g serve
 # Copy build output from stage 1
 COPY --from=builder /app/dist ./dist
 
-EXPOSE 5173
+EXPOSE 5174
 
 # Run the server
-CMD ["serve", "-s", "dist", "-l", "5173"]
+CMD ["serve", "-s", "dist", "-l", "5174"]
