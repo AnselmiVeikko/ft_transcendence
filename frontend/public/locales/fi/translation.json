@@ -7,6 +7,7 @@
   "enter-email": "Kirjoita sähköpostiosoitteesi",
   "enter-password": "Kirjoita salasanasi",
   "enter-username": "Kirjoita käyttäjänimesi",
+  "friends": "Kaverit",
   "landing_welcome_message": "Tervetuloa Pongiin!",
   "not_registered_yet": "Etkö ole vielä rekisteröitynyt?",
   "change_language": "Vaihda kieli",
@@ -21,5 +22,9 @@
   "registration_success": "Rekisteröityminen onnistui",
   "log_in": "Kirjaudu sisään",
   "log_in_play": "Kirjaudu sisään pelataksesi Pongia!",
+  "log_out": "Kirjaudu ulos",
+  "single_match": "Pelaa",
+  "stats": "Tilastot",
+  "tournament": "Turnaus",
   "username": "Käyttäjänimi"
 }

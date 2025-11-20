@@ -37,7 +37,7 @@ const LangSwitcher = ()=> {
   	}, [isMenuOpen]);
 
 	return (
-		<div className="absolute top-4 end-4 z-20"> 
+		<div className="absolute bottom-4 end-4 z-20"> 
 			<div className="relative" ref={menuRef}>
 				<button
 					className="flex items-center px-4 py-2 bg-white text-gray-800 font-medium rounded-full shadow-lg hover:bg-gray-100 transition duration-150 border border-gray-200"
@@ -47,7 +47,7 @@ const LangSwitcher = ()=> {
 					<span className="inline">{i18n.language.toUpperCase()}</span>
 				</button>
 				{isMenuOpen && (
-				<div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden">
+				<div className="absolute right-0 bottom-full mb-2 w-40 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden">
 						<button
 							onClick={() => handleLanguageChange('en')}
 							className={`w-full text-left px-4 py-2 hover:bg-gray-100 transition duration-150 ${
