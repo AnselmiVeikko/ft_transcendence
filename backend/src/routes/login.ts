@@ -28,6 +28,6 @@ export default async function loginRoutes(app: FastifyInstance) {
 			return reply.status(401).send({ message: "Invalid Password."});
 		}
 
-		return reply.status(200).send({ message: "User registered successfully!" });
+		return reply.status(200).send({ message: "Login successful!" });
 	});
 }
