@@ -49,16 +49,16 @@ const LogInForm = ()=> {
 			const data = await response.json();
 
 			if (!response.ok) {
-				throw new Error(data.message || t('registration_failed'));
+				throw new Error(data.message || t('login_failed'));
 			}
-			setSuccess(t('registration_success'));
+			setSuccess(t('login_success'));
 
 			setTimeout(() => {
 				navigate('/menu');
 			}, 1000);
 
 		} catch (err: unknown) {
-			setError(t('registration_failed'));
+			setError(t('login_failed'));
 		} finally {
 			setLoading(false);
 		}
@@ -121,7 +121,7 @@ const LogInForm = ()=> {
 					type="submit"
 					id="register"
 					name="register"
-					><span className="relative z-10">{t('log_in')}</span><span className="absolute inset-0 overflow-hidden rounded-md"><span className="absolute left-0 aspect-square w-full origin-center translate-x-full rounded-full bg-blue-600 transition-all duration-300 group-hover:translate-x-0 group-hover:scale-150"></span></span>
+					><span className="relative z-10">{t('log_in')}</span><span className="absolute inset-0 overflow-hidden rounded-md"><span className="absolute left-0 aspect-square w-full origin-center translate-x-full rounded-full bg-blue-600 transition-all duration-300 group-hover:-translate-x-0 group-hover:scale-150"></span></span>
 				</button>
 			</div>
 		</form>

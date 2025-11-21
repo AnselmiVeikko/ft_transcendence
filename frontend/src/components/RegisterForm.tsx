@@ -61,11 +61,9 @@ const RegisterForm = ()=> {
 			}
 			setSuccess(t('registration_success'));
 
-			setTimeout(() => 
-			{
-				navigate('/login');
+			setTimeout(() => {
+				navigate('/');
 			}, 1500);
-
 
 		} catch (err: unknown) {
 			//const message = err instanceof Error ? err.message : String(err);

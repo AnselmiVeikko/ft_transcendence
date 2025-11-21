@@ -15,7 +15,7 @@ const MenuCard = ({ title, colorClass, icon, onClick }: MenuCardProps) => (
     <button
         onClick={onClick}
         className={`w-full lg:w-60 lg:h-90 flex flex-col items-center justify-center p-6 
-                    text-white rounded-xl shadow-l transition duration-300 
+                    text-white rounded-xl shadow-lg transition duration-300 
                     transform hover:scale-[1.07] hover:shadow-xl ${colorClass}`}
     >
         <div className="text-4xl mb-3">{icon}</div>
@@ -43,10 +43,10 @@ const Menu = () => {
       start: 'bg-gradient-to-b from-indigo-700 to-blue-300 hover:bg-gradient-to-r hover:to-indigo-200',
       tournament: 'bg-gradient-to-b from-violet-700 to-blue-300 hover:bg-gradient-to-r hover:to-violet-200',
       stats: 'bg-gradient-to-b from-fuchsia-600 to-blue-300 hover:bg-gradient-to-r hover:to-fuchsia-200',
-  }
+  };
 
   return (
-    <div className="relative h-screen overflow-hidden"> 
+    <div className="relative h-screen overflow-hidden">
       <LangSwitcher />
       <Header
         appName="PONG"

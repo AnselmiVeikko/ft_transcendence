@@ -24,7 +24,7 @@ const Header = ({ appName, playerName, onFriendsClick, onLogout }: HeaderProps) 
     onLogout();
     setShowMenu(false);
   }
-	// 't' is for translation, 'i18n' is the instance for control
+  // 't' is for translation
   const { t } = useTranslation();
 
   return (
@@ -65,7 +65,8 @@ const Header = ({ appName, playerName, onFriendsClick, onLogout }: HeaderProps) 
         <nav className="sm:hidden flex flex-col items-end gap-2 relative">
           <button
             onClick={() => setShowMenu(!showMenu)}
-            className="text-white font-bold text-2xl hover:bg-white/10 p-2 rounded-lg "
+            className="text-white font-bold text-2xl hover:bg-white/10 p-2 rounded-lg"
+            aria-label={showMenu ? 'Close menu' : 'Open menu'}
           >
             {showMenu ? <GrClose /> : <GiHamburgerMenu />}
           </button>
@@ -79,7 +80,7 @@ const Header = ({ appName, playerName, onFriendsClick, onLogout }: HeaderProps) 
               
               <button
                 onClick={handleFriendsClick}
-                className="flex items-center gap-2 px-4 py-3 hover:bg-white/10 text-white font-semibold w-full text-left "
+                className="flex items-center gap-2 px-4 py-3 hover:bg-white/10 text-white font-semibold w-full text-left"
               >
                 <FaUserFriends className="w-5 h-5" />
                 <span>{t('friends')}</span>
