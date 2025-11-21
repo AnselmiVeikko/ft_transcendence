@@ -15,7 +15,7 @@ const MenuCard = ({ title, colorClass, icon, onClick }: MenuCardProps) => (
     <button
         onClick={onClick}
         className={`w-full lg:w-60 lg:h-90 flex flex-col items-center justify-center p-6 
-                    text-white rounded-xl shadow-l transition duration-300 
+                    text-white rounded-xl shadow-lg transition duration-300 
                     transform hover:scale-[1.07] hover:shadow-xl ${colorClass}`}
     >
         <div className="text-4xl mb-3">{icon}</div>
