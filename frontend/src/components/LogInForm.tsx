@@ -54,7 +54,7 @@ const LogInForm = ()=> {
 			setSuccess(t('registration_success'));
 
 			setTimeout(() => {
-				navigate('/HomePage');
+				navigate('/menu');
 			}, 1000);
 
 		} catch (err: unknown) {
@@ -71,11 +71,11 @@ const LogInForm = ()=> {
 					{error}
 				</div>
 			)}
-			{success && (
+			{/* {success && (
 				<div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
 					{success}
 				</div>
-			)}
+			)} */}
 			<div className="space-y-4">
 				<div>
 					<label htmlFor="username" className="block text-left text-sm font-medium mb-2">
