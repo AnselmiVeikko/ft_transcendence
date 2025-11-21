@@ -1,35 +1,42 @@
-import { FastifyInstance } from "fastify";
+import  bcrypt  from "bcrypt";
+import  jwt  from "jsonwebtoken";
+import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import { prisma } from "../plugins/prisma";
-import { bcrypt } from "bcrypt";
-import { jwt } from "jsonwebtoken";
 import { loginSuccess } from "../utils/responses";
+import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox"; //Tool to enforce strict types
+import { LoginBodySchema, LoginResponseSchema, ErrorResponseSchema } from "../schemas/user"
 
 export default async function loginRoutes(app: FastifyInstance) {
-    app.post("/user/login", async (request, reply) => {
-        const { username, password } = request.body as {
-            username?: string;
-            password?: string;
-        };
+    app.withTypeProvider<TypeBoxTypeProvider>().post(
+        "/user/login",
+        {
+            schema: {
+                body: LoginBodySchema,
+                response: {
+                    200: LoginResponseSchema,
+                    400: ErrorResponseSchema,
+                    401: ErrorResponseSchema,
+                },
+            },
+        },
+        async (request: FastifyRequest, reply: FastifyReply) => {
+        const { username, password } = request.body;
     
-    if (!username || !password) {
-        return reply.status(400).send({ error: "All fields are required."});
-    }
-
-    const existingUser = await prisma.user_info.findUnique({ where: { username }});
-    if (!existingUser) {
+    const user = await prisma.user_info.findUnique({ where: { username }});
+    if (!user) {
         return reply.status(401).send({ error: "User does not exist"});
     }
 
     //Check the crypted password
-    const passCheck = await bcrypt.compare(password, existingUser.password);
+    const passCheck = await bcrypt.compare(password, user.password);
 
     if (!passCheck) {
         return reply.status(401).send({ error: "Invalid credentials."});
     }
 
-    const token = jwt.sign(
-        { userId: existingUser.id, username: existingUser.username },
-        ProcessingInstruction.env.JWT_SECRET || "dev-secret",
+    const token = jwt.sign({
+        userId: user.id, username: user.username },
+        process.env.JWT_SECRET || "dev-secret",
         { expiresIn: "7d" }
     )
 
