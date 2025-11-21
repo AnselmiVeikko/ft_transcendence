@@ -1,7 +1,7 @@
 import { FastifyInstance } from "fastify";
 import { prisma } from "../plugins/prisma";
-import { bcrypt } from "bcrypt";
-import { jwt } from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 export default async function loginRoutes(app: FastifyInstance) {
     app.post("/user/login", async (request, reply) => {
@@ -34,7 +34,7 @@ export default async function loginRoutes(app: FastifyInstance) {
         secure: process.env.NODE_ENV === "production",
         sameSite: "lax",
         path: "/",
-        maxAge: 7 * 24 * 60 * 60
+        maxAge: 7 * 24 * 60 * 60 //7 (days), 24 (hours), 60 (minutes), 60 (seconds) = 7 days in seconds
         })
         .status(200)
         .send({ message:"Login succesful", user: { id: existingUser.id, username: existingUser.username } });
