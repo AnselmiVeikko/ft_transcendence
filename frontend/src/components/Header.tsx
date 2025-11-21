@@ -80,7 +80,7 @@ const Header = ({ appName, playerName, onFriendsClick, onLogout }: HeaderProps) 
               
               <button
                 onClick={handleFriendsClick}
-                className="flex items-center gap-2 px-4 py-3 hover:bg-white/10 text-white font-semibold w-full text-left "
+                className="flex items-center gap-2 px-4 py-3 hover:bg-white/10 text-white font-semibold w-full text-left"
               >
                 <FaUserFriends className="w-5 h-5" />
                 <span>{t('friends')}</span>
