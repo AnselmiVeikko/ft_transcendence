@@ -1,5 +1,5 @@
 services:
-  game-module:
+  game:
     image: node:20-alpine
     container_name: pong-game
     working_dir: /game
