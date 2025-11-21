@@ -61,8 +61,7 @@ const RegisterForm = ()=> {
 			}
 			setSuccess(t('registration_success'));
 
-			setTimeout(() => 
-			{
+			setTimeout(() => {
 				navigate('/');
 			}, 1500);
 
