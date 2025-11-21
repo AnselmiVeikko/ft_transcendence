@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { prisma } from '../plugins/prisma';
-import { bcrypt } from "bcrypt";
+import bcrypt  from "bcrypt";
 
 export default async function registrationRoutes(app: FastifyInstance) {
 	app.post("/user/registration", async (request, reply) => {
