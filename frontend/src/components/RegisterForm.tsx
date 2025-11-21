@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useTranslation, Trans } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
 const RegisterForm = ()=> {
 
@@ -10,6 +11,7 @@ const RegisterForm = ()=> {
 
 	// 't' is for translation, 'i18n' is the instance for control
 	const { t, i18n } = useTranslation();
+	const navigate = useNavigate();
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -58,6 +60,11 @@ const RegisterForm = ()=> {
 				throw new Error(data.message || t('registration_failed'));
 			}
 			setSuccess(t('registration_success'));
+
+			setTimeout(() => {
+				navigate('/');
+			}, 1500);
+
 		} catch (err: unknown) {
 			//const message = err instanceof Error ? err.message : String(err);
 			setError(/* message ||  */t('registration_failed'));
@@ -131,11 +138,11 @@ const RegisterForm = ()=> {
 						placeholder={t('confirm_password')}
 					/>
 				</div>
-				<button className="group relative z-0 h-12 overflow-hidden overflow-x-hidden rounded-md bg-neutral-950 px-8 py-2 text-neutral-50"
+				<button className="group relative z-0 h-12 overflow-hidden overflow-x-hidden rounded-md bg-linear-to-br from-blue-500 to-indigo-500 px-8 py-2 text-neutral-50 transform hover:scale-[1.10] duration-300"
 					type="submit"
 					id="register"
 					name="register"
-					><span className="relative z-10">{t('register')}</span><span className="absolute inset-0 overflow-hidden rounded-md"><span className="absolute left-0 aspect-square w-full origin-center translate-x-full rounded-full bg-blue-500 transition-all duration-500 group-hover:-translate-x-0 group-hover:scale-150"></span></span>
+					><span className="relative z-10">{t('register')}</span><span className="absolute inset-0 overflow-hidden rounded-md"><span className="absolute left-0 aspect-square w-full origin-center translate-x-full rounded-full bg-blue-600 transition-all duration-300 group-hover:-translate-x-0 group-hover:scale-150"></span></span>
 				</button>
 			</div>
 		</form>
