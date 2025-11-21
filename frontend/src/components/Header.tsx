@@ -24,7 +24,7 @@ const Header = ({ appName, playerName, onFriendsClick, onLogout }: HeaderProps) 
     onLogout();
     setShowMenu(false);
   }
-	// 't' is for translation, 'i18n' is the instance for control
+  // 't' is for translation
   const { t } = useTranslation();
 
   return (
