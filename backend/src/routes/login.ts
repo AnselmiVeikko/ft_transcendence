@@ -2,6 +2,7 @@ import { FastifyInstance } from "fastify";
 import { prisma } from "../plugins/prisma";
 import { bcrypt } from "bcrypt";
 import { jwt } from "jsonwebtoken";
+import { loginSuccess } from "../utils/responses";
 
 export default async function loginRoutes(app: FastifyInstance) {
     app.post("/user/login", async (request, reply) => {
@@ -32,9 +33,6 @@ export default async function loginRoutes(app: FastifyInstance) {
         { expiresIn: "7d" }
     )
 
-    return reply.status(200).send({
-        user: "Login succesful",
-        token,
-        user: { id: existingUser.id, username: existingUser.username }
+    return reply.status(200).send(loginSuccess(user, token));
     });
 }
