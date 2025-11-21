@@ -63,7 +63,7 @@ const RegisterForm = ()=> {
 
 			setTimeout(() => 
 			{
-				navigate('/login');
+				navigate('/');
 			}, 1500);
 
 
