@@ -37,7 +37,7 @@ const LangSwitcher = ()=> {
   	}, [isMenuOpen]);
 
 	return (
-		<div className="absolute bottom-4 end-4 z-20"> 
+		<div className="absolute bottom-4 end-4 z-20">
 			<div className="relative" ref={menuRef}>
 				<button
 					className="flex items-center px-4 py-2 bg-white text-gray-800 font-medium rounded-full shadow-lg hover:bg-gray-100 transition duration-150 border border-gray-200"
