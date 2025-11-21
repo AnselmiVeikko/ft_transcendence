@@ -6,17 +6,17 @@ import './index.css'
 
 import App from './App.tsx'
 import './i18n.ts';
-import Landing from './components/Landing.tsx'
 import LogIn from './components/LogIn.tsx'
 import Menu from './components/Menu.tsx'
+import Register from './components/Register.tsx'
 
 const router = createBrowserRouter([
 	{
 		path: "/",
 		element: <App />,
 		children: [
-			{ path: "/", element: <Landing /> },
-			{ path: "/login", element: <LogIn /> },
+			{ path: "/", element: <LogIn /> },
+			{ path: "/register", element: <Register /> },
 			{ path: "/menu", element: <Menu/>},
 		],
 	},
