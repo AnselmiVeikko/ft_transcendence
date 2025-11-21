@@ -65,7 +65,6 @@ const RegisterForm = ()=> {
 				navigate('/');
 			}, 1500);
 
-
 		} catch (err: unknown) {
 			//const message = err instanceof Error ? err.message : String(err);
 			setError(/* message ||  */t('registration_failed'));
