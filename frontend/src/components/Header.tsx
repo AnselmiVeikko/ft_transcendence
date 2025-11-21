@@ -65,7 +65,7 @@ const Header = ({ appName, playerName, onFriendsClick, onLogout }: HeaderProps) 
         <nav className="sm:hidden flex flex-col items-end gap-2 relative">
           <button
             onClick={() => setShowMenu(!showMenu)}
-            className="text-white font-bold text-2xl hover:bg-white/10 p-2 rounded-lg "
+            className="text-white font-bold text-2xl hover:bg-white/10 p-2 rounded-lg"
             aria-label={showMenu ? 'Close menu' : 'Open menu'}
           >
             {showMenu ? <GrClose /> : <GiHamburgerMenu />}
