@@ -1,11 +1,14 @@
 import Fastify from "fastify";
 import dotenv from "dotenv"
 import registrationRoutes from "./routes/register";
+import fastifyCookie from "fastify-cookie";
 
 dotenv.config();
 
 const app = Fastify({ logger: true });
 const port = process.env.BACKEND_PORT? Number(process.env.BACKEND_PORT) : 3000
+
+app.register (fastifyCookie, { secret: process.env.COOKIE_SECRET });
 
 app.get("/health", async() => ({Hello: "Backend is running...." }));
 
