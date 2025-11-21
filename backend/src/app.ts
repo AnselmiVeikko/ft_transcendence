@@ -1,10 +1,11 @@
 import Fastify from "fastify";
 import dotenv from "dotenv"
 import registrationRoutes from "./routes/register";
+import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 
 dotenv.config();
 
-const app = Fastify({ logger: true });
+const app = Fastify({ logger: true }).withTypeProvider<TypeBoxTypeProvider>();
 const port = process.env.BACKEND_PORT? Number(process.env.BACKEND_PORT) : 3000
 
 app.get("/health", async() => ({Hello: "Backend is running...." }));

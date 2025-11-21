@@ -1,15 +1,15 @@
 import  bcrypt  from "bcrypt";
 import  jwt  from "jsonwebtoken";
 import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
+import { Static } from "@sinclair/typebox";
 import { prisma } from "../plugins/prisma";
 import { loginSuccess } from "../utils/responses";
-import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox"; //Tool to enforce strict types
 import { LoginBodySchema, LoginResponseSchema, ErrorResponseSchema } from "../schemas/user"
 
+type LoginRequest = FastifyRequest<{ Body: Static<typeof LoginBodySchema> }>;
+
 export default async function loginRoutes(app: FastifyInstance) {
-    app.withTypeProvider<TypeBoxTypeProvider>().post(
-        "/user/login",
-        {
+    app.post( "/user/login", {
             schema: {
                 body: LoginBodySchema,
                 response: {
@@ -19,7 +19,7 @@ export default async function loginRoutes(app: FastifyInstance) {
                 },
             },
         },
-        async (request: FastifyRequest, reply: FastifyReply) => {
+        async (request: LoginRequest, reply: FastifyReply) => {
         const { username, password } = request.body;
     
     const user = await prisma.user_info.findUnique({ where: { username }});
