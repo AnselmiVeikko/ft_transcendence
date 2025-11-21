@@ -46,7 +46,7 @@ const Menu = () => {
   };
 
   return (
-    <div className="relative h-screen overflow-hidden"> 
+    <div className="relative h-screen overflow-hidden">
       <LangSwitcher />
       <Header
         appName="PONG"
