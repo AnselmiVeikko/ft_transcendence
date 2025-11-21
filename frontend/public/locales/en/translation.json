@@ -12,6 +12,8 @@
   "change_language": "Change Language",
   "language_en": "English",
   "language_fi": "Finnish",
+  "login_failed": "Login failed",
+  "login_success": "Logged in succesfully",
   "not_registered_yet": "Not registered yet?",
   "password": "Password",
   "password_mismatch": "Passwords don't match",

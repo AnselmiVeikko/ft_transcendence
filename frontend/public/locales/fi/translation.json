@@ -13,6 +13,8 @@
   "change_language": "Vaihda kieli",
   "language_en": "englanti",
   "language_fi": "suomi",
+  "login_fail": "Sisäänkirjautuminen epäonnistui",
+  "login_success": "Sisäänkirjautuminen onnistui",
   "password": "Salasana",
   "password_mismatch": "Salasanat eivät täsmää",
   "confirm_password": "Vahvista salasana",
