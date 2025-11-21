@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pong game</title>
+  </head>
+  <body class="flex flex-col items-center justify-center h-screen bg-gray-900 text-white">
+    <h1 class="text-3xl font-bold mb-6">Pong Game</h1>
+    <div class="flex gap-4">
+      <button id="play2PButton" class="px-4 py-2 bg-green-500 rounded hover:bg-green-600">
+        2 Players
+      </button>
+      <button id="playAIButton" class="px-4 py-2 bg-green-500 rounded hover:bg-green-600">
+        Play with AI
+      </button>
+    </div>
+    <canvas id="pongCanvas" width="800" height="600" class="border-2 border-gray-600 mt-6"></canvas>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
