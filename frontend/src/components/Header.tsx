@@ -66,6 +66,7 @@ const Header = ({ appName, playerName, onFriendsClick, onLogout }: HeaderProps) 
           <button
             onClick={() => setShowMenu(!showMenu)}
             className="text-white font-bold text-2xl hover:bg-white/10 p-2 rounded-lg "
+            aria-label={showMenu ? 'Close menu' : 'Open menu'}
           >
             {showMenu ? <GrClose /> : <GiHamburgerMenu />}
           </button>
