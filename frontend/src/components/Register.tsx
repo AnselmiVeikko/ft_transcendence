@@ -5,7 +5,7 @@ import LangSwitcher from './LangSwitcher.tsx'
 import RegisterForm from './RegisterForm.tsx'
 import PongBG from '../../public/PongBG.png'
 
-const Landing = ()=> {
+const Register = ()=> {
 	const [username, setUsername] = useState('')
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
@@ -24,12 +24,12 @@ const Landing = ()=> {
 				<div className="flex-1 lg:w-1/2 bg-white flex items-center justify-center p-4 sm:p-6 lg:p-8">
 				<div className="text-center w-full max-w-md">
 					<h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 sm:mb-6 lg:mb-8">
-						{t('landing_welcome_message')}</h1>
-					<h2 className="text-xl sm:text-2xl lg:text-3xl mb-4 sm:mb-6 lg:mb-8">
-						{t('create_account_message')}</h2>
+						{t('create_account_message')}</h1>
+					{/* <h2 className="text-xl sm:text-2xl lg:text-3xl mb-4 sm:mb-6 lg:mb-8">
+						{t('create_account_message')}</h2> */}
 					<h3 className="text-sm sm:text-base lg:text-lg mb-6 sm:mb-8">
 						{t('already_registered')}{' '}
-						<Link to="/login" className="text-blue-600 underline hover:text-blue-800">
+						<Link to="/" className="text-blue-600 underline hover:text-blue-800">
 						{t('log_in')}</Link>
 					</h3>
 					
@@ -40,4 +40,4 @@ const Landing = ()=> {
 	)
 }
 
-export default Landing;
+export default Register;
