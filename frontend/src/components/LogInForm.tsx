@@ -49,16 +49,16 @@ const LogInForm = ()=> {
 			const data = await response.json();
 
 			if (!response.ok) {
-				throw new Error(data.message || t('registration_failed'));
+				throw new Error(data.message || t('login_failed'));
 			}
-			setSuccess(t('registration_success'));
+			setSuccess(t('login_success'));
 
 			setTimeout(() => {
 				navigate('/menu');
 			}, 1000);
 
 		} catch (err: unknown) {
-			setError(t('registration_failed'));
+			setError(t('login_failed'));
 		} finally {
 			setLoading(false);
 		}
