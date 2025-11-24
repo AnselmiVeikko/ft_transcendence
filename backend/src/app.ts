@@ -1,12 +1,13 @@
 import Fastify from "fastify";
 import dotenv from "dotenv";
 import registrationRoutes from "./routes/register";
+import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import loginRoutes from "./routes/login";
 import cors from "@fastify/cors";
 
 dotenv.config();
 
-const app = Fastify({ logger: true });
+const app = Fastify({ logger: true }).withTypeProvider<TypeBoxTypeProvider>();
 const port = process.env.BACKEND_PORT? Number(process.env.BACKEND_PORT) : 3000
 
 async function buildServer() {
