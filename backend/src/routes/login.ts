@@ -31,7 +31,7 @@ export default async function loginRoutes(app: FastifyInstance) {
 		return reply.status(200).send({
 			message: "Login successful!",
 			// Do frontend need this??? *****
-			user: {
+			data: {
 				userId: existingUser.userId,
 				userName: existingUser.userName,
 			},
