@@ -36,7 +36,7 @@ export default async function registrationRoutes(app: FastifyInstance) {
 		return reply.status(201).send({
 			message: "User registered successfully!",
 			// Do frontend need this??? *****
-			user: {
+			data: {
 				userId: newUser.userId,
 				username: newUser.userName,
 			},
