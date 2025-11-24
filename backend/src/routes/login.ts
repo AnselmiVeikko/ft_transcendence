@@ -1,5 +1,6 @@
 import  bcrypt  from "bcrypt";
 import  jwt  from "jsonwebtoken";
+import dotenv from "dotenv";
 import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import { Static } from "@sinclair/typebox";
 import { prisma } from "../plugins/prisma";
@@ -7,8 +8,6 @@ import { loginSuccess } from "../utils/responses";
 import { LoginBodySchema, LoginResponseSchema, ErrorResponseSchema } from "../schemas/user"
 
 type LoginRequest = FastifyRequest<{ Body: Static<typeof LoginBodySchema> }>;
-import dotenv from "dotenv";
-import bcrypt from "bcrypt";
 
 dotenv.config();
 
