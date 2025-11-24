@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@fastify/type-provider-typebox": "^6.1.0",
     "@prisma/adapter-better-sqlite3": "^6.19.0",
     "@prisma/client": "^6.19.0",
     "better-sqlite3": "^12.4.1",
