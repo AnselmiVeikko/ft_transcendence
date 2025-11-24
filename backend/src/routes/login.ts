@@ -10,36 +10,37 @@ type LoginRequest = FastifyRequest<{ Body: Static<typeof LoginBodySchema> }>;
 
 export default async function loginRoutes(app: FastifyInstance) {
     app.post( "/user/login", {
-            schema: {
-                body: LoginBodySchema,
-                response: {
-                    200: LoginResponseSchema,
-                    400: ErrorResponseSchema,
-                    401: ErrorResponseSchema,
-                },
-            },
-        },
-        async (request: LoginRequest, reply: FastifyReply) => {
-        const { username, password } = request.body;
+        schema: {
+               body: LoginBodySchema,
+               response: {
+                   200: LoginResponseSchema,
+                   400: ErrorResponseSchema,
+                   401: ErrorResponseSchema,
+               },
+           },
+    },
+    async (request: LoginRequest, reply: FastifyReply) => {
+    const { username, password } = request.body;
     
-    const user = await prisma.user_info.findUnique({ where: { username }});
-    if (!user) {
-        return reply.status(401).send({ error: "User does not exist"});
-    }
+        const user = await prisma.user_info.findUnique({ where: { username }});
+        if (!user) { 
+            return reply.status(401).send({ error: "User does not exist"});
+        }
 
-    //Check the crypted password
-    const passCheck = await bcrypt.compare(password, user.password);
+        //Check the crypted password
+        const passCheck = await bcrypt.compare(password, user.password);
 
-    if (!passCheck) {
-        return reply.status(401).send({ error: "Invalid credentials."});
-    }
+        if (!passCheck) {
+            return reply.status(401).send({ error: "Invalid credentials."});
+        }
 
-    const token = jwt.sign({
-        userId: user.id, username: user.username },
-        process.env.JWT_SECRET || "dev-secret",
-        { expiresIn: "7d" }
-    )
+        const token = jwt.sign({
+            userId: user.id, username: user.username },
+            process.env.JWT_SECRET || "dev-secret",
+            { expiresIn: "7d" }
+        )
 
-    return reply.status(200).send(loginSuccess(user, token));
+        return reply.status(200).send(loginSuccess(user, token));
+
     });
 }
