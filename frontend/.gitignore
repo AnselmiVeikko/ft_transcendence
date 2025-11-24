@@ -7,16 +7,10 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-.env
-migrations
-dev.db
-dev
-
 node_modules
 dist
 dist-ssr
 *.local
-/backend/generated/prisma
 
 # Editor directories and files
 .vscode/*
