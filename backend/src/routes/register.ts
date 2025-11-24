@@ -4,6 +4,7 @@ import { prisma } from '../plugins/prisma';
 import { Static } from "@sinclair/typebox";
 import { RegistrationSuccess } from "../utils/responses";
 import { RegisterBodySchema, RegisterResponseSchema, ErrorResponseSchema } from "../schemas/user";
+import bcrypt from "bcrypt";
 
 type RegisterRequest = FastifyRequest<{ Body: Static<typeof RegisterBodySchema> }>;
 
@@ -27,10 +28,12 @@ export default async function registrationRoutes(app: FastifyInstance) {
 		}
 
 		//Encrypt the password
-		const cryptedPass = await bcrypt.hash(password, 10);
+		const hashedPassword = await bcrypt.hash(password, 10);
 
 		const user = await prisma.user_info.create({
-			data: { username, email, cryptedPass },
+			data: { username,
+					email,
+					password: hashedPassword },
 		});
 
 		return reply.status(201).send(RegistrationSuccess(user));

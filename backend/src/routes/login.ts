@@ -7,6 +7,10 @@ import { loginSuccess } from "../utils/responses";
 import { LoginBodySchema, LoginResponseSchema, ErrorResponseSchema } from "../schemas/user"
 
 type LoginRequest = FastifyRequest<{ Body: Static<typeof LoginBodySchema> }>;
+import dotenv from "dotenv";
+import bcrypt from "bcrypt";
+
+dotenv.config();
 
 export default async function loginRoutes(app: FastifyInstance) {
     app.post( "/user/login", {
