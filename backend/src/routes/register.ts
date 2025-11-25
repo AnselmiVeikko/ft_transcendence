@@ -1,23 +1,25 @@
-import { FastifyInstance } from "fastify";
+import bcrypt  from "bcrypt";
+import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import { prisma } from '../plugins/prisma';
-import bcrypt from "bcrypt";
+import { Static } from "@sinclair/typebox";
+import { RegistrationSuccess } from "../utils/responses";
+import { RegisterBodySchema, RegisterResponseSchema, ErrorResponseSchema } from "../schemas/user";
+
+type RegisterRequest = FastifyRequest<{ Body: Static<typeof RegisterBodySchema> }>;
 
 export default async function registrationRoutes(app: FastifyInstance) {
-	app.post("/api/user/registration", async (request, reply) => {
-		const { username, email, password } = request.body as {
-			username?: string;
-			email?: string;
-			password?: string;
-		};
-
-		if (!username || !email || !password) {
-			return reply.status(400).send({ message: "User information missing." });
-		}
-
-		const isUsernameDup = await prisma.user_info.findUnique({ where: { userName: username } });
-		if (isUsernameDup) {
-			return reply.status(400).send({ message: "Username " + username + " is already taken." });
-		}
+	app.post( "/user/registration", {
+		schema: {
+			body: RegisterBodySchema,
+			response: {
+				201: RegisterResponseSchema,
+				400: ErrorResponseSchema,
+				401: ErrorResponseSchema,
+			},
+		},
+	},
+	async (request: RegisterRequest, reply: FastifyReply) => {
+	const { username, email, password } = request.body;
 
 		const isEmailDup = await prisma.user_info.findUnique({ where: { email: email } });
 		if (isEmailDup) {
@@ -27,19 +29,12 @@ export default async function registrationRoutes(app: FastifyInstance) {
 		//Encrypt the password
 		const hashedPassword = await bcrypt.hash(password, 10);
 
-		const newUser = await prisma.user_info.create({
-			data: { userName: username,
-					email: email,
+		const user = await prisma.user_info.create({
+			data: { username,
+					email,
 					password: hashedPassword },
 		});
 
-		return reply.status(201).send({
-			message: "User registered successfully!",
-			// Do frontend need this??? *****
-			data: {
-				userId: newUser.userId,
-				username: newUser.userName,
-			},
-		});
+		return reply.status(201).send(RegistrationSuccess(user));
 	});
 }
