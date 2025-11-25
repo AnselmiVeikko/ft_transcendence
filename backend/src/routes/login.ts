@@ -4,8 +4,9 @@ import dotenv from "dotenv";
 import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import { Static } from "@sinclair/typebox";
 import { prisma } from "../plugins/prisma";
-import loginSuccess from "../utils/responses";
-import LoginBodySchema, LoginResponseSchema, ErrorResponseSchema from "../schemas/user"
+import { loginSuccess } from "../utils/responses";
+import { LoginBodySchema, LoginResponseSchema, ErrorResponseSchema } from "../schemas/user";
+import { setCookies } from "../utils/auth";
 
 type LoginRequest = FastifyRequest<{ Body: Static<typeof LoginBodySchema> }>;
 
@@ -37,20 +38,7 @@ export default async function loginRoutes(app: FastifyInstance) {
             return reply.status(401).send({ error: "Invalid credentials."});
         }
 
-        const token = jwt.sign({
-            userId: user.id, username: user.username },
-            process.env.JWT_SECRET || "dev-secret",
-            { expiresIn: "7d" }
-        )
-
-    reply.setCookie("auth_token", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        path: "/",
-        maxAge: 7 * 24 * 60 * 60 //7 (days), 24 (hours), 60 (minutes), 60 (seconds) = 7 days in seconds
-        })
-        .status(200)
-        .send({ message:"Login succesful", user: { id: existingUser.id, username: existingUser.username } });
+    setCookies(reply, user.userId, user.username);
+    return reply.status(200).send(loginSuccess(user));
     });
 }
