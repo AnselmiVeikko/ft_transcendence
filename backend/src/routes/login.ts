@@ -13,23 +13,26 @@ type LoginRequest = FastifyRequest<{ Body: Static<typeof LoginBodySchema> }>;
 dotenv.config();
 
 export default async function loginRoutes(app: FastifyInstance) {
-    app.post("/user/login", async (request, reply) => {
-        const { username, password } = request.body as {
-            username?: string;
-            password?: string;
-        };
+    app.post( "/user/login", {
+        schema: {
+               body: LoginBodySchema,
+               response: {
+                   200: LoginResponseSchema,
+                   400: ErrorResponseSchema,
+                   401: ErrorResponseSchema,
+               },
+           },
+    },
+    async (request: LoginRequest, reply: FastifyReply) => {
+    const { username, password } = request.body;
 
-    if (!username || !password) {
-        return reply.status(400).send({ error: "All fields are required."});
-    }
+        const user = await prisma.user_info.findUnique({ where: { username }});
+        if (!user) {
+            return reply.status(401).send({ error: "User does not exist"});
+        }
 
-    const existingUser = await prisma.user_info.findUnique({ where: { username }});
-    if (!existingUser) {
-        return reply.status(401).send({ error: "User does not exist"});
-    }
-
-    		//Compare the crypted password
-    		const passCheck = await bcrypt.compare(password, user.password);
+        //Check the crypted password
+        const passCheck = await bcrypt.compare(password, user.password);
 
         if (!passCheck) {
             return reply.status(401).send({ error: "Invalid credentials."});

@@ -21,9 +21,9 @@ export default async function registrationRoutes(app: FastifyInstance) {
 	async (request: RegisterRequest, reply: FastifyReply) => {
 	const { username, email, password } = request.body;
 
-		const isEmailDup = await prisma.user_info.findUnique({ where: { email: email } });
-		if (isEmailDup) {
-			return reply.status(400).send({ message: "Email " + email + " already exists." });
+		const existingUser = await prisma.user_info.findUnique({ where: { email } });
+		if (existingUser) {
+			return reply.status(400).send({ error: "Email already registered." });
 		}
 
 		//Encrypt the password
