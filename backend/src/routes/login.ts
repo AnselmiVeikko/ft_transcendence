@@ -5,7 +5,8 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import { Static } from "@sinclair/typebox";
 import { prisma } from "../plugins/prisma";
 import { loginSuccess } from "../utils/responses";
-import { LoginBodySchema, LoginResponseSchema, ErrorResponseSchema } from "../schemas/user"
+import { LoginBodySchema, LoginResponseSchema, ErrorResponseSchema } from "../schemas/user";
+import { setCookies } from "../utils/auth";
 
 type LoginRequest = FastifyRequest<{ Body: Static<typeof LoginBodySchema> }>;
 
@@ -37,13 +38,7 @@ export default async function loginRoutes(app: FastifyInstance) {
             return reply.status(401).send({ error: "Invalid credentials."});
         }
 
-        const token = jwt.sign({
-            userId: user.id, username: user.username },
-            process.env.JWT_SECRET || "dev-secret",
-            { expiresIn: "7d" }
-        )
-
-        return reply.status(200).send(loginSuccess(user, token));
-
+    setCookies(reply, user.userId, user.username);
+    return reply.status(200).send(loginSuccess(user));
     });
 }
