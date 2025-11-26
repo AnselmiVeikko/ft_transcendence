@@ -38,7 +38,7 @@ export default async function loginRoutes(app: FastifyInstance) {
             return reply.status(401).send({ error: "Invalid credentials."});
         }
 
-    setCookies(reply, user.userId, user.username);
+    setCookies(reply, user.userId);
     return reply.status(200).send(loginSuccess(user));
     });
 }
