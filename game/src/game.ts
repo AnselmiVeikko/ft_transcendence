@@ -55,7 +55,7 @@ export function initGame() {
     aiController = new AIController(keys, canvas.height);
     aiInterval = window.setInterval(() => { 
       if (aiController) {
-        stepDiff = aiController!.stepCalculate(ball, rightPlayer); 
+        stepDiff = aiController!.calculateSteps(ball, rightPlayer); 
       }
     }, 1000);
   });
@@ -66,7 +66,7 @@ export function initGame() {
   });
 
   function resetGame() {
-    ball.reset(canvas.width, canvas.height);
+    ball.reset(canvas.width/2, canvas.height/2);
     leftPlayer.y = canvas.height / 2 - leftPlayer.height / 2;
     rightPlayer.y = canvas.height / 2 - rightPlayer.height / 2;
     leftPlayer.life = leftPlayer.defaultLife;
@@ -89,7 +89,7 @@ export function initGame() {
 
   function checkState() {
     if (ball.x < 0) {
-      ball.reset(canvas.width, canvas.height);
+      ball.reset(leftPlayer.x + leftPlayer.width + ball.radius, leftPlayer.y + leftPlayer.height/2);
       if (--leftPlayer.life <= 0) {
         gameMessage = "Player 2 wins!";
         gameMode = null;
@@ -97,7 +97,7 @@ export function initGame() {
     }
 
     if (ball.x > canvas.width) {
-      ball.reset(canvas.width, canvas.height);
+      ball.reset(rightPlayer.x - rightPlayer.width - ball.radius, rightPlayer.y + rightPlayer.height/2);
       if (--rightPlayer.life <= 0) {
         gameMessage = "Player1 wins!";
         gameMode = null;
