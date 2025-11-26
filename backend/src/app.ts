@@ -1,10 +1,11 @@
 import Fastify from "fastify";
 import dotenv from "dotenv";
-import registrationRoutes from "./routes/register";
 import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
-import loginRoutes from "./routes/login";
 import cors from "@fastify/cors";
 import fastifyCookie from "@fastify/cookie";
+import registrationRoutes from "./routes/register";
+import loginRoutes from "./routes/login";
+import profileRoutes from "./routes/profile";
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ async function buildServer() {
   app.register(fastifyCookie);
   app.register(registrationRoutes);
   app.register(loginRoutes);
+  app.register(profileRoutes);
 }
 
 
