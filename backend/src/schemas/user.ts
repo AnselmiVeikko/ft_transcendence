@@ -14,6 +14,8 @@ export const LoginResponseSchema = Type.Object({
     }),
 });
 
+
+// Registration body and response schema
 export const RegisterBodySchema = Type.Object({
     userName: Type.String(),
     email: Type.String(),
@@ -28,6 +30,23 @@ export const RegisterResponseSchema = Type.Object({
     }),
 });
 
+// Profile body and response schema
+export const ProfilePersonalQuerySchema = Type.Object({
+    userId: Type.String(),
+});
+
+export const ProfilePersonalResponseSchema = Type.Object({
+    message: Type.String(),
+    //token: Type.String(),
+    userProfile: Type.Object({
+        userId: Type.Number(),
+        userName: Type.String(),
+        email: Type.String(),
+    }),
+});
+
+
+// Error Response
 export const ErrorResponseSchema = Type.Object({
     //statusCode: Type.Number(),
     //error: Type.String(),
