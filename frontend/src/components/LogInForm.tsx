@@ -6,7 +6,7 @@ const LogInForm = ()=> {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState('');
 	const [success, setSuccess] = useState('');
-	const LogInAPI = 'http://localhost:3000/user/login';
+	const LogInAPI = 'http://localhost:3000/api/user/login';
 
 	const { t, i18n } = useTranslation();
 
@@ -17,16 +17,16 @@ const LogInForm = ()=> {
 		setLoading(loading);
 
 		const target = e.target as typeof e.target & {
-			username: { value: string };
+			userName: { value: string };
 			//email: { value: string };
 			password: { value: string };
 		};
 
-		const username = target.username.value;
+		const userName = target.userName.value;
 		//const email = target.email.value;
 		const password = target.password.value;
 
-		if (!username || !password) {
+		if (!userName || !password) {
             setError(t('all_fields_required'));
             setLoading(false);
             return;
@@ -39,7 +39,7 @@ const LogInForm = ()=> {
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify({
-					username,
+					userName,
 					//email,
 					password,
 				}),
@@ -71,16 +71,16 @@ const LogInForm = ()=> {
 			)}
 			<div className="space-y-4">
 				<div>
-					<label htmlFor="username" className="block text-left text-sm font-medium mb-2">
-						{t('username')}
+					<label htmlFor="userName" className="block text-left text-sm font-medium mb-2">
+						{t('userName')}
 					</label>
 					<input
 						type="text"
-						id="username"
-						name="username"
-						autoComplete="username"
+						id="userName"
+						name="userName"
+						autoComplete="userName"
 						className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-						placeholder={t('enter-username')}
+						placeholder={t('enter-userName')}
 						/>
 				</div>
 				{/*<div>
