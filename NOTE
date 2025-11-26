@@ -57,15 +57,15 @@ ORM: Prisma
 
 REGISTRATION:
 
-curl -X POST http://localhost:3000/user/registration \
+curl -X POST http://localhost:3000/api/user/registration \
   -H "Content-Type: application/json" \
-  -d '{"username":"john","email":"john@example.com","password":"secret123"}'
+  -d '{"userName":"john","email":"john@example.com","password":"secret123"}'
 
 LOGIN:
 
-curl -X POST http://localhost:3000/user/login \
+curl -X POST http://localhost:3000/api/user/login \
   -H "Content-Type: application/json" \
-  -d '{"username":"john","password":"secret123"}'
+  -d '{"userName":"john","password":"secret123"}'
 
 docker compose --env-file ./backend/.env --file docker-compose.yml up --build -d
 

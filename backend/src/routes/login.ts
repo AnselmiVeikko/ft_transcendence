@@ -24,9 +24,9 @@ export default async function loginRoutes(app: FastifyInstance) {
            },
     },
     async (request: LoginRequest, reply: FastifyReply) => {
-    const { username, password } = request.body;
+    const { userName, password } = request.body;
 
-        const user = await prisma.user_info.findUnique({ where: { username }});
+        const user = await prisma.user_info.findUnique({ where: { userName }});
         if (!user) {
             return reply.status(401).send({ error: "User does not exist"});
         }
@@ -38,7 +38,7 @@ export default async function loginRoutes(app: FastifyInstance) {
             return reply.status(401).send({ error: "Invalid credentials."});
         }
 
-    setCookies(reply, user.userId, user.username);
+    setCookies(reply, user.userId, user.userName);
     return reply.status(200).send(loginSuccess(user));
     });
 }
