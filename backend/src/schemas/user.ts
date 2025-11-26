@@ -7,7 +7,7 @@ export const LoginBodySchema = Type.Object({
 
 export const LoginResponseSchema = Type.Object({
     message: Type.String(),
-    token: Type.String(),
+    //token: Type.String(),
     user: Type.Object({
         userId: Type.Number(),
         userName: Type.String(),
@@ -29,7 +29,7 @@ export const RegisterResponseSchema = Type.Object({
 });
 
 export const ErrorResponseSchema = Type.Object({
-    statusCode: Type.Number(),
-    error: Type.String(),
+    //statusCode: Type.Number(),
+    //error: Type.String(),
     message: Type.String(),
 });

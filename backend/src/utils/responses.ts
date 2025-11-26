@@ -5,7 +5,7 @@ export function loginSuccess(user: { userId: number, userName: string }) {
     };
 }
 
-export function RegistrationSuccess(user: {userId: number, userName: string }) {
+export function RegistrationSuccess(user: { userId: number, userName: string }) {
     return {
         message: "Registration succesful",
         user: { userId: user.userId, userName: user.userName },
