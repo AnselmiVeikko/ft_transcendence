@@ -34,7 +34,7 @@ export class AIController {
     return y;
   }
   
-  stepCalculate(ball: Ball, aiPaddle: Paddle) : number {
+  calculateSteps(ball: Ball, aiPaddle: Paddle) : number {
     return Math.floor(
       (this.predictBallY(ball, aiPaddle) - (aiPaddle.y + aiPaddle.height / 2)) 
         / aiPaddle.speed);
