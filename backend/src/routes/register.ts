@@ -8,7 +8,7 @@ import { RegisterBodySchema, RegisterResponseSchema, ErrorResponseSchema } from 
 type RegisterRequest = FastifyRequest<{ Body: Static<typeof RegisterBodySchema> }>;
 
 export default async function registrationRoutes(app: FastifyInstance) {
-	app.post( "/user/registration", {
+	app.post( "/api/user/registration", {
 		schema: {
 			body: RegisterBodySchema,
 			response: {
@@ -19,7 +19,7 @@ export default async function registrationRoutes(app: FastifyInstance) {
 		},
 	},
 	async (request: RegisterRequest, reply: FastifyReply) => {
-	const { username, email, password } = request.body;
+	const { userName, email, password } = request.body;
 
 		const existingUser = await prisma.user_info.findUnique({ where: { email } });
 		if (existingUser) {
@@ -30,11 +30,16 @@ export default async function registrationRoutes(app: FastifyInstance) {
 		const hashedPassword = await bcrypt.hash(password, 10);
 
 		const user = await prisma.user_info.create({
-			data: { username,
+			data: { userName,
 					email,
 					password: hashedPassword },
 		});
 
-		return reply.status(201).send(RegistrationSuccess(user));
+		const responseUser = {
+			userId: user.userId,
+			userName: user.userName,
+		};
+
+		return reply.status(201).send(RegistrationSuccess(responseUser));
 	});
 }

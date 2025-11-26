@@ -1,13 +1,13 @@
-export function loginSuccess(user: { id: number, username: string }) {
+export function loginSuccess(user: { userId: number, userName: string }) {
     return {
         message: "Login succesful",
-        user: { id: user.id, username: user.username },
+        user: { userId: user.userId, userName: user.userName },
     };
 }
 
-export function RegistrationSuccess(user: { id: number, username: string }) {
+export function RegistrationSuccess(user: {userId: number, userName: string }) {
     return {
         message: "Registration succesful",
-        user: { id: user.id, username: user.username },
+        user: { userId: user.userId, userName: user.userName },
     };
 }
