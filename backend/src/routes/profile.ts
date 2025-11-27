@@ -35,16 +35,6 @@ export default async function profileRoutes(app: FastifyInstance) {
 		}
 
 		return reply.status(200).send(ProfilePersonal(userProfile));
-
-		// return reply.status(200).send({
-		// 	message: "Profile retrieved successfully",
-		// 	user: {
-		// 		userId: userProfile.userId,
-		// 		userName: userProfile.userName,
-		// 		email: userProfile.email,
-		// 		createdAt: userProfile.createdAt.toISOString()
-		// 	}
-		// });
 	});
 }
 
