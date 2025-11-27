@@ -20,21 +20,11 @@ export class Game {
   private stepDiff = 0;
   private remainSteps = 0;
 
-  public getCtx() {
-    return this.ctx;
-  }
-  public getBall() {
-    return this.ball;
-  }
-  public getLeftPlayer() {
-    return this.leftPlayer;
-  }
-  public getRightPlayer() {
-    return this.rightPlayer;
-  }
-  public getGameMessage() {
-    return this.gameMessage;
-  }
+  public getCtx() { return this.ctx; }
+  public getBall() { return this.ball; }
+  public getLeftPlayer() { return this.leftPlayer; }
+  public getRightPlayer() { return this.rightPlayer; }
+  public getGameMessage() { return this.gameMessage; }
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
