@@ -8,33 +8,50 @@ import { RegisterBodySchema, RegisterResponseSchema, ErrorResponseSchema } from 
 type RegisterRequest = FastifyRequest<{ Body: Static<typeof RegisterBodySchema> }>;
 
 export default async function registrationRoutes(app: FastifyInstance) {
-	app.post( "/user/registration", {
+	app.post( "/api/user/registration", {
 		schema: {
 			body: RegisterBodySchema,
 			response: {
 				201: RegisterResponseSchema,
 				400: ErrorResponseSchema,
 				401: ErrorResponseSchema,
+				500: ErrorResponseSchema,
+				501: ErrorResponseSchema,
 			},
 		},
 	},
 	async (request: RegisterRequest, reply: FastifyReply) => {
-	const { username, email, password } = request.body;
+		const { userName, email, password } = request.body;
 
-		const existingUser = await prisma.user_info.findUnique({ where: { email } });
+		const existingUser = await prisma.user_info.findFirst({
+			where: {
+			OR: [{ userName }, { email }],
+			},
+		});
+
 		if (existingUser) {
-			return reply.status(400).send({ error: "Email already registered." });
+			if (existingUser.userName === userName) {
+				return reply.status(400).send({ message: "Username already registered." });
+			}
+			if (existingUser.email === email) {
+				return reply.status(400).send({ message: "Email already registered." });
+			}
 		}
 
 		//Encrypt the password
 		const hashedPassword = await bcrypt.hash(password, 10);
 
 		const user = await prisma.user_info.create({
-			data: { username,
+			data: { userName,
 					email,
 					password: hashedPassword },
 		});
 
-		return reply.status(201).send(RegistrationSuccess(user));
+		const responseUser = {
+			userId: user.userId,
+			userName: user.userName,
+		};
+
+		return reply.status(201).send(RegistrationSuccess(responseUser));
 	});
 }
