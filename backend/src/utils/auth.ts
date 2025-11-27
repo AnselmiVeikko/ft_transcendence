@@ -1,13 +1,19 @@
 import type { FastifyRequest, FastifyReply } from "fastify";
 import jwt from "jsonwebtoken";
 
+interface JWTPayLoad {
+    userId: number;
+    iat?:   number;
+    exp?:   number;
+}
+
 export async function verifyAccess(request: FastifyRequest, reply: FastifyReply) {
     const token = request.cookies?.accessJWT;
     if (!token) {
         return reply.status(401).send({ error: "Missing token" });
     }
     try {
-        const payload = jwt.verify(token, process.env.JWT_ACCESS_SECRET || "access-secret");
+        const payload = jwt.verify(token, process.env.JWT_ACCESS_SECRET || "access-secret") as JWTPayLoad;
         (request as any).user = payload;
     } catch (err) {
         return reply.status(401).send({ error: "Invalid token" });
@@ -19,8 +25,10 @@ export async function refreshAccess(request: FastifyRequest, reply: FastifyReply
      if (!token) {
         return reply.status(401).send({ error: "Missing token" });
      }
+
+     const user = request.cookies?.userId;
      try {
-        const payload = jwt.verify(token, process.env.JWT_REFRESH_SECRET || "refresh-secret");
+        const payload = jwt.verify(token, process.env.JWT_REFRESH_SECRET || "refresh-secret") as JWTPayLoad;
 
         setCookies(reply, payload.userId);
         return reply.status(200).send({ message: "Token refreshed" });
@@ -36,7 +44,7 @@ export function setCookies(reply: FastifyReply, userId: number) {
         { userId },
         process.env.JWT_ACCESS_SECRET || "access-secret",
         { expiresIn: "15m" }
-    );
+    ); 
 
     const refreshJWT = jwt.sign(
         { userId },
