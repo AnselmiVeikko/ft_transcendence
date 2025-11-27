@@ -8,7 +8,7 @@ export const LoginBodySchema = Type.Object({
 export const LoginResponseSchema = Type.Object({
     message: Type.String(),
     //token: Type.String(),
-    user: Type.Object({
+    data: Type.Object({
         userId: Type.Number(),
         userName: Type.String(),
     }),
@@ -24,7 +24,7 @@ export const RegisterBodySchema = Type.Object({
 
 export const RegisterResponseSchema = Type.Object({
     message: Type.String(),
-    user: Type.Object({
+    data: Type.Object({
         userId: Type.Number(),
         userName: Type.String(),
     }),
@@ -38,7 +38,7 @@ export const ProfilePersonalQuerySchema = Type.Object({
 export const ProfilePersonalResponseSchema = Type.Object({
     message: Type.String(),
     //token: Type.String(),
-    userProfile: Type.Object({
+    data: Type.Object({
         userId: Type.Number(),
         userName: Type.String(),
         email: Type.String(),
