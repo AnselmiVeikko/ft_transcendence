@@ -5,17 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pong game</title>
   </head>
-  <body class="flex flex-col items-center justify-center h-screen bg-gray-900 text-white">
-    <h1 class="text-3xl font-bold mb-6">Pong Game</h1>
-    <div class="flex gap-4">
-      <button id="play2PButton" class="px-4 py-2 bg-green-500 rounded hover:bg-green-600">
-        2 Players
-      </button>
-      <button id="playAIButton" class="px-4 py-2 bg-green-500 rounded hover:bg-green-600">
-        Play with AI
-      </button>
-    </div>
-    <canvas id="pongCanvas" width="800" height="600" class="border-2 border-gray-600 mt-6"></canvas>
+  <body>
+    <div class="orb orb-one"></div>
+    <div class="orb orb-two"></div>
+    <main class="game-shell">
+      <section class="intro-panel">
+        <p class="eyebrow">Transcendence</p>
+        <h1>Pong Game</h1>
+        <p class="lead">
+          Pick your mode and jump into a glowing cyber-court. Battle a friend locally
+          or train against the adaptive AI while the arena pulses with color.
+        </p>
+        <div class="button-grid">
+          <button id="play2PButton" class="play-button primary">2 Players</button>
+          <button id="playAIButton" class="play-button primary">Play vs AI</button>
+        </div>
+      </section>
+
+      <section class="arena">
+        <div class="canvas-wrap">
+          <canvas id="pongCanvas" width="900" height="600"></canvas>
+          <div class="canvas-glow"></div>
+        </div>
+      </section>
+
+      <section class="guides-panel">
+        <div class="tips-card">
+          <p class="tips-title">Controls</p>
+          <ul>
+            <li><span>W / S</span>Move left paddle</li>
+            <li><span>↑ / ↓</span>Move right paddle</li>
+          </ul>
+        </div>
+      </section>
+    </main>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
