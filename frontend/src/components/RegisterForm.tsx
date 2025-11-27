@@ -18,13 +18,13 @@ const RegisterForm = ()=> {
 		setLoading(loading);
 
 		const target = e.target as typeof e.target & {
-			userName: { value: string };
+			username: { value: string };
 			email: { value: string };
 			password: { value: string };
 			confirmPassword: { value: string };
 		};
 
-		const userName = target.userName.value;
+		const userName = target.username.value;
 		const email = target.email.value;
 		const password = target.password.value;
 		const confirmPassword = target.confirmPassword.value;
@@ -80,16 +80,16 @@ const RegisterForm = ()=> {
 			)}
 			<div className="space-y-4">
 				<div>
-					<label htmlFor="userName" className="block text-left text-sm font-medium mb-2">
-						{t('userName')}
+					<label htmlFor="username" className="block text-left text-sm font-medium mb-2">
+						{t('username')}
 					</label>
 					<input
 						type="text"
-						id="userName"
-						name="userName"
-						autoComplete="userName"
+						id="username"
+						name="username"
+						autoComplete="username"
 						className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-						placeholder={t('enter-userName')}
+						placeholder={t('enter-username')}
 						/>
 				</div>
 				<div>
