@@ -59,13 +59,13 @@ REGISTRATION:
 
 curl -X POST http://localhost:3000/api/user/registration \
   -H "Content-Type: application/json" \
-  -d '{"userName":"john","email":"john@example.com","password":"secret123"}'
+  -d '{"userName":"john","email":"john@example.com","password":"123456"}'
 
 LOGIN:
 
 curl -X POST http://localhost:3000/api/user/login \
   -H "Content-Type: application/json" \
-  -d '{"userName":"john","password":"secret123"}'
+  -d '{"userName":"john","password":"123456"}'
 
 docker compose --env-file ./backend/.env --file docker-compose.yml up --build -d
 

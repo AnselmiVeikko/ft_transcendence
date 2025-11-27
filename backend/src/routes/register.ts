@@ -15,15 +15,27 @@ export default async function registrationRoutes(app: FastifyInstance) {
 				201: RegisterResponseSchema,
 				400: ErrorResponseSchema,
 				401: ErrorResponseSchema,
+				500: ErrorResponseSchema,
+				501: ErrorResponseSchema,
 			},
 		},
 	},
 	async (request: RegisterRequest, reply: FastifyReply) => {
-	const { userName, email, password } = request.body;
+		const { userName, email, password } = request.body;
 
-		const existingUser = await prisma.user_info.findUnique({ where: { email } });
+		const existingUser = await prisma.user_info.findFirst({
+			where: {
+			OR: [{ userName }, { email }],
+			},
+		});
+
 		if (existingUser) {
-			return reply.status(400).send({ error: "Email already registered." });
+			if (existingUser.userName === userName) {
+				return reply.status(400).send({ message: "Username already registered." });
+			}
+			if (existingUser.email === email) {
+				return reply.status(400).send({ message: "Email already registered." });
+			}
 		}
 
 		//Encrypt the password
