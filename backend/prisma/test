@@ -1,0 +1,46 @@
+model User {
+  id                      String      @id @default(cuid()) // A unique, auto-incrementing number for each user (Primary Key)
+  email                   String      @unique // The user's email address, which must be unique
+  password                String      // Where we will store the securely hashed password
+  username                String      @unique// The players username to be used throughout the website
+  avatarUrl               String?
+  isOnline                Boolean     @default(false) // Online status of the user
+
+  games                   Game[]      @relation("UserGames") // The games that the user has participated in
+  gamesWon                Game[]      @relation("GameWinner") // The games that the user has won
+  tournaments             Tournament[] @relation("UserTournaments") // The tournaments the user has participated in
+  tournamentsWon          Tournament[] @relation("TournamentWinner") // The tournaments the user has won
+  // Fields for Two-Factor Authentication (2FA)
+  isTwoFactorEnabled      Boolean @default(false)
+  twoFactorSecret         String? //The '?' makes this field optional
+
+  googleId                String?   @unique // Google's unique user ID, must be unique
+
+  friends                 User[]   @relation("UserFriends") // Users that this user is friends with
+  friendsOf               User[]   @relation("UserFriends") // Users who have this user as a friend
+
+  sentFriendRequests      FriendRequest[]  @relation("SentRequests") // Sent friend requests
+  receivedFriendRequests  FriendRequest[] @relation("ReceivedRequests") // Received friend requests
+
+  createdAt               DateTime @default(now()) // Automatically set the creation timestamp
+  updatedAt               DateTime @updatedAt    // Automatically update the timestamp on any change
+
+  // Relation: a user can have multiple refresh tokens (multiple devices)
+  refreshTokens           RefreshToken[]
+}
+
+model FriendRequest {
+  id          String  @id @default(cuid()) // A unique friend request id
+
+  senderId    String  // The id of the sender user
+  sender      User    @relation("SentRequests", fields: [senderId], references: [id])
+
+  receiverId  String  // The id of the receiver user
+  receiver    User    @relation("ReceivedRequests", fields: [receiverId], references: [id])
+
+  accepted    Boolean @default(false) // status of the request, true when accepted
+
+  createdAt   DateTime  @default(now()) // Time when the request was sent
+
+  @@unique([senderId, receiverId])
+}
