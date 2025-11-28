@@ -73,6 +73,9 @@ const RegisterForm = ()=> {
 		}
 	}
 
+	const formStyle = "block text-left text-sm font-medium mb-2";
+	const formFieldStyle = "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500";
+
 	return (
 		<form onSubmit={handleSubmit}>
 				{error && (
@@ -87,7 +90,7 @@ const RegisterForm = ()=> {
 			)}
 			<div className="space-y-4">
 				<div>
-					<label htmlFor="username" className="block text-left text-sm font-medium mb-2">
+					<label htmlFor="username" className={`${formStyle}`}>
 						{t('username')}
 					</label>
 					<input
@@ -95,12 +98,12 @@ const RegisterForm = ()=> {
 						id="username"
 						name="username"
 						autoComplete="username"
-						className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+						className={`${formFieldStyle}`}
 						placeholder={t('enter-username')}
 						/>
 				</div>
 				<div>
-					<label htmlFor="email" className="block text-left text-sm font-medium mb-2">
+					<label htmlFor="email" className={`${formStyle}`}>
 						{t('email')}
 					</label>
 					<input
@@ -108,12 +111,12 @@ const RegisterForm = ()=> {
 						id="email"
 						name="email"
 						autoComplete="email"
-						className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+						className={`${formFieldStyle}`}
 						placeholder={t('enter-email')}
 					/>
 				</div>
 				<div>
-					<label htmlFor="password" className="block text-left text-sm font-medium mb-2">
+					<label htmlFor="password" className={`${formStyle}`}>
 						{t('password')}
 					</label>
 					<input
@@ -121,12 +124,12 @@ const RegisterForm = ()=> {
 						id="password"
 						name="password"
 						autoComplete="new-password"
-						className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+						className={`${formFieldStyle}`}
 						placeholder={t('enter-password')}
 					/>
 				</div>
 				<div>
-					<label htmlFor="confirmPassword" className="block text-left text-sm font-medium mb-2">
+					<label htmlFor="confirmPassword" className={`${formStyle}`}>
 						{t('confirm_password')}
 					</label>
 					<input
@@ -134,7 +137,7 @@ const RegisterForm = ()=> {
 						id="confirmPassword"
 						name="confirmPassword"
 						autoComplete="new-password"
-						className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+						className={`${formFieldStyle}`}
 						placeholder={t('confirm_password')}
 					/>
 				</div>
