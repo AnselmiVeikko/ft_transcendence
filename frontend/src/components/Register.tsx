@@ -25,8 +25,6 @@ const Register = ()=> {
 				<div className="text-center w-full max-w-md">
 					<h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 sm:mb-6 lg:mb-8">
 						{t('create_account_message')}</h1>
-					{/* <h2 className="text-xl sm:text-2xl lg:text-3xl mb-4 sm:mb-6 lg:mb-8">
-						{t('create_account_message')}</h2> */}
 					<h3 className="text-sm sm:text-base lg:text-lg mb-6 sm:mb-8">
 						{t('already_registered')}{' '}
 						<Link to="/" className="text-blue-600 underline hover:text-blue-800">
