@@ -52,17 +52,15 @@ const LogInForm = ()=> {
 				throw new Error(data.message || t('login_failed'));
 			}
 			setSuccess(t('login_success'));
-
-			setTimeout(() => {
-				navigate('/menu');
-			}, 1000);
-
 		} catch (err: unknown) {
 			setError(t('login_failed'));
 		} finally {
 			setLoading(false);
 		}
 	}
+
+	const formStyle = "block text-left text-sm font-medium mb-2";
+	const formFieldStyle = "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500";
 
 	return (
 		<form onSubmit={handleSubmit}>
@@ -78,7 +76,7 @@ const LogInForm = ()=> {
 			)} */}
 			<div className="space-y-4">
 				<div>
-					<label htmlFor="username" className="block text-left text-sm font-medium mb-2">
+					<label htmlFor="username" className={`${formStyle}`}>
 						{t('username')}
 					</label>
 					<input
@@ -86,25 +84,12 @@ const LogInForm = ()=> {
 						id="username"
 						name="username"
 						autoComplete="username"
-						className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+						className={`${formFieldStyle}`}
 						placeholder={t('enter-username')}
 						/>
 				</div>
-				{/*<div>
-					<label htmlFor="email" className="block text-left text-sm font-medium mb-2">
-						{t('email')}
-					</label>
-					<input
-						type="email"
-						id="email"
-						name="email"
-						autoComplete="email"
-						className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-						placeholder={t('enter-email')}
-					/>
-				</div>*/}
 				<div>
-					<label htmlFor="password" className="block text-left text-sm font-medium mb-2">
+					<label htmlFor="password" className={`${formStyle}`}>
 						{t('password')}
 					</label>
 					<input
@@ -112,7 +97,7 @@ const LogInForm = ()=> {
 						id="password"
 						name="password"
 						autoComplete="new-password"
-						className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+						className={`${formFieldStyle}`}
 						placeholder={t('enter-password')}
 					/>
 				</div>

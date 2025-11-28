@@ -9,6 +9,7 @@ import './i18n.ts';
 import LogIn from './components/LogIn.tsx'
 import Menu from './components/Menu.tsx'
 import Register from './components/Register.tsx'
+import SingleMatch from './components/SingleMatch.tsx'
 
 const router = createBrowserRouter([
 	{
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
 			{ path: "/", element: <LogIn /> },
 			{ path: "/register", element: <Register /> },
 			{ path: "/menu", element: <Menu />},
+			{ path: "/singlematch", element: <SingleMatch />},
 		],
 	},
 ]);
