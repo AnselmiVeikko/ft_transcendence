@@ -59,6 +59,9 @@ const LogInForm = ()=> {
 		}
 	}
 
+	const formStyle = "block text-left text-sm font-medium mb-2";
+	const formFieldStyle = "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500";
+
 	return (
 		<form onSubmit={handleSubmit}>
 				{error && (
@@ -73,7 +76,7 @@ const LogInForm = ()=> {
 			)} */}
 			<div className="space-y-4">
 				<div>
-					<label htmlFor="username" className="block text-left text-sm font-medium mb-2">
+					<label htmlFor="username" className={`${formStyle}`}>
 						{t('username')}
 					</label>
 					<input
@@ -81,12 +84,12 @@ const LogInForm = ()=> {
 						id="username"
 						name="username"
 						autoComplete="username"
-						className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+						className={`${formFieldStyle}`}
 						placeholder={t('enter-username')}
 						/>
 				</div>
 				<div>
-					<label htmlFor="password" className="block text-left text-sm font-medium mb-2">
+					<label htmlFor="password" className={`${formStyle}`}>
 						{t('password')}
 					</label>
 					<input
@@ -94,7 +97,7 @@ const LogInForm = ()=> {
 						id="password"
 						name="password"
 						autoComplete="new-password"
-						className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+						className={`${formFieldStyle}`}
 						placeholder={t('enter-password')}
 					/>
 				</div>
