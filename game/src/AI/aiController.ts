@@ -34,31 +34,31 @@ export class AIController {
     return y;
   }
   
-  stepCalculate(ball: Ball, aiPaddle: Paddle) : number {
+  calculateSteps(ball: Ball, aiPaddle: Paddle) : number {
     return Math.floor(
       (this.predictBallY(ball, aiPaddle) - (aiPaddle.y + aiPaddle.height / 2)) 
         / aiPaddle.speed);
   }
 
+  control(stepDiff: number): number {
+    // reset keys
+    this.keys["ArrowUp"] = false;
+      this.keys["ArrowDown"] = false;
+      let moveKey: "ArrowUp" | "ArrowDown" | null = null;
 
-  control(keys: KeyMap, stepDiff: number): number {
-        // reset keys
-        keys["ArrowUp"] = false;
-        keys["ArrowDown"] = false;
-        let moveKey: "ArrowUp" | "ArrowDown" | null = null;
-
-        if (stepDiff < 0) {
-            moveKey = "ArrowUp";
-            stepDiff++;
-          } else if (stepDiff > 0) {
-            moveKey = "ArrowDown";
-            stepDiff--;
-          } else {
-            moveKey = null;
-          }
+    if (stepDiff < 0) {
+      moveKey = "ArrowUp";
+      stepDiff++;
+    } else if (stepDiff > 0) {
+      moveKey = "ArrowDown";
+      stepDiff--;
+    } else {
+      moveKey = null;
+    }
         
-        if (moveKey)
-          keys[moveKey] = true;
-        return stepDiff;
-      }
+    if (moveKey)
+      this.keys[moveKey] = true;
+
+    return stepDiff;
+  }
 }
