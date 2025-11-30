@@ -22,16 +22,16 @@ model user_info {
 
 
 model friend_request {
-  friendRId       Int        @id default(autoincrement())
+  friendRId       Int        @id @default(autoincrement())
   senderId        Int
   receiverId      Int
-  requestStatus   Boolean   default(false)
+  requestStatus   Boolean   @default(false)
   sentAt          DateTime  @default(now())
   acceptedAt      DateTime?
 
   // Relation with user_info
-  sender    user_info @relation("Sender", fields[senderId], references[userID])
-  receiver  user_info @relation("Receiver", fields[receiverId], references[userID])
+  sender    user_info @relation("Sender", fields: [senderId], references: [userId])
+  receiver  user_info @relation("Receiver", fields: [receiverId], references: [userId])
 
   @@unique([senderId, receiverId])
 }
