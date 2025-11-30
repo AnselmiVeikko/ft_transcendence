@@ -52,10 +52,7 @@ const LogInForm = ()=> {
 				throw new Error(data.message || t('login_failed'));
 			}
 			setSuccess(t('login_success'));
-
-			setTimeout(() => {
-				navigate('/menu');
-			}, 1000);
+			navigate('/menu');
 
 		} catch (err: unknown) {
 			setError(t('login_failed'));
