@@ -55,17 +55,26 @@ ORM: Prisma
 	npm install @prisma/adapter-better-sqlite3 (Prisma adapter)
 	npm install better-sqlite3 (better-sqlite3 driver)
 
+........................CURL  REQUEST .................................
+
 REGISTRATION:
 
 curl -X POST http://localhost:3000/api/user/registration \
   -H "Content-Type: application/json" \
-  -d '{"userName":"john","email":"john@example.com","password":"123456"}'
+  -d '{"userName":"john2","email":"john2@example.com","password":"123456"}'
 
 LOGIN:
 
 curl -X POST http://localhost:3000/api/user/login \
   -H "Content-Type: application/json" \
   -d '{"userName":"john","password":"123456"}'
+
+PROFILE SELF:
+
+curl -X GET "http://localhost:3000/api/user/profile/self?userId=1"
+
+.......................... CURL   END .....................................
+
 
 docker compose --env-file ./backend/.env --file docker-compose.yml up --build -d
 
