@@ -2,7 +2,7 @@ import { Outlet, Navigate } from "react-router-dom";
 
 const ProtectedRoutes = () =>
 {
-  const auth = { token: false }; //TODO: replace with authentication logic
+  const auth = { token: true }; //TODO: replace with authentication logic
   return auth.token ? <Outlet /> : <Navigate to="/" />;
 };
 
