@@ -1,8 +1,14 @@
 import React from 'react';
 /* import Header from './Header'; */
 import { useTranslation } from 'react-i18next'
-import LangSwitcher from './LangSwitcher'
+import SettingsMenu from './SettingsMenu'
 import { FaPlay, FaTrophy, FaChartBar } from 'react-icons/fa';
+
+document.documentElement.classList.toggle(
+  "dark",
+  localStorage.theme === "dark" ||
+    (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches),
+);
 
 interface MenuCardProps {
   title: string;
@@ -10,6 +16,12 @@ interface MenuCardProps {
   icon: React.ReactNode;
   onClick: () => void;
 }
+
+const colorClasses = {
+	start: 'bg-gradient-to-b from-indigo-700 to-blue-300 hover:bg-gradient-to-r hover:to-indigo-200',
+	tournament: 'bg-gradient-to-b from-violet-700 to-blue-300 hover:bg-gradient-to-r hover:to-violet-200',
+	stats: 'bg-gradient-to-b from-fuchsia-600 to-blue-300 hover:bg-gradient-to-r hover:to-fuchsia-200',
+};
 
 const MenuCard = ({ title, colorClass, icon, onClick }: MenuCardProps) => (
     <button
@@ -39,23 +51,17 @@ const Menu = () => {
 
   const { t } = useTranslation();
 
-  const colorClasses = {
-      start: 'bg-gradient-to-b from-indigo-700 to-blue-300 hover:bg-gradient-to-r hover:to-indigo-200',
-      tournament: 'bg-gradient-to-b from-violet-700 to-blue-300 hover:bg-gradient-to-r hover:to-violet-200',
-      stats: 'bg-gradient-to-b from-fuchsia-600 to-blue-300 hover:bg-gradient-to-r hover:to-fuchsia-200',
-  };
-
   return (
     <div className="relative h-screen overflow-hidden">
-      <LangSwitcher />
-{/*       <Header
+      <SettingsMenu />
+      {/* <Header
         appName="PONG"
         playerName="Player1"
         onFriendsClick={handleFriendsClick}
         onLogout={handleLogout}
       /> */}
       <div
-        className="bg-linear-to-b from-white to-slate-100  flex items-center justify-center p-4"
+        className="bg-linear-to-b from-white to-slate-100 dark:bg-linear-to-b dark:from-slate-900 dark:to-blue-900 flex items-center justify-center p-4"
         style={{ height: 'calc(100vh - 3.5rem)' }} // make sure content fits below header
       >
         <div className="flex flex-col lg:flex-row items-center gap-12 max-w-7xl mx-auto">

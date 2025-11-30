@@ -87,19 +87,6 @@ const LogInForm = ()=> {
 						placeholder={t('enter-username')}
 						/>
 				</div>
-				{/*<div>
-					<label htmlFor="email" className="block text-left text-sm font-medium mb-2">
-						{t('email')}
-					</label>
-					<input
-						type="email"
-						id="email"
-						name="email"
-						autoComplete="email"
-						className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-						placeholder={t('enter-email')}
-					/>
-				</div>*/}
 				<div>
 					<label htmlFor="password" className="block text-left text-sm font-medium mb-2">
 						{t('password')}
