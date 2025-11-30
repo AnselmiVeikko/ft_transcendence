@@ -6,7 +6,10 @@ const App: React.FC = () => {
   const location = useLocation();
 
   const noHeaderRoutes = ["/", "/register"];
-  const showHeader = !noHeaderRoutes.includes(location.pathname);
+  const validRoutes = ["/", "/register", "/menu", "/friends"];
+  const showHeader =
+    !noHeaderRoutes.includes(location.pathname) &&
+    validRoutes.includes(location.pathname);
 
   return (
     <div className="app-container">
