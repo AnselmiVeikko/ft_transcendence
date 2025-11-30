@@ -1,23 +1,25 @@
 import { FastifyInstance, FastifyRequest, FastifyReply  } from "fastify";
 import { prisma } from "../plugins/prisma";
 import { Static } from "@sinclair/typebox";
-import { ProfilePersonalQuerySchema, ProfilePersonalResponseSchema, ErrorResponseSchema } from "../schemas/user";
-import { ProfilePersonal } from "../utils/responses";
+import { ProfileSelfQuerySchema, ProfileSelfResponseSchema, ErrorResponseSchema } from "../schemas/UserSchema";
+import { ProfileAllfQuerySchema, ProfileAllResponseSchema } from "../schemas/UserSchema";
+import { ProfileSelf, ProfileAll } from "../utils/UserResponses";
 
 
-type ProfilePersonalRequest = FastifyRequest<{ Querystring: Static<typeof ProfilePersonalQuerySchema> }>;
+type ProfileSelfRequest = FastifyRequest<{ Querystring: Static<typeof ProfileSelfQuerySchema> }>;
+type ProfileAllRequest = FastifyRequest<{ Querystring: Static<typeof ProfileAllfQuerySchema> }>;
 
 export default async function profileRoutes(app: FastifyInstance) {
-	app.get("/api/user/profile", {
+	app.get("/api/user/profile/self", {
 		schema: {
-			querystring: ProfilePersonalQuerySchema,
+			querystring: ProfileSelfQuerySchema,
 			response: {
-				200: ProfilePersonalResponseSchema,
+				200: ProfileSelfResponseSchema,
 				400: ErrorResponseSchema
 			}
 		}
 	},
-	async (request: ProfilePersonalRequest, reply: FastifyReply) => {
+	async (request: ProfileSelfRequest, reply: FastifyReply) => {
 		const { userId } = request.query;
 
 		const userIdNum = Number(userId);
@@ -34,9 +36,32 @@ export default async function profileRoutes(app: FastifyInstance) {
 			return reply.status(400).send({ message: "User profile not found" });
 		}
 
-		return reply.status(200).send(ProfilePersonal(userProfile));
+		return reply.status(200).send(ProfileSelf(userProfile));
 	});
+
+	app.get(
+		"/api/user/profile/all",
+		{
+		  schema: {
+			querystring: ProfileAllfQuerySchema,
+			response: {
+			  200: ProfileAllResponseSchema,
+			},
+		  },
+		},
+		async (request: ProfileAllRequest, reply: FastifyReply) => {
+			const usersAll = await prisma.user_info.findMany({
+				select: {
+					userId: true,
+					userName: true,
+					email: true,
+				},
+			});
+			return reply.status(200).send(ProfileAll(usersAll));
+		}
+	);
 }
+
 
 // export default async function profilePersonalRoutes(app: FastifyInstance) {
 // 	app.get("/api/user/profilepersonal/:userId", async (request, reply) => {
