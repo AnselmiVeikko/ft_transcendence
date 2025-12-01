@@ -8,10 +8,30 @@ datasource db {
 }
 
 model user_info {
-  userId    Int      @id @default(autoincrement())
-  userName  String   @unique
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  userId      Int      @id @default(autoincrement())
+  userName    String   @unique
+  email       String   @unique
+  password    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+
+  // Relation with friend_request
+  sentRequests      friend_request[] @relation("Sender")
+  receivedRequests  friend_request[] @relation("Receiver")
+}
+
+
+model friend_request {
+  friendRId       Int        @id @default(autoincrement())
+  senderId        Int
+  receiverId      Int
+  requestStatus   Boolean   @default(false)
+  sentAt          DateTime  @default(now())
+  acceptedAt      DateTime?
+
+  // Relation with user_info
+  sender    user_info @relation("Sender", fields: [senderId], references: [userId])
+  receiver  user_info @relation("Receiver", fields: [receiverId], references: [userId])
+
+  @@unique([senderId, receiverId])
 }

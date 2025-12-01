@@ -2,8 +2,8 @@ import bcrypt  from "bcrypt";
 import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import { prisma } from '../plugins/prisma';
 import { Static } from "@sinclair/typebox";
-import { RegistrationSuccess } from "../utils/responses";
-import { RegisterBodySchema, RegisterResponseSchema, ErrorResponseSchema } from "../schemas/user";
+import { RegistrationSuccess } from "../utils/UserResponses";
+import { RegisterBodySchema, RegisterResponseSchema, ErrorResponseSchema } from "../schemas/UserSchema";
 
 type RegisterRequest = FastifyRequest<{ Body: Static<typeof RegisterBodySchema> }>;
 

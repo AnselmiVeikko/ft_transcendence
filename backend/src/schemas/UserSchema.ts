@@ -30,12 +30,12 @@ export const RegisterResponseSchema = Type.Object({
     }),
 });
 
-// Profile body and response schema
-export const ProfilePersonalQuerySchema = Type.Object({
+// SELF Profile Query and response schema
+export const ProfileSelfQuerySchema = Type.Object({
     userId: Type.String(),
 });
 
-export const ProfilePersonalResponseSchema = Type.Object({
+export const ProfileSelfResponseSchema = Type.Object({
     message: Type.String(),
     //token: Type.String(),
     data: Type.Object({
@@ -45,6 +45,22 @@ export const ProfilePersonalResponseSchema = Type.Object({
     }),
 });
 
+// ALL Profile query and response schema
+export const ProfileAllfQuerySchema = Type.Object({
+    // Pagination will add later
+});
+
+export const ProfileAllResponseSchema = Type.Object({
+    message: Type.String(),
+    //token: Type.String(),
+    data: Type.Array(
+        Type.Object({
+            userId: Type.Number(),
+            userName: Type.String(),
+            email: Type.String(),
+        }),
+    )
+});
 
 // Error Response
 export const ErrorResponseSchema = Type.Object({
