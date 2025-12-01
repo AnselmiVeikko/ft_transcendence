@@ -50,14 +50,22 @@ export default async function profileRoutes(app: FastifyInstance) {
 		  },
 		},
 		async (request: ProfileAllRequest, reply: FastifyReply) => {
-			const usersAll = await prisma.user_info.findMany({
+
+			const pageNo = Number(request.query.pageNo)?? 1;
+			const limit = Number(request.query.limit)?? 1;
+			const skip = (pageNo - 1) * limit;
+			const totalUSer = await prisma.user_info.count();
+
+			const users = await prisma.user_info.findMany({
+				skip,
+				take: limit,
 				select: {
 					userId: true,
 					userName: true,
 					email: true,
 				},
 			});
-			return reply.status(200).send(ProfileAll(usersAll));
+			return reply.status(200).send(ProfileAll(users, pageNo, limit, totalUSer));
 		}
 	);
 }

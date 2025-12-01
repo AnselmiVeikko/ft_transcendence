@@ -30,7 +30,7 @@ export function ProfileSelf(userProfile: {userId: number, userName: string, emai
 }
 
 
-export function ProfileAll(userProfile: {userId: number, userName: string, email: string}[]) {
+export function ProfileAll(userProfile: any[], pageNo: number, limit: number, totalUser: number) {
 	return {
 		message: "All profiles retrieved successfully",
 		data: userProfile.map(u => ({
@@ -38,5 +38,15 @@ export function ProfileAll(userProfile: {userId: number, userName: string, email
 			userName: u.userName,
 			email: u.email
 		})),
+		pagination: {
+			pageNo,
+			limit,
+			totalUser,
+			totalPage: Math.ceil(totalUser / limit),
+		}
 	};
 }
+
+
+// export function ProfileAll(userProfile: {userId: number, userName: string, email: string}[])
+
