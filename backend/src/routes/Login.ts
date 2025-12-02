@@ -40,7 +40,7 @@ export default async function loginRoutes(app: FastifyInstance) {
             return reply.status(401).send({ message: "Invalid credentials."});
         }
 
-        setCookies(reply, user.userId, user.userName);
+        setCookies(reply, user.userId);
 
         const responseUser = {
             userId: user.userId,
