@@ -28,3 +28,21 @@ export function ProfilePersonal(userProfile: {userId: number, userName: string, 
 		},
 	};
 }
+
+export function errorResponse(status: number, message: string) {
+	const errors: Record<number, string> = {
+		400: "Bad Request",
+		401: "Unauthorized",
+		403: "Forbidden",
+		404: "Not Found",
+		500: "Internal Server Error",
+		501: "Not Implemented",
+		503: "Service Unavailable",
+	};
+
+	return {
+		statusCode: status,
+		error: errors[status] || "Unknown Error",
+		message: message,
+	};
+}
