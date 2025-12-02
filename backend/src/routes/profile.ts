@@ -2,7 +2,7 @@ import { FastifyInstance, FastifyRequest, FastifyReply  } from "fastify";
 import { prisma } from "../plugins/prisma";
 import { Static } from "@sinclair/typebox";
 import { ProfilePersonalQuerySchema, ProfilePersonalResponseSchema, ErrorResponseSchema } from "../schemas/user";
-import { ProfilePersonal } from "../utils/responses";
+import { errorResponse, ProfilePersonal } from "../utils/responses";
 
 
 type ProfilePersonalRequest = FastifyRequest<{ Querystring: Static<typeof ProfilePersonalQuerySchema> }>;
@@ -13,7 +13,7 @@ export default async function profileRoutes(app: FastifyInstance) {
 			querystring: ProfilePersonalQuerySchema,
 			response: {
 				200: ProfilePersonalResponseSchema,
-				400: ErrorResponseSchema
+				default: ErrorResponseSchema
 			}
 		}
 	},
@@ -23,7 +23,7 @@ export default async function profileRoutes(app: FastifyInstance) {
 		const userIdNum = Number(userId);
 
 		if (isNaN(userIdNum)) {
-			return reply.status(400).send({ message: "Invalid userId format" });
+			return reply.status(400).send(errorResponse(400, "Invalid userId format"));
 		}
 
 		const userProfile = await prisma.user_info.findUnique({
@@ -31,7 +31,7 @@ export default async function profileRoutes(app: FastifyInstance) {
 		});
 
 		if (!userProfile) {
-			return reply.status(400).send({ message: "User profile not found" });
+			return reply.status(400).send(errorResponse(400, "User profile not found"));
 		}
 
 		return reply.status(200).send(ProfilePersonal(userProfile));
@@ -46,19 +46,19 @@ export default async function profileRoutes(app: FastifyInstance) {
 // 			};
 
 // 			if (!userid) {
-// 				return reply.status(400).send({message: "No userid provided."});
+// 				return reply.status(400).send(errorResponse(400,"No userid provided."));
 // 			}
 
 // 			const userIdNum = Number(userid);
 
 // 			if (isNaN(userIdNum)) {
-// 				return reply.status(400).send({message: "Invalid userid format"});
+// 				return reply.status(400).send(errorResponse(400,"Invalid userid format"));
 // 			}
 
 // 			const userProfile = await prisma.user_info.findUnique({ where: { userId: userIdNum }});
 
 // 			if (!userProfile) {
-// 				return reply.status(404).send({message: "User profile not found"});
+// 				return reply.status(404).send(errorResponse(404, "User profile not found"));
 // 			}
 
 // 			return reply.status(200).send({

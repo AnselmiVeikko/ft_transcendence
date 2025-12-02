@@ -2,7 +2,7 @@ import bcrypt  from "bcrypt";
 import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import { prisma } from '../plugins/prisma';
 import { Static } from "@sinclair/typebox";
-import { RegistrationSuccess } from "../utils/responses";
+import { errorResponse, RegistrationSuccess } from "../utils/responses";
 import { RegisterBodySchema, RegisterResponseSchema, ErrorResponseSchema } from "../schemas/user";
 
 type RegisterRequest = FastifyRequest<{ Body: Static<typeof RegisterBodySchema> }>;
@@ -13,10 +13,7 @@ export default async function registrationRoutes(app: FastifyInstance) {
 			body: RegisterBodySchema,
 			response: {
 				201: RegisterResponseSchema,
-				400: ErrorResponseSchema,
-				401: ErrorResponseSchema,
-				500: ErrorResponseSchema,
-				501: ErrorResponseSchema,
+				default: ErrorResponseSchema
 			},
 		},
 	},
@@ -31,10 +28,10 @@ export default async function registrationRoutes(app: FastifyInstance) {
 
 		if (existingUser) {
 			if (existingUser.userName === userName) {
-				return reply.status(400).send({ message: "Username already registered." });
+				return reply.status(400).send(errorResponse(400, "Username already registered."));
 			}
 			if (existingUser.email === email) {
-				return reply.status(400).send({ message: "Email already registered." });
+				return reply.status(400).send(errorResponse(400, "Email already registered."));
 			}
 		}
 
