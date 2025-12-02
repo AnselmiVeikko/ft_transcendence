@@ -1,7 +1,7 @@
 export function loginSuccess(user: { userId: number, userName: string }) {
 	return {
 		message: "Login succesful",
-		user: {
+		data: {
 			userId: user.userId,
 			userName: user.userName
 		},
@@ -18,7 +18,7 @@ export function RegistrationSuccess(user: { userId: number, userName: string }) 
 	};
 }
 
-export function ProfilePersonal(userProfile: {userId: number, userName: string, email: string}) {
+export function ProfileSelf(userProfile: {userId: number, userName: string, email: string}) {
 	return {
 		message: "Profile retrieved successfully",
 		data: {
@@ -44,5 +44,17 @@ export function errorResponse(status: number, message: string) {
 		statusCode: status,
 		error: errors[status] || "Unknown Error",
 		message: message,
+	};
+}
+
+
+export function ProfileAll(userProfile: {userId: number, userName: string, email: string}[]) {
+	return {
+		message: "All profiles retrieved successfully",
+		data: userProfile.map(u => ({
+			userId: u.userId,
+			userName: u.userName,
+			email: u.email
+		})),
 	};
 }

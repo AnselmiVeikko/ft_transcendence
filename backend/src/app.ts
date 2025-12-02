@@ -3,9 +3,9 @@ import dotenv from "dotenv";
 import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import cors from "@fastify/cors";
 import fastifyCookie from "@fastify/cookie";
-import registrationRoutes from "./routes/register";
-import loginRoutes from "./routes/login";
-import profileRoutes from "./routes/profile";
+import registrationRoutes from "./routes/Register";
+import loginRoutes from "./routes/Login";
+import profileRoutes from "./routes/Profile";
 
 dotenv.config();
 

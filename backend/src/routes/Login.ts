@@ -4,8 +4,8 @@ import dotenv from "dotenv";
 import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import { Static } from "@sinclair/typebox";
 import { prisma } from "../plugins/prisma";
-import { loginSuccess, errorResponse } from "../utils/responses";
-import { LoginBodySchema, LoginResponseSchema, ErrorResponseSchema } from "../schemas/user";
+import { loginSuccess, errorResponse } from "../utils/UserResponses";
+import { LoginBodySchema, LoginResponseSchema, ErrorResponseSchema } from "../schemas/UserSchema";
 import { setCookies } from "../utils/auth";
 
 type LoginRequest = FastifyRequest<{ Body: Static<typeof LoginBodySchema> }>;
