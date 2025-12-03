@@ -54,3 +54,38 @@ ORM: Prisma
 	More dependency:
 	npm install @prisma/adapter-better-sqlite3 (Prisma adapter)
 	npm install better-sqlite3 (better-sqlite3 driver)
+
+........................CURL  REQUEST .................................
+
+REGISTRATION:
+
+curl -X POST http://localhost:3000/api/user/registration \
+  -H "Content-Type: application/json" \
+  -d '{"userName":"john6","email":"john6@example.com","password":"123456"}'
+
+LOGIN:
+
+curl -X POST http://localhost:3000/api/user/login \
+  -H "Content-Type: application/json" \
+  -d '{"userName":"john","password":"123456"}'
+
+PROFILE SELF:
+
+curl -X GET "http://localhost:3000/api/user/profile/self?userId=1"
+
+
+PROFILE ALL:
+
+curl -X GET "http://localhost:3000/api/user/profile/all?pageNo=1&limit=5"
+
+.......................... CURL   END .....................................
+
+
+docker compose --env-file ./backend/.env --file docker-compose.yml up --build -d
+
+
+docker compose --env-file ./backend/.env --file docker-compose.yml down
+
+
+How to run prisma studio inside the container:
+docker exec -it transcendence_be sh

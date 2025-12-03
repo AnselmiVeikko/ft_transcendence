@@ -7,7 +7,7 @@ const LogInForm = ()=> {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState('');
 	const [success, setSuccess] = useState('');
-	const LogInAPI = 'http://localhost:3000/user/login';
+	const LogInAPI = 'http://localhost:3000/api/user/login';
 
 	const { t, i18n } = useTranslation();
 	const navigate = useNavigate();
@@ -24,11 +24,11 @@ const LogInForm = ()=> {
 			password: { value: string };
 		};
 
-		const username = target.username.value;
+		const userName = target.username.value;
 		//const email = target.email.value;
 		const password = target.password.value;
 
-		if (!username || !password) {
+		if (!userName || !password) {
             setError(t('all_fields_required'));
             setLoading(false);
             return;
@@ -41,7 +41,7 @@ const LogInForm = ()=> {
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify({
-					username,
+					userName,
 					//email,
 					password,
 				}),
