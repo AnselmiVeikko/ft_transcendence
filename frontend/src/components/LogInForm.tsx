@@ -52,6 +52,7 @@ const LogInForm = ()=> {
 				throw new Error(data.message || t('login_failed'));
 			}
 			setSuccess(t('login_success'));
+			navigate("/menu");
 		} catch (err: unknown) {
 			setError(t('login_failed'));
 		} finally {
@@ -59,8 +60,8 @@ const LogInForm = ()=> {
 		}
 	}
 
-	const formStyle = "block text-left text-sm font-medium mb-2";
-	const formFieldStyle = "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500";
+	const formStyle = "block dark:text-white text-left text-sm font-medium mb-2";
+	const formFieldStyle = "dark:text-white w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500";
 
 	return (
 		<form onSubmit={handleSubmit}>
