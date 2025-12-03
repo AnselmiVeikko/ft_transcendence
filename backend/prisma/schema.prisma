@@ -20,12 +20,17 @@ model user_info {
   receivedRequests  friend_request[] @relation("Receiver")
 }
 
+enum FriendRequestStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
 
 model friend_request {
   friendRId       Int        @id @default(autoincrement())
   senderId        Int
   receiverId      Int
-  requestStatus   Boolean   @default(false)
+  requestStatus   FriendRequestStatus   @default(PENDING)
   sentAt          DateTime  @default(now())
   acceptedAt      DateTime?
 
