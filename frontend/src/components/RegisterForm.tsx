@@ -7,7 +7,7 @@ const RegisterForm = ()=> {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState('');
 	const [success, setSuccess] = useState('');
-	const RegisterAPI = 'http://localhost:3000/user/registration';
+	const RegisterAPI = 'http://localhost:3000/api/user/registration';
 
 	// 't' is for translation, 'i18n' is the instance for control
 	const { t, i18n } = useTranslation();
@@ -26,7 +26,7 @@ const RegisterForm = ()=> {
 			confirmPassword: { value: string };
 		};
 
-		const username = target.username.value;
+		const userName = target.username.value;
 		const email = target.email.value;
 		const password = target.password.value;
 		const confirmPassword = target.confirmPassword.value;
@@ -36,7 +36,7 @@ const RegisterForm = ()=> {
             setLoading(false);
             return; // Stop the function if they don't match
         }
-		if (!username || !email || !password || !confirmPassword) {
+		if (!userName || !email || !password || !confirmPassword) {
             setError(t('all_fields_required'));
             setLoading(false);
             return;
@@ -49,7 +49,7 @@ const RegisterForm = ()=> {
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify({
-					username,
+					userName,
 					email,
 					password,
 				}),

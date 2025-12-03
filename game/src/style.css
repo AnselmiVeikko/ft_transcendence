@@ -49,18 +49,20 @@ body {
   filter: blur(60px);
   opacity: 0.4;
   z-index: 0;
+  max-width: 100vw;
+  overflow: hidden;
 }
 
 .orb-one {
-  top: -120px;
-  right: -60px;
+  top: 0;
+  right: 0;
   background: #7a5bff;
   animation: float 12s ease-in-out infinite;
 }
 
 .orb-two {
-  bottom: -180px;
-  left: -80px;
+  bottom: 0;
+  left: 0;
   background: #ff72d8;
   animation: float 14s ease-in-out infinite reverse;
 }
@@ -76,14 +78,14 @@ body {
 }
 
 .game-shell {
-  width: min(1150px, 100%);
+  width: min(2100px, 100%);
   display: grid;
   grid-template-columns: minmax(280px, 340px) 1fr;
   grid-template-areas:
     "intro arena"
     "guides arena";
-  gap: 2rem;
-  padding: 2.5rem;
+  gap: 1.5rem;
+  padding: 1.5rem;
   border-radius: 32px;
   background: var(--panel);
   border: 1px solid var(--panel-border);
