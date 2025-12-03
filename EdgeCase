@@ -1,9 +1,0 @@
-Registration:
-- userId format need to change?
-- password format and length
-- email format
-- username length
-
-Login:
-- already logged in? seesion?
-
