@@ -20,7 +20,7 @@ export function RegistrationSuccess(user: { userId: number, userName: string }) 
 
 export function ProfileSelf(userProfile: {userId: number, userName: string, email: string}) {
 	return {
-		message: "Profile retrieved successfully",
+		message: "Profile retrieve successful",
 		data: {
 			userId: userProfile.userId,
 			userName: userProfile.userName,
@@ -48,13 +48,23 @@ export function errorResponse(status: number, message: string) {
 }
 
 
-export function ProfileAll(userProfile: {userId: number, userName: string, email: string}[]) {
+export function ProfileAll(userProfile: any[], pageNo: number, limit: number, totalUser: number) {
 	return {
-		message: "All profiles retrieved successfully",
+		message: "All profiles retrieve successful",
 		data: userProfile.map(u => ({
 			userId: u.userId,
 			userName: u.userName,
 			email: u.email
 		})),
+		pagination: {
+			pageNo,
+			limit,
+			totalUser,
+			totalPage: Math.ceil(totalUser / limit),
+		}
 	};
 }
+
+
+// export function ProfileAll(userProfile: {userId: number, userName: string, email: string}[])
+
