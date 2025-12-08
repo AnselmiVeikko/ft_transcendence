@@ -79,6 +79,23 @@ PROFILE ALL:
 curl -X GET "http://localhost:3000/api/user/profile/all?pageNo=1&limit=5"
 
 
+FRIEND REQUEST:
+
+curl -X POST http://localhost:3000/api/friendrequest/send \
+  -H "Content-Type: application/json" \
+  -d '{"senderId":"1", "receiverId":"2"}'
+
+
+curl -X POST http://localhost:3000/api/friendrequest/accept \
+  -H "Content-Type: application/json" \
+  -d '{"senderId":"1", "receiverId":"2"}'
+
+
+curl -X POST http://localhost:3000/api/friendrequest/decline \
+  -H "Content-Type: application/json" \
+  -d '{"senderId":"1", "receiverId":"2"}'
+
+
 .......................... CURL   END .....................................
 
 
@@ -90,3 +107,10 @@ docker compose --env-file ./backend/.env --file docker-compose.yml down
 
 How to run prisma studio inside the container:
 docker exec -it transcendence_be sh
+
+
+
+c1r2p2% curl -X POST http://localhost:3000/api/friendrequest/send \
+  -H "Content-Type: application/json" \
+  -d '{"senderId":"1", "receiverId":"2"}'
+{"message":"\nInvalid `prisma_1.default.friend_request.findUnique()` invocacc1r2c1r2p2c1c1cc1rcc1c1rc1r2
