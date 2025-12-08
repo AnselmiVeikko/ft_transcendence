@@ -3,7 +3,6 @@ import { Type } from "@sinclair/typebox";
 export const FRSendBodySchema = Type.Object({
 	senderId: Type.Number(),
 	receiverId: Type.Number(),
-	requestStatus: Type.Number(),
 })
 
 export const FRSendResponseSchema = Type.Object({
@@ -17,7 +16,6 @@ export const FRSendResponseSchema = Type.Object({
 export const FRAcceptBodySchema = Type.Object({
 	senderId: Type.Number(),
 	receiverId: Type.Number(),
-	requestStatus: Type.Number(),
 })
 
 export const FRAcceptResponseSchema = Type.Object({
@@ -31,7 +29,6 @@ export const FRAcceptResponseSchema = Type.Object({
 export const FRDeclineBodySchema = Type.Object({
 	senderId: Type.Number(),
 	receiverId: Type.Number(),
-	requestStatus: Type.Number(),
 })
 
 export const FRDeclineResponseSchema = Type.Object({
