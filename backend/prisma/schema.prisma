@@ -32,7 +32,7 @@ model friend_request {
   receiverId      Int
   requestStatus   FriendRequestStatus   @default(PENDING)
   sentAt          DateTime  @default(now())
-  acceptedAt      DateTime?
+  updatedAt      DateTime?
 
   // Relation with user_info
   sender    user_info @relation("Sender", fields: [senderId], references: [userId])
