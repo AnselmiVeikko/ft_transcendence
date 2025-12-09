@@ -1,13 +1,20 @@
 import './style.css'
-import { initGame } from './game';
+import { Game } from "./core/game";
 
-const canvas = document.getElementById('pongCanvas') as HTMLCanvasElement
-const ctx = canvas.getContext('2d')
-if (!ctx) throw new Error('Cannot get canvas context')
+const canvas = document.getElementById("pongCanvas") as HTMLCanvasElement;
+const play2PButton = document.getElementById("play2PButton");
+const playAIButton = document.getElementById("playAIButton");
 
-// Welcome windows
-ctx.fillStyle = '#ffffff';
-ctx.font = '24px Arial';
-ctx.fillText('Welcome to Pong!', 300, 300);
+if (!canvas || !play2PButton || !playAIButton) {
+  throw new Error("Missing required DOM elements to start the game");
+}
 
-initGame();
+const game = new Game(canvas);
+
+play2PButton.addEventListener("click", () => {
+  game.start("2P", "Player1", "Player2");
+});
+
+playAIButton.addEventListener("click", () => {
+  game.start("AI", "Player1");
+});

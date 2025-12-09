@@ -7,7 +7,7 @@ const RegisterForm = ()=> {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState('');
 	const [success, setSuccess] = useState('');
-	const RegisterAPI = 'http://localhost:3000/user/registration';
+	const RegisterAPI = 'http://localhost:3000/api/user/registration';
 
 	// 't' is for translation, 'i18n' is the instance for control
 	const { t, i18n } = useTranslation();
@@ -26,7 +26,7 @@ const RegisterForm = ()=> {
 			confirmPassword: { value: string };
 		};
 
-		const username = target.username.value;
+		const userName = target.username.value;
 		const email = target.email.value;
 		const password = target.password.value;
 		const confirmPassword = target.confirmPassword.value;
@@ -36,7 +36,7 @@ const RegisterForm = ()=> {
             setLoading(false);
             return; // Stop the function if they don't match
         }
-		if (!username || !email || !password || !confirmPassword) {
+		if (!userName || !email || !password || !confirmPassword) {
             setError(t('all_fields_required'));
             setLoading(false);
             return;
@@ -49,7 +49,7 @@ const RegisterForm = ()=> {
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify({
-					username,
+					userName,
 					email,
 					password,
 				}),
@@ -70,6 +70,9 @@ const RegisterForm = ()=> {
 		}
 	}
 
+	const formStyle = "block text-left dark:text-white text-sm font-medium mb-2";
+	const formFieldStyle = "dark:text-white w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500";
+
 	return (
 		<form onSubmit={handleSubmit}>
 				{error && (
@@ -84,7 +87,7 @@ const RegisterForm = ()=> {
 			)} */}
 			<div className="space-y-4">
 				<div>
-					<label htmlFor="username" className="block text-left text-sm font-medium mb-2">
+					<label htmlFor="username" className={`${formStyle}`}>
 						{t('username')}
 					</label>
 					<input
@@ -92,12 +95,12 @@ const RegisterForm = ()=> {
 						id="username"
 						name="username"
 						autoComplete="username"
-						className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+						className={`${formFieldStyle}`}
 						placeholder={t('enter-username')}
 						/>
 				</div>
 				<div>
-					<label htmlFor="email" className="block text-left text-sm font-medium mb-2">
+					<label htmlFor="email" className={`${formStyle}`}>
 						{t('email')}
 					</label>
 					<input
@@ -105,12 +108,12 @@ const RegisterForm = ()=> {
 						id="email"
 						name="email"
 						autoComplete="email"
-						className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+						className={`${formFieldStyle}`}
 						placeholder={t('enter-email')}
 					/>
 				</div>
 				<div>
-					<label htmlFor="password" className="block text-left text-sm font-medium mb-2">
+					<label htmlFor="password" className={`${formStyle}`}>
 						{t('password')}
 					</label>
 					<input
@@ -118,12 +121,12 @@ const RegisterForm = ()=> {
 						id="password"
 						name="password"
 						autoComplete="new-password"
-						className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+						className={`${formFieldStyle}`}
 						placeholder={t('enter-password')}
 					/>
 				</div>
 				<div>
-					<label htmlFor="confirmPassword" className="block text-left text-sm font-medium mb-2">
+					<label htmlFor="confirmPassword" className={`${formStyle}`}>
 						{t('confirm_password')}
 					</label>
 					<input
@@ -131,7 +134,7 @@ const RegisterForm = ()=> {
 						id="confirmPassword"
 						name="confirmPassword"
 						autoComplete="new-password"
-						className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+						className={`${formFieldStyle}`}
 						placeholder={t('confirm_password')}
 					/>
 				</div>

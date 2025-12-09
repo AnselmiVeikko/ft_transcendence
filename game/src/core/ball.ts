@@ -2,8 +2,8 @@ export class Ball {
   x: number;
   y: number;
   radius = 8;
-  speedX = Math.random() + 4;
-  speedY = Math.random() + 3;
+  speedX = Math.random() + 6;
+  speedY = Math.random() + 5;
 
   constructor(x: number, y: number) {
     this.x = x;
@@ -26,8 +26,8 @@ export class Ball {
   }
 
   reset(canvasWidth: number, canvasHeight: number) {
-    this.x = canvasWidth / 2;
-    this.y = canvasHeight / 2;
+    this.x = canvasWidth;
+    this.y = canvasHeight;
     this.speedX *= -1;
     this.speedY *= -1;
   }

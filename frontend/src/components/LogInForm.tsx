@@ -7,7 +7,7 @@ const LogInForm = ()=> {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState('');
 	const [success, setSuccess] = useState('');
-	const LogInAPI = 'http://localhost:3000/user/login';
+	const LogInAPI = 'http://localhost:3000/api/user/login';
 
 	const { t, i18n } = useTranslation();
 	const navigate = useNavigate();
@@ -24,11 +24,11 @@ const LogInForm = ()=> {
 			password: { value: string };
 		};
 
-		const username = target.username.value;
+		const userName = target.username.value;
 		//const email = target.email.value;
 		const password = target.password.value;
 
-		if (!username || !password) {
+		if (!userName || !password) {
             setError(t('all_fields_required'));
             setLoading(false);
             return;
@@ -37,11 +37,12 @@ const LogInForm = ()=> {
 		try {
 			const response = await fetch(LogInAPI, {
 				method: 'POST',
+				credentials: "include",
 				headers: {
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify({
-					username,
+					userName,
 					//email,
 					password,
 				}),
@@ -52,14 +53,16 @@ const LogInForm = ()=> {
 				throw new Error(data.message || t('login_failed'));
 			}
 			setSuccess(t('login_success'));
-			navigate('/menu');
-
+			navigate("/menu");
 		} catch (err: unknown) {
 			setError(t('login_failed'));
 		} finally {
 			setLoading(false);
 		}
 	}
+
+	const formStyle = "block dark:text-white text-left text-sm font-medium mb-2";
+	const formFieldStyle = "dark:text-white w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500";
 
 	return (
 		<form onSubmit={handleSubmit}>
@@ -75,7 +78,7 @@ const LogInForm = ()=> {
 			)} */}
 			<div className="space-y-4">
 				<div>
-					<label htmlFor="username" className="block text-left text-sm font-medium mb-2">
+					<label htmlFor="username" className={`${formStyle}`}>
 						{t('username')}
 					</label>
 					<input
@@ -83,20 +86,20 @@ const LogInForm = ()=> {
 						id="username"
 						name="username"
 						autoComplete="username"
-						className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+						className={`${formFieldStyle}`}
 						placeholder={t('enter-username')}
 						/>
 				</div>
 				<div>
-					<label htmlFor="password" className="block text-left text-sm font-medium mb-2">
+					<label htmlFor="password" className={`${formStyle}`}>
 						{t('password')}
 					</label>
 					<input
 						type="password"
 						id="password"
 						name="password"
-						autoComplete="new-password"
-						className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+						autoComplete="current-password"
+						className={`${formFieldStyle}`}
 						placeholder={t('enter-password')}
 					/>
 				</div>

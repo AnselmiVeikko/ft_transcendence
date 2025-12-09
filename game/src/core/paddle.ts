@@ -1,4 +1,5 @@
 export class Paddle {
+  name: string;
   x: number;
   y: number;
   width = 12;
@@ -8,7 +9,8 @@ export class Paddle {
   life = 3;
 
 
-  constructor(x: number, y: number) {
+  constructor(name: string, x: number, y: number) {
+    this.name = name;
     this.x = x;
     this.y = y;
   }
@@ -19,11 +21,5 @@ export class Paddle {
 
   moveDown() {
     this.y += this.speed;
-  }
-
-  clamp(canvasHeight: number) {
-    if (this.y < 0) this.y = 0;
-    if (this.y + this.height > canvasHeight)
-      this.y = canvasHeight - this.height;
   }
 }
