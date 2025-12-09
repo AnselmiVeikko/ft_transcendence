@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './Header'; 
 import { useTranslation } from 'react-i18next'
 import SettingsMenu from './SettingsMenu'
@@ -40,8 +40,42 @@ const Menu = () => {
   const handleFriendsClick = () => {
     console.log('Navigating to Friends list...');
   };
-
+   
   const { t } = useTranslation();
+
+  const [userName, setUserName] = useState('Loading...');
+  const SelfAPI = 'http://localhost:3000/api/user/profile/self';
+
+  useEffect(() => {
+		const fetchUserName = async () => {
+			try {
+				const response = await fetch(SelfAPI, {
+					method: 'GET',
+					credentials: 'include',
+					headers: {
+					},
+				});
+				if (response.status === 401) {
+        			throw new Error("User not authenticated.");
+    			}
+				if (!response.ok) {
+					throw new Error(`HTTP Error: ${response.status}`);
+				}
+				const result = await response.json();
+
+				if (result.data && result.data.userName) {
+					//console.log(result.data.userName);
+					setUserName(result.data.userName);
+				} else {
+					throw new Error(result.message);
+				}
+			} catch (e) {
+				console.error("Failed to fetch user profile: ", e);
+				setUserName("Player1");
+			}
+		};
+		fetchUserName();
+  }, []);
 
   return (
     <div className="relative h-screen overflow-hidden">
@@ -49,7 +83,7 @@ const Menu = () => {
       <SettingsMenu />
       <Header
         appName="PONG"
-        playerName="Player1"
+        playerName={userName}
         onFriendsClick={handleFriendsClick}
         onLogout={handleLogout}
       />
