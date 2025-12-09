@@ -4,7 +4,14 @@ import { Static } from "@sinclair/typebox";
 import { ProfileSelfQuerySchema, ProfileSelfResponseSchema, ErrorResponseSchema } from "../schemas/UserSchema";
 import { ProfileAllfQuerySchema, ProfileAllResponseSchema } from "../schemas/UserSchema";
 import { ProfileSelf, ProfileAll, errorResponse } from "../utils/UserResponses";
+import jwt from "jsonwebtoken";
 
+
+interface JWTPayLoad {
+    userId: number;
+    iat?:   number;
+    exp?:   number;
+}
 
 type ProfileSelfRequest = FastifyRequest<{ Querystring: Static<typeof ProfileSelfQuerySchema> }>;
 type ProfileAllRequest = FastifyRequest<{ Querystring: Static<typeof ProfileAllfQuerySchema> }>;
@@ -12,24 +19,27 @@ type ProfileAllRequest = FastifyRequest<{ Querystring: Static<typeof ProfileAllf
 export default async function profileRoutes(app: FastifyInstance) {
 	app.get("/api/user/profile/self", {
 		schema: {
-			querystring: ProfileSelfQuerySchema,
 			response: {
 				200: ProfileSelfResponseSchema,
 				default: ErrorResponseSchema
 			}
 		}
 	},
-	async (request: ProfileSelfRequest, reply: FastifyReply) => {
-		const { userId } = request.query;
+	async (request: FastifyRequest, reply: FastifyReply) => {
+		const token = request.cookies?.accessJWT;
+			if (!token) {
+				return reply.status(401).send({ message: "Missing token "});
+			}
+			const payload = jwt.verify(token, process.env.JWT_ACCESS_SECRET || "access-secret") as JWTPayLoad;
+				(request as any).user = payload;
+			
 
-		const userIdNum = Number(userId);
-
-		if (isNaN(userIdNum)) {
+		if (isNaN(payload.userId)) {
 			return reply.status(400).send(errorResponse(400, "Invalid userId format"));
 		}
 
 		const userProfile = await prisma.user_info.findUnique({
-			where: { userId: userIdNum }
+			where: { userId: payload.userId }
 		});
 
 		if (!userProfile) {
