@@ -4,6 +4,7 @@ import { Static } from "@sinclair/typebox";
 import { ProfileSelfQuerySchema, ProfileSelfResponseSchema, ErrorResponseSchema } from "../schemas/UserSchema";
 import { ProfileAllfQuerySchema, ProfileAllResponseSchema } from "../schemas/UserSchema";
 import { ProfileSelf, ProfileAll, errorResponse } from "../utils/UserResponses";
+import { verifyAccess } from "../utils/auth";
 
 
 type ProfileSelfRequest = FastifyRequest<{ Querystring: Static<typeof ProfileSelfQuerySchema> }>;
@@ -20,16 +21,14 @@ export default async function profileRoutes(app: FastifyInstance) {
 		}
 	},
 	async (request: ProfileSelfRequest, reply: FastifyReply) => {
-		const { userId } = request.query;
 
-		const userIdNum = Number(userId);
-
-		if (isNaN(userIdNum)) {
-			return reply.status(400).send(errorResponse(400, "Invalid userId format"));
+		const userId = await verifyAccess(request, reply);
+		if (!userId) {
+			return;
 		}
 
 		const userProfile = await prisma.user_info.findUnique({
-			where: { userId: userIdNum }
+			where: { userId: userId }
 		});
 
 		if (!userProfile) {
