@@ -88,9 +88,10 @@ logs:
 	$(DC) --env-file $(ENV_FILE) -f $(COMPOSE_FILE) logs -f
 
 # -----------------------
-# Clean and restart
+# Clean, build and restart
 # -----------------------
 re:
 	@echo "Cleaning and restarting all services..."
 	$(MAKE) clean
+	$(MAKE) build
 	$(MAKE) up
