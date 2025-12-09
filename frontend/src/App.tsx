@@ -6,7 +6,7 @@ const App: React.FC = () => {
   const location = useLocation();
 
   const noHeaderRoutes = ["/", "/register"];
-  const validRoutes = ["/", "/register", "/menu", "/friends"];
+  const validRoutes = ["/", "/register", "/menu", "/friends", "/singlematch"];
   const showHeader =
     !noHeaderRoutes.includes(location.pathname) &&
     validRoutes.includes(location.pathname);

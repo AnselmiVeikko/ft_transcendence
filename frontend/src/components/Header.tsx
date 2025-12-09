@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { GrClose } from "react-icons/gr";
-import { GiHamburgerMenu } from "react-icons/gi";
-import { FaUser, FaUserFriends, FaSignOutAlt } from "react-icons/fa";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router";
+import { useState, useEffect } from 'react';
+import { GrClose } from 'react-icons/gr';
+import { GiHamburgerMenu } from 'react-icons/gi';
+import { FaUser, FaUserFriends, FaSignOutAlt } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router';
 
 /* interface HeaderProps {
   appName: string;
@@ -17,17 +17,49 @@ const Header = () => {
 
   const handleFriendsClick = () => {
     setShowMenu(false);
-    navigate("/friends");
+    navigate('/friends');
   };
 
   const handleLogoutClick = () => {
     setShowMenu(false);
   };
-  // 't' is for translation
   const { t } = useTranslation();
 
+  const [userName, setUserName] = useState('');
+  const SelfAPI = 'http://localhost:3000/api/user/profile/self';
+
+  useEffect(() => {
+    const fetchUserName = async () => {
+      try {
+        const response = await fetch(SelfAPI, {
+          method: 'GET',
+          credentials: 'include',
+          headers: {},
+        });
+        if (response.status === 401) {
+          throw new Error('User not authenticated.');
+        }
+        if (!response.ok) {
+          throw new Error(`HTTP Error: ${response.status}`);
+        }
+        const result = await response.json();
+
+        if (result.data && result.data.userName) {
+          //console.log(result.data.userName);
+          setUserName(result.data.userName);
+        } else {
+          throw new Error(result.message);
+        }
+      } catch (e) {
+        console.error('Failed to fetch user profile: ', e);
+        setUserName('Player1');
+      }
+    };
+    fetchUserName();
+  }, []);
+
   return (
-    <header className="bg-linear-to-b from-slate-900 to-slate-700  p-4 sticky top-0 z-10"> 
+    <header className="bg-linear-to-b from-slate-900 to-slate-700  p-4 sticky top-0 z-10">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-4">
           <h1 className="text-2xl sm:text-3xl font-bold text-white px-4 py-2">
@@ -38,7 +70,7 @@ const Header = () => {
             <div className="h-8 w-px bg-purple-500/50"></div>
             <div className="flex items-center gap-2 text-white px-4 py-2">
               <FaUser className="w-5 h-5" />
-              <span className="font-semibold">Player1</span>
+              <span className="font-semibold">{userName}</span>
             </div>
           </div>
         </div>
@@ -99,6 +131,6 @@ const Header = () => {
       </div>
     </header>
   );
-}
+};
 
 export default Header;
