@@ -33,7 +33,7 @@ const MenuCard = ({ title, colorClass, icon, to }: MenuCardProps) => (
 
 const Menu = () => {
 
-  const handleLogout = () => {
+   const handleLogout = () => {
     console.log('Logging out from Menu component...');
   };
 
@@ -81,12 +81,12 @@ const Menu = () => {
     <div className="relative h-screen overflow-hidden">
 		
       <SettingsMenu />
-      <Header
+      {/* <Header
         appName="PONG"
         playerName={userName}
         onFriendsClick={handleFriendsClick}
         onLogout={handleLogout}
-      />
+      />*/}
       <div 
         className={`${colorClasses.bgGlow} flex items-center justify-center p-4`}
         style={{ height: 'calc(100vh - 3.5rem)' }} // make sure content fits below header
@@ -99,14 +99,12 @@ const Menu = () => {
             icon={<FaPlay />}
             to="/singlematch"
           />
-          
           <MenuCard
             title={t('tournament')}
             colorClass={colorClasses.tournament}
             icon={<FaTrophy />}
             to="/"
           />
-          
           <MenuCard
             title={t('stats')}
             colorClass={colorClasses.stats}
