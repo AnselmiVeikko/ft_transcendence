@@ -1,12 +1,12 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "App.js",
+  "type": "module",
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
-    "dev": "ts-node src/index.ts",
-    "prestart": "npm run build"
+    "dev": "nodemon --watch 'src/**/*.ts' --exec ts-node src/app.ts"
   },
   "keywords": [],
   "author": "",
@@ -23,7 +23,7 @@
   "devDependencies": {
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/node": "^24.10.1",
+    "@types/node": "^24.10.2",
     "@types/ws": "^8.18.1",
     "nodemon": "^3.1.11"
   }
