@@ -78,7 +78,7 @@ body {
 }
 
 .game-shell {
-  width: min(2100px, 100%);
+  width: min(2000px, 100%);
   display: grid;
   grid-template-columns: minmax(280px, 340px) 1fr;
   grid-template-areas:
