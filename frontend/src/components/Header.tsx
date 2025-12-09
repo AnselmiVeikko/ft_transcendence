@@ -28,7 +28,7 @@ const Header = ({ appName, playerName, onFriendsClick, onLogout }: HeaderProps) 
   const { t } = useTranslation();
 
   return (
-    <header className="bg-linear-to-b from-slate-900/95 to-slate-700  p-4 sticky top-0 z-10"> 
+    <header className="bg-linear-to-b from-slate-900 to-slate-700  p-4 sticky top-0 z-10"> 
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-4">
           <h1 className="text-2xl sm:text-3xl font-bold text-white px-4 py-2">
