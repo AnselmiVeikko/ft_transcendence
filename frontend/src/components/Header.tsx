@@ -37,9 +37,11 @@ const Header = () => {
           headers: {},
         });
         if (response.status === 401) {
+		  navigate("/");
           throw new Error('User not authenticated.');
         }
         if (!response.ok) {
+		  navigate("/");
           throw new Error(`HTTP Error: ${response.status}`);
         }
         const result = await response.json();
