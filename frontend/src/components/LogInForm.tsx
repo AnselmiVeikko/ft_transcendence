@@ -37,6 +37,7 @@ const LogInForm = ()=> {
 		try {
 			const response = await fetch(LogInAPI, {
 				method: 'POST',
+				credentials: "include",
 				headers: {
 					'Content-Type': 'application/json',
 				},
@@ -97,7 +98,7 @@ const LogInForm = ()=> {
 						type="password"
 						id="password"
 						name="password"
-						autoComplete="new-password"
+						autoComplete="current-password"
 						className={`${formFieldStyle}`}
 						placeholder={t('enter-password')}
 					/>

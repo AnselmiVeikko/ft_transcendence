@@ -7,13 +7,18 @@ import { ProfileSelf, ProfileAll, errorResponse } from "../utils/UserResponses";
 import { verifyAccess } from "../utils/auth";
 
 
+interface JWTPayLoad {
+    userId: number;
+    iat?:   number;
+    exp?:   number;
+}
+
 type ProfileSelfRequest = FastifyRequest<{ Querystring: Static<typeof ProfileSelfQuerySchema> }>;
 type ProfileAllRequest = FastifyRequest<{ Querystring: Static<typeof ProfileAllfQuerySchema> }>;
 
 export default async function profileRoutes(app: FastifyInstance) {
 	app.get("/api/user/profile/self", {
 		schema: {
-			querystring: ProfileSelfQuerySchema,
 			response: {
 				200: ProfileSelfResponseSchema,
 				default: ErrorResponseSchema

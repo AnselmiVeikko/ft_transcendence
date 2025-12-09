@@ -32,7 +32,7 @@ export const RegisterResponseSchema = Type.Object({
 
 // SELF Profile Query and response schema
 export const ProfileSelfQuerySchema = Type.Object({
-    userId: Type.String(),
+    //userId: Type.String(),
 });
 
 export const ProfileSelfResponseSchema = Type.Object({
