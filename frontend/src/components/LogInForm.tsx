@@ -98,7 +98,7 @@ const LogInForm = ()=> {
 						type="password"
 						id="password"
 						name="password"
-						autoComplete="new-password"
+						autoComplete="current-password"
 						className={`${formFieldStyle}`}
 						placeholder={t('enter-password')}
 					/>
