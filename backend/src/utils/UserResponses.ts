@@ -1,4 +1,4 @@
-export function loginSuccess(user: { userId: number, userName: string }) {
+export function loginSuccess(user: { userId: string, userName: string }) {
 	return {
 		message: "Login succesful",
 		data: {
@@ -8,7 +8,7 @@ export function loginSuccess(user: { userId: number, userName: string }) {
 	};
 }
 
-export function RegistrationSuccess(user: { userId: number, userName: string }) {
+export function RegistrationSuccess(user: { userId: string, userName: string }) {
 	return {
 		message: "Registration succesful",
 		data: {
@@ -18,7 +18,7 @@ export function RegistrationSuccess(user: { userId: number, userName: string }) 
 	};
 }
 
-export function ProfileSelf(userProfile: {userId: number, userName: string, email: string}) {
+export function ProfileSelf(userProfile: {userId: string, userName: string, email: string}) {
 	return {
 		message: "Profile retrieve successful",
 		data: {
