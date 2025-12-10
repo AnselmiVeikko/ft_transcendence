@@ -1,5 +1,4 @@
 import React from 'react';
-import Header from './Header'; 
 import { useTranslation } from 'react-i18next'
 import SettingsMenu from './SettingsMenu'
 import { FaPlay, FaTrophy, FaChartBar } from 'react-icons/fa'
@@ -32,27 +31,19 @@ const MenuCard = ({ title, colorClass, icon, to }: MenuCardProps) => (
 // ---------------------------------------
 
 const Menu = () => {
-
-  const handleLogout = () => {
-    console.log('Logging out from Menu component...');
-  };
-
-  const handleFriendsClick = () => {
-    console.log('Navigating to Friends list...');
-  };
-
+   
   const { t } = useTranslation();
 
   return (
     <div className="relative h-screen overflow-hidden">
 		
       <SettingsMenu />
-      <Header
+      {/* <Header
         appName="PONG"
-        playerName="Player1"
+        playerName={userName}
         onFriendsClick={handleFriendsClick}
         onLogout={handleLogout}
-      />
+      />*/}
       <div 
         className={`${colorClasses.bgGlow} flex items-center justify-center p-4`}
         style={{ height: 'calc(100vh - 3.5rem)' }} // make sure content fits below header
@@ -65,14 +56,12 @@ const Menu = () => {
             icon={<FaPlay />}
             to="/singlematch"
           />
-          
           <MenuCard
             title={t('tournament')}
             colorClass={colorClasses.tournament}
             icon={<FaTrophy />}
             to="/"
           />
-          
           <MenuCard
             title={t('stats')}
             colorClass={colorClasses.stats}
