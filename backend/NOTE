@@ -83,7 +83,7 @@ FRIEND REQUEST:
 
 curl -X POST http://localhost:3000/api/friendrequest/send \
   -H "Content-Type: application/json" \
-  -d '{"senderId":"1", "receiverId":"2"}'
+  -d '{"senderId":"cmizzzsdi0000mi3nxsnl8tug", "receiverId":"cmizzzyn80001mi3n4xt6xilm"}'
 
 
 curl -X POST http://localhost:3000/api/friendrequest/accept \
