@@ -5,6 +5,7 @@ import cors from "@fastify/cors";
 import fastifyCookie from "@fastify/cookie";
 import registrationRoutes from "./routes/Register";
 import loginRoutes from "./routes/Login";
+import logoutRoutes from "./routes/Logout"
 import profileRoutes from "./routes/Profile";
 import FriendRequest from "./routes/FriendRequest";
 
@@ -28,6 +29,7 @@ async function buildServer() {
 	app.register(loginRoutes);
 	app.register(profileRoutes);
 	app.register(FriendRequest);
+	app.register(logoutRoutes);
 }
 
 
