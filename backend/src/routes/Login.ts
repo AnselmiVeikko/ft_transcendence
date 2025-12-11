@@ -33,13 +33,16 @@ export default async function loginRoutes(app: FastifyInstance) {
             return reply.status(401).send(errorResponse(401, "Invalid credentials."));
         }
 
+        
         setCookies(reply, user.userId);
-        //TODO: toggle person online in the database
+        
         const responseUser = {
             userId: user.userId,
             userName: user.userName,
         };
-
+        
+        await prisma.user_info.update({ where: { userId: user.userId }, data: { status: 'ONLINE' } }); //TODO: Wrap in try/catch
+        
         return reply.status(200).send(loginSuccess(responseUser));
     });
 }
