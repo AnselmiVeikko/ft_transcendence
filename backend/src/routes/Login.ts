@@ -1,6 +1,4 @@
 import  bcrypt  from "bcrypt";
-import  jwt  from "jsonwebtoken";
-import dotenv from "dotenv";
 import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import { Static } from "@sinclair/typebox";
 import { prisma } from "../plugins/prisma";
@@ -9,8 +7,6 @@ import { LoginBodySchema, LoginResponseSchema, ErrorResponseSchema } from "../sc
 import { setCookies } from "../utils/auth";
 
 type LoginRequest = FastifyRequest<{ Body: Static<typeof LoginBodySchema> }>;
-
-dotenv.config();
 
 export default async function loginRoutes(app: FastifyInstance) {
     app.post( "/api/user/login", {
@@ -25,7 +21,7 @@ export default async function loginRoutes(app: FastifyInstance) {
     async (request: LoginRequest, reply: FastifyReply) => {
     const { userName, password } = request.body;
 
-        const user = await prisma.user_info.findUnique({ where: { userName }});
+        const user = await prisma.user_info.findUnique({ where: { userName }}); //TODO: Wrap in try/catch
         if (!user) {
             return reply.status(401).send(errorResponse(401, "User does not exist"));
         }
@@ -38,7 +34,7 @@ export default async function loginRoutes(app: FastifyInstance) {
         }
 
         setCookies(reply, user.userId);
-
+        //toggle person online
         const responseUser = {
             userId: user.userId,
             userName: user.userName,
