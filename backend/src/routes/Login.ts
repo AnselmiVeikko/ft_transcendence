@@ -34,7 +34,7 @@ export default async function loginRoutes(app: FastifyInstance) {
         }
 
         setCookies(reply, user.userId);
-        //toggle person online
+        //TODO: toggle person online in the database
         const responseUser = {
             userId: user.userId,
             userName: user.userName,

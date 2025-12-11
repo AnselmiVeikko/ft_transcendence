@@ -26,7 +26,7 @@ export default async function logoutRoutes(app: FastifyInstance) {
 
         clearCookies(reply);
 
-        //toggle person offline
+        //TODO: toggle person offline in the database
         const responseUser = {
             userId: user.userId,
             userName: user.userName,
