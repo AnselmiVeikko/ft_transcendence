@@ -1,5 +1,6 @@
 import { Type, Static } from "@sinclair/typebox";
 
+//login and logout schemas
 export const LoginBodySchema = Type.Object({
     userName: Type.String(),
     password: Type.String(),
@@ -14,6 +15,13 @@ export const LoginResponseSchema = Type.Object({
     }),
 });
 
+export const LogoutResponseSchema = Type.Object({
+    message: Type.String(),
+    data: Type.Object({
+
+    username: Type.String(),
+    }),
+});
 
 // Registration body and response schema
 export const RegisterBodySchema = Type.Object({
