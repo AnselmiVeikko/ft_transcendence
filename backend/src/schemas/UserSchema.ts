@@ -19,7 +19,7 @@ export const LogoutResponseSchema = Type.Object({
     message: Type.String(),
     data: Type.Object({
 
-    username: Type.String(),
+    userName: Type.String(),
     }),
 });
 
