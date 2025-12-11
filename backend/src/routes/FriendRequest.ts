@@ -2,10 +2,10 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import { FRAcceptBodySchema, FRAcceptResponseSchema, FRDeclineBodySchema, FRDeclineResponseSchema, FRSendBodySchema, FRSendResponseSchema } from "../schemas/FriendSchema";
 import { Static } from "@fastify/type-provider-typebox";
 import { ErrorResponseSchema } from "../schemas/UserSchema";
-import { request } from "http";
 import { errorResponse } from "../utils/UserResponses";
 import prisma from "../plugins/prisma";
 import { FRAcceptSuccess, FRDecclineSuccess, FRSendSuccess } from "../utils/FriendResponses";
+import { verifyAccess } from "../utils/auth";
 
 type FriendRequestSend = FastifyRequest<{ Body: Static<typeof FRSendBodySchema> }>;
 type FriendRequestAccept = FastifyRequest<{ Body: Static<typeof FRAcceptBodySchema> }>;
@@ -22,12 +22,15 @@ export default async function FriendRequest(app: FastifyInstance) {
 			},
 		},
 	},
+
 	async (request: FriendRequestSend, reply: FastifyReply) => {
 		try{
+			const { receiverId } = request.body;
 
-			const {senderId, receiverId} = request.body;
-
-			// add validation : senderID == userID (from cookie) ************
+			const senderId = await verifyAccess(request, reply);
+			if (!senderId) {
+				return;
+			}
 
 			if (senderId === receiverId) {
 				return reply.status(400).send(errorResponse(400, "Sending self friend request is not allowed"));
@@ -43,11 +46,50 @@ export default async function FriendRequest(app: FastifyInstance) {
 				return reply.status(401).send(errorResponse(401, "Receiver does not exists"));
 			}
 
-			// What to do when request status is "DECLINED" ???????????
-			const requestExist = await prisma.friend_request.findUnique({
+			const dirRequestExist = await prisma.friend_request.findUnique({
 				where: { senderId_receiverId: {senderId: senderId as string, receiverId: receiverId as string}}});
-			if (requestExist) {
-				return reply.status(400).send(errorResponse(400, "Friend request already exists"));
+
+			if (dirRequestExist) {
+				if (dirRequestExist.requestStatus === "PENDING" || dirRequestExist.requestStatus === "ACCEPTED") {
+					return reply.status(400).send(errorResponse(400, "Friend request already exists"));
+				} else {
+					const updateRequest = await prisma.friend_request.update({
+						where: { senderId_receiverId: {
+							senderId: senderId as string,
+							receiverId: receiverId as string,
+							},
+						},
+						data: {
+							requestStatus: "PENDING",
+							updatedAt: new Date(),
+						},
+					});
+					return reply.status(201).send(FRSendSuccess(updateRequest));
+				}
+
+			}
+
+			const revRequestExist = await prisma.friend_request.findUnique({
+				where: { senderId_receiverId: {senderId: receiverId as string, receiverId:  senderId as string}}});
+
+			if (revRequestExist) {
+				if (revRequestExist.requestStatus === "PENDING" || revRequestExist.requestStatus === "ACCEPTED") {
+					return reply.status(400).send(errorResponse(400, "Friend request already exists"));
+				} else {
+					const updateRequest = await prisma.friend_request.update({
+						where: { senderId_receiverId: {
+							senderId: receiverId as string,
+							receiverId: senderId as string,
+							},
+						},
+						data: {
+							requestStatus: "PENDING",
+							senderId: receiverId as string,
+							receiverId: senderId as string,
+							updatedAt: new Date(),
+						},
+					});
+				}
 			}
 
 			const sendRequest = await prisma.friend_request.create({
@@ -56,8 +98,8 @@ export default async function FriendRequest(app: FastifyInstance) {
 					receiverId: receiverId as string,
 				}
 			});
-
 			return reply.status(201).send(FRSendSuccess(sendRequest));
+
 		} catch (error) {
 			app.log.error(error);
 			return reply.status(500).send(errorResponse(500, "Internal server error"));
@@ -76,7 +118,12 @@ export default async function FriendRequest(app: FastifyInstance) {
 	async (request: FriendRequestAccept, reply: FastifyReply) => {
 		try{
 
-			const {senderId, receiverId} = request.body;
+			const { senderId } = request.body;
+
+			const receiverId = await verifyAccess(request, reply);
+			if (!receiverId) {
+				return;
+			}
 
 			// add validation : receiverId == userID (from cookie) ***********
 
@@ -126,7 +173,12 @@ export default async function FriendRequest(app: FastifyInstance) {
 	async (request: FriendRequestDecline, reply: FastifyReply) => {
 		try{
 
-			const {senderId, receiverId} = request.body;
+			const { senderId } = request.body;
+
+			const receiverId =  await verifyAccess(request, reply);
+			if (!receiverId) {
+				return;
+			}
 
 			// add validation : receiverId == userID (from cookie) ***********
 
