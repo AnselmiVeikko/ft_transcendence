@@ -6,7 +6,7 @@ import { verifyAccess } from "../utils/auth";
 import { clearCookies } from "../utils/auth";
 
 export default async function logoutRoutes(app: FastifyInstance) {
-    app.post( "/api/user/login", {
+    app.post( "/api/user/logout", {
         schema: {
                response: {
                    200: LogoutResponseSchema,
