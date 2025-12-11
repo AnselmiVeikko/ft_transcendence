@@ -1,4 +1,4 @@
-export function FRSendSuccess(request: { senderId: number, receiverId: number}) {
+export function FRSendSuccess(request: { senderId: string, receiverId: string}) {
 	return {
 		message: "Request sent",
 		data: {
@@ -8,7 +8,7 @@ export function FRSendSuccess(request: { senderId: number, receiverId: number}) 
 	};
 }
 
-export function FRAcceptSuccess(request: { senderId: number, receiverId: number}) {
+export function FRAcceptSuccess(request: { senderId: string, receiverId: string}) {
 	return {
 		message: "Request Accepted",
 		data: {
@@ -18,7 +18,7 @@ export function FRAcceptSuccess(request: { senderId: number, receiverId: number}
 	};
 }
 
-export function FRDecclineSuccess(request: { senderId: number, receiverId: number}) {
+export function FRDecclineSuccess(request: { senderId: string, receiverId: string}) {
 	return {
 		message: "Request Declined",
 		data: {

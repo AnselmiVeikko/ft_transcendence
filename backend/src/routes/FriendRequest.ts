@@ -33,27 +33,27 @@ export default async function FriendRequest(app: FastifyInstance) {
 				return reply.status(400).send(errorResponse(400, "Sending self friend request is not allowed"));
 			}
 
-			const sender = await prisma.user_info.findUnique({where: { userId: Number(senderId)}});
+			const sender = await prisma.user_info.findUnique({where: { userId: senderId as string}});
 			if (!sender) {
 				return reply.status(401).send(errorResponse(401, "Sender does not exists"));
 			}
 
-			const receiver = await prisma.user_info.findUnique({ where: { userId: Number(receiverId)}});
+			const receiver = await prisma.user_info.findUnique({ where: { userId: receiverId as string}});
 			if (!receiver) {
 				return reply.status(401).send(errorResponse(401, "Receiver does not exists"));
 			}
 
 			// What to do when request status is "DECLINED" ???????????
 			const requestExist = await prisma.friend_request.findUnique({
-				where: { senderId_receiverId: {senderId: Number(senderId), receiverId: Number(receiverId)}}});
+				where: { senderId_receiverId: {senderId: senderId as string, receiverId: receiverId as string}}});
 			if (requestExist) {
 				return reply.status(400).send(errorResponse(400, "Friend request already exists"));
 			}
 
 			const sendRequest = await prisma.friend_request.create({
 				data: {
-					senderId: Number(senderId),
-					receiverId: Number(receiverId),
+					senderId: senderId as string,
+					receiverId: receiverId as string,
 				}
 			});
 
@@ -81,7 +81,7 @@ export default async function FriendRequest(app: FastifyInstance) {
 			// add validation : receiverId == userID (from cookie) ***********
 
 			const requestExist = await prisma.friend_request.findUnique({
-				where: { senderId_receiverId: {senderId: Number(senderId), receiverId: Number(receiverId)}}});
+				where: { senderId_receiverId: {senderId: senderId as string, receiverId: receiverId as string}}});
 			if (!requestExist) {
 				return reply.status(404).send(errorResponse(404, "Friend request not found"));
 			}
@@ -97,8 +97,8 @@ export default async function FriendRequest(app: FastifyInstance) {
 
 			const acceptRequest = await prisma.friend_request.update({
 				where: { senderId_receiverId: {
-					senderId: Number(senderId),
-					receiverId: Number(receiverId),
+					senderId: senderId as string,
+					receiverId: receiverId as string,
 					},
 				},
 				data: {
@@ -131,7 +131,7 @@ export default async function FriendRequest(app: FastifyInstance) {
 			// add validation : receiverId == userID (from cookie) ***********
 
 			const requestExist = await prisma.friend_request.findUnique({
-				where: { senderId_receiverId: {senderId: Number(senderId), receiverId: Number(receiverId)}}});
+				where: { senderId_receiverId: {senderId: senderId as string, receiverId: receiverId as string}}});
 			if (!requestExist) {
 				return reply.status(404).send(errorResponse(404, "Friend request not found"));
 			}
@@ -146,8 +146,8 @@ export default async function FriendRequest(app: FastifyInstance) {
 
 			const declineRequest = await prisma.friend_request.update({
 				where: { senderId_receiverId: {
-					senderId: Number(senderId),
-					receiverId: Number(receiverId),
+					senderId: senderId as string,
+					receiverId: receiverId as string,
 					},
 				},
 				data: {

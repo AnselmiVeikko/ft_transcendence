@@ -6,13 +6,6 @@ import { ProfileAllfQuerySchema, ProfileAllResponseSchema } from "../schemas/Use
 import { ProfileSelf, ProfileAll, errorResponse } from "../utils/UserResponses";
 import { verifyAccess } from "../utils/auth";
 
-
-interface JWTPayLoad {
-    userId: number;
-    iat?:   number;
-    exp?:   number;
-}
-
 type ProfileSelfRequest = FastifyRequest<{ Querystring: Static<typeof ProfileSelfQuerySchema> }>;
 type ProfileAllRequest = FastifyRequest<{ Querystring: Static<typeof ProfileAllfQuerySchema> }>;
 
