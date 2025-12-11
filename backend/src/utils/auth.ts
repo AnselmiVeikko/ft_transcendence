@@ -2,7 +2,7 @@ import type { FastifyRequest, FastifyReply } from "fastify";
 import jwt from "jsonwebtoken";
 
 interface JWTPayLoad {
-    userId: number;
+    userId: string;
     iat?:   number;
     exp?:   number;
 }
@@ -40,7 +40,7 @@ export async function refreshAccess(request: FastifyRequest, reply: FastifyReply
      }
 }
 
-export function setCookies(reply: FastifyReply, userId: number) {
+export function setCookies(reply: FastifyReply, userId: string) {
 
     const accessJWT = jwt.sign(
         { userId },
