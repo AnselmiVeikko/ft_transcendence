@@ -24,13 +24,16 @@ export default async function logoutRoutes(app: FastifyInstance) {
            return reply.status(401).send(errorResponse(401, "User does not exist"));
         }
 
+        
         clearCookies(reply);
-
-        //TODO: toggle person offline in the database
+        
         const responseUser = {
             userId: user.userId,
             userName: user.userName,
         };
+
+        await prisma.user_info.update({ where: { userId: user.userId }, data: { status: 'OFFLINE' } }); //TODO: Wrap in try/catch
+
         return reply.status(200).send(logoutSuccess(responseUser));
     });
 }
