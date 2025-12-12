@@ -5,7 +5,9 @@ import cors from "@fastify/cors";
 import fastifyCookie from "@fastify/cookie";
 import registrationRoutes from "./routes/Register";
 import loginRoutes from "./routes/Login";
+import logoutRoutes from "./routes/Logout"
 import profileRoutes from "./routes/Profile";
+import FriendRequest from "./routes/FriendRequest";
 
 dotenv.config();
 
@@ -16,13 +18,18 @@ const port = process.env.BACKEND_PORT? Number(process.env.BACKEND_PORT) : 3000
 async function buildServer() {
 	// Register CORS plugin
 	await app.register(cors, {
-		origin: "*"
+		origin: "http://localhost:5173",
+		credentials: true
 	});
+	
 	app.get("/health", async () => ({ Hello: "Backend is running...." }));
+	
 	app.register(fastifyCookie);
 	app.register(registrationRoutes);
 	app.register(loginRoutes);
 	app.register(profileRoutes);
+	app.register(FriendRequest);
+	app.register(logoutRoutes);
 }
 
 

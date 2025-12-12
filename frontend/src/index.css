@@ -1,3 +1,67 @@
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
+
+
+@keyframes blob-drift {
+  0% {
+    background-position: 200% -50%, 80% 60%, 40% -100%;
+  }
+  50% {
+    background-position: 35% 25%, 75% -50%, 0% 100%;
+  }
+  100% {
+    background-position: 200% -50%, 80% 60%, 40% -100%;
+  }
+}
+
+@keyframes blob-drift2 {
+  0% {
+    background-position: 300% -50%,-300% -600%, 40% -300%;
+  }
+  50% {
+    background-position: 400% 25%, 300% -500%, 305% 15%;
+  }
+  100% {
+    background-position: 300% -50%, -300% -600%, 40% -300%;
+  }
+}
+
+@layer utilities {
+  .dark .bg-glow {
+    background-color: #03072e;
+	background-repeat: no-repeat;
+	background-size: 1800px 1800px, 1200px 1200px, 1400px 1400px;
+    background-image:
+      radial-gradient(circle, #002fff5f, transparent 40%),
+      radial-gradient(circle, #ff00b784, transparent 40%),
+      radial-gradient(circle, #38919448, transparent 40%);
+  }
+  .bg-glow {
+    background-color: #ebecef;
+	background-repeat: no-repeat;
+	background-size: 1800px 1800px, 1200px 1200px, 1400px 1400px;
+    background-image:
+      radial-gradient(circle, #002fff25, transparent 40%),
+      radial-gradient(circle, #ff00b72b, transparent 40%),
+      radial-gradient(circle, #3891942d, transparent 40%);
+  }
+  .dark .bg-glow2 {
+    background-color: #03072e;
+	background-repeat: no-repeat;
+	background-size: 1800px 1800px, 1200px 1200px, 1400px 1400px;
+    background-image:
+      radial-gradient(circle, #002fff2c, transparent 40%),
+      radial-gradient(circle, #ff00b730, transparent 40%),
+      radial-gradient(circle, #38919433, transparent 40%);
+  }
+  .bg-glow2 {
+    background-color: #ebecef;
+	background-repeat: no-repeat;
+	background-size: 1800px 1800px, 1200px 1200px, 1400px 1400px;
+    background-image:
+      radial-gradient(circle, #002fff23, transparent 40%),
+      radial-gradient(circle, #ff00b72a, transparent 40%),
+      radial-gradient(circle, #38919425, transparent 40%);
+  }
+}

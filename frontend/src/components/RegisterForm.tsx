@@ -60,10 +60,7 @@ const RegisterForm = ()=> {
 				throw new Error(data.message || t('registration_failed'));
 			}
 			setSuccess(t('registration_success'));
-
-			setTimeout(() => {
-				navigate('/');
-			}, 1500);
+			navigate('/');
 
 		} catch (err: unknown) {
 			//const message = err instanceof Error ? err.message : String(err);
@@ -73,8 +70,8 @@ const RegisterForm = ()=> {
 		}
 	}
 
-	const formStyle = "block text-left text-sm font-medium mb-2";
-	const formFieldStyle = "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500";
+	const formStyle = "block text-left dark:text-white text-sm font-medium mb-2";
+	const formFieldStyle = "dark:text-white w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500";
 
 	return (
 		<form onSubmit={handleSubmit}>
@@ -83,11 +80,11 @@ const RegisterForm = ()=> {
 					{error}
 				</div>
 			)}
-			{success && (
+			{/* {success && (
 				<div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
 					{success}
 				</div>
-			)}
+			)} */}
 			<div className="space-y-4">
 				<div>
 					<label htmlFor="username" className={`${formStyle}`}>

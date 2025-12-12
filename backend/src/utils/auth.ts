@@ -2,23 +2,25 @@ import type { FastifyRequest, FastifyReply } from "fastify";
 import jwt from "jsonwebtoken";
 
 interface JWTPayLoad {
-    userId: number;
+    userId: string;
     iat?:   number;
     exp?:   number;
 }
 
 export async function verifyAccess(request: FastifyRequest, reply: FastifyReply) {
-    const token = request.cookies?.accessJWT;
-    if (!token) {
-        return reply.status(401).send({ message: "Missing token "});
-    }
-    try {
-        const payload = jwt.verify(token, process.env.JWT_ACCESS_SECRET || "access-secret") as JWTPayLoad;
-        (request as any).user = payload;
-    } catch (err) {
-        return reply.status(401).send({ message: "Invalid token" });
-    }
+  const token = request.cookies?.accessJWT;
+  if (!token) {
+      return reply.status(401).send({ message: "Missing token "});
+  }
+  let payload: JWTPayLoad | undefined;
+  try {
+      payload = jwt.verify(token, process.env.JWT_ACCESS_SECRET || "access-secret") as JWTPayLoad;
+  } catch (err) {
+      return reply.status(401).send({ message: "Invalid token" });
+  }
+  return payload.userId;
 }
+
 
 export async function refreshAccess(request: FastifyRequest, reply: FastifyReply){
      const token = request.cookies?.refreshJWT;
@@ -38,13 +40,13 @@ export async function refreshAccess(request: FastifyRequest, reply: FastifyReply
      }
 }
 
-export function setCookies(reply: FastifyReply, userId: number) {
+export function setCookies(reply: FastifyReply, userId: string) {
 
     const accessJWT = jwt.sign(
         { userId },
         process.env.JWT_ACCESS_SECRET || "access-secret",
         { expiresIn: "15m" }
-    ); 
+    );
 
     const refreshJWT = jwt.sign(
         { userId },
@@ -54,18 +56,28 @@ export function setCookies(reply: FastifyReply, userId: number) {
     reply
         .setCookie("accessJWT", accessJWT, {
             httpOnly: true,
-            secure: true, //https only
+            secure: false, //TODO: change to true when https connection is established
             sameSite: "lax",
             path: "/",
             maxAge: 15 * 60 // 15 minutes
         })
         .setCookie("refreshJWT", refreshJWT, {
             httpOnly: true,
-            secure: true,
+            secure: false,
             sameSite: "strict",
             path: "/auth/refresh",
             maxAge: 7 * 24 * 60 * 60 // 7 days
         });
 
     return reply;
+}
+
+export function clearCookies(reply: FastifyReply)
+{
+    reply.clearCookie("accessJWT", {
+        path: "/",
+    });
+    reply.clearCookie("refreshJWT" {
+        path: "/auth/refresh",
+    });
 }
