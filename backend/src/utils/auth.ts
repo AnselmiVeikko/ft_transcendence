@@ -77,7 +77,7 @@ export function clearCookies(reply: FastifyReply)
     reply.clearCookie("accessJWT", {
         path: "/",
     });
-    reply.clearCookie("refreshJWT" {
+    reply.clearCookie("refreshJWT", {
         path: "/auth/refresh",
     });
 }
