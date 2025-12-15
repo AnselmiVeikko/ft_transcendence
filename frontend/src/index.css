@@ -41,10 +41,10 @@
     background-color: #ebecef;
 	background-repeat: no-repeat;
 	background-size: 1800px 1800px, 1200px 1200px, 1400px 1400px;
-    background-image:
+    /* background-image:
       radial-gradient(circle, #002fff25, transparent 40%),
       radial-gradient(circle, #ff00b72b, transparent 40%),
-      radial-gradient(circle, #3891942d, transparent 40%);
+      radial-gradient(circle, #3891942d, transparent 40%); */
   }
   .dark .bg-glow2 {
     background-color: #03072e;
@@ -59,9 +59,9 @@
     background-color: #ebecef;
 	background-repeat: no-repeat;
 	background-size: 1800px 1800px, 1200px 1200px, 1400px 1400px;
-    background-image:
+    /* background-image:
       radial-gradient(circle, #002fff23, transparent 40%),
       radial-gradient(circle, #ff00b72a, transparent 40%),
-      radial-gradient(circle, #38919425, transparent 40%);
+      radial-gradient(circle, #38919425, transparent 40%); */
   }
 }
