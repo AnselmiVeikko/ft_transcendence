@@ -1,15 +1,18 @@
-import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
-import { FRAcceptBodySchema, FRAcceptResponseSchema, FRDeclineBodySchema, FRDeclineResponseSchema, FRSendBodySchema, FRSendResponseSchema } from "../schemas/FriendSchema";
-import { Static } from "@fastify/type-provider-typebox";
+import { FastifyInstance, FastifyRequest, FastifyReply, FastifyError } from "fastify";
+import { FRSendBodySchema, FRAcceptBodySchema, FRDeclineBodySchema, FRDeleteQuerySchema} from "../schemas/FriendSchema";
+import { FRSendResponseSchema, FRAcceptResponseSchema, FRDeclineResponseSchema, FRDeleteResponseSchema } from "../schemas/FriendSchema";
+import { FRAcceptSuccess, FRDecclineSuccess, FRSendSuccess, FRDeleteSuccess } from "../utils/FriendResponses";
 import { ErrorResponseSchema } from "../schemas/UserSchema";
 import { errorResponse } from "../utils/UserResponses";
+import { Static } from "@fastify/type-provider-typebox";
 import prisma from "../plugins/prisma";
-import { FRAcceptSuccess, FRDecclineSuccess, FRSendSuccess } from "../utils/FriendResponses";
+
 import { verifyAccess } from "../utils/auth";
 
 type FriendRequestSend = FastifyRequest<{ Body: Static<typeof FRSendBodySchema> }>;
 type FriendRequestAccept = FastifyRequest<{ Body: Static<typeof FRAcceptBodySchema> }>;
 type FriendRequestDecline = FastifyRequest<{ Body: Static<typeof FRDeclineBodySchema> }>;
+type FriendRequestDelete = FastifyRequest<{ Querystring: Static<typeof FRDeleteQuerySchema> }>;
 
 export default async function FriendRequest(app: FastifyInstance) {
 
@@ -17,7 +20,7 @@ export default async function FriendRequest(app: FastifyInstance) {
 		schema: {
 			body: FRSendBodySchema,
 			response: {
-				200: FRSendResponseSchema,
+				201: FRSendResponseSchema,
 				default: ErrorResponseSchema,
 			},
 		},
@@ -66,7 +69,6 @@ export default async function FriendRequest(app: FastifyInstance) {
 					});
 					return reply.status(201).send(FRSendSuccess(updateRequest));
 				}
-
 			}
 
 			const revRequestExist = await prisma.friend_request.findUnique({
@@ -74,7 +76,7 @@ export default async function FriendRequest(app: FastifyInstance) {
 
 			if (revRequestExist) {
 				if (revRequestExist.requestStatus === "PENDING" || revRequestExist.requestStatus === "ACCEPTED") {
-					return reply.status(400).send(errorResponse(400, "Friend request already exists"));
+					return reply.status(400).send(errorResponse(400, "This user already sent you a request"));
 				} else {
 					const updateRequest = await prisma.friend_request.update({
 						where: { senderId_receiverId: {
@@ -89,6 +91,7 @@ export default async function FriendRequest(app: FastifyInstance) {
 							updatedAt: new Date(),
 						},
 					});
+					return reply.status(201).send(FRSendSuccess(updateRequest));
 				}
 			}
 
@@ -117,7 +120,6 @@ export default async function FriendRequest(app: FastifyInstance) {
 	},
 	async (request: FriendRequestAccept, reply: FastifyReply) => {
 		try{
-
 			const { senderId } = request.body;
 
 			const receiverId = await verifyAccess(request, reply);
@@ -139,7 +141,7 @@ export default async function FriendRequest(app: FastifyInstance) {
 
 			// What to do when request status is "DECLINED" ??????????
 			if (requestExist.requestStatus === "DECLINED") {
-				return reply.status(400).send(errorResponse(400, "Friend request declined, make new request"));
+				return reply.status(400).send(errorResponse(400, "Ivalid friend request"));
 			}
 
 			const acceptRequest = await prisma.friend_request.update({
@@ -172,15 +174,12 @@ export default async function FriendRequest(app: FastifyInstance) {
 	},
 	async (request: FriendRequestDecline, reply: FastifyReply) => {
 		try{
-
 			const { senderId } = request.body;
 
 			const receiverId =  await verifyAccess(request, reply);
 			if (!receiverId) {
 				return;
 			}
-
-			// add validation : receiverId == userID (from cookie) ***********
 
 			const requestExist = await prisma.friend_request.findUnique({
 				where: { senderId_receiverId: {senderId: senderId as string, receiverId: receiverId as string}}});
@@ -214,8 +213,52 @@ export default async function FriendRequest(app: FastifyInstance) {
 			return reply.status(500).send(errorResponse(500, "Internal server error"));
 		}
 	});
+
+	app.delete( "/api/friendrequest/delete", {
+		schema: {
+			querystring: FRDeleteQuerySchema,
+			response: {
+				200: FRDeleteResponseSchema,
+				default: ErrorResponseSchema,
+			},
+		},
+	},
+	async (request: FriendRequestDelete, reply: FastifyReply) => {
+		try{
+			const { friendRId } = request.query;
+
+			const deleteBy =  await verifyAccess(request, reply);
+			if (!deleteBy) {
+				return;
+			}
+
+			const requestExist = await prisma.friend_request.findUnique({
+				where: { friendRId: friendRId as string}});
+			if (!requestExist) {
+				return reply.status(404).send(errorResponse(404, "Friend request not found"));
+			}
+
+			if (requestExist.senderId !== deleteBy && requestExist.receiverId !== deleteBy) {
+				return reply.status(403).send(errorResponse(403, "You are not alloewd to delete this request"))
+			}
+
+			if (requestExist.requestStatus !== "ACCEPTED") {
+				return reply.status(400).send(errorResponse(400, "Not friend"));
+			}
+
+			const deleteRequest = await prisma.friend_request.update({
+				where: { friendRId: friendRId as string,
+				},
+				data: {
+					requestStatus: "DECLINED",
+					updatedAt: new Date(),
+				},
+			});
+
+			return reply.status(200).send(FRDeleteSuccess(deleteRequest));
+		} catch (error) {
+			app.log.error(error);
+			return reply.status(500).send(errorResponse(500, "Internal server error"));
+		}
+	});
 }
-
-
-
-// api/friend/reject
