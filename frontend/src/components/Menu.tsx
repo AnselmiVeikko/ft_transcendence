@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next'
 import SettingsMenu from './SettingsMenu'
 import { FaPlay, FaTrophy, FaChartBar } from 'react-icons/fa'
@@ -31,25 +31,71 @@ const MenuCard = ({ title, colorClass, icon, to }: MenuCardProps) => (
 // ---------------------------------------
 
 const Menu = () => {
-   
   const { t } = useTranslation();
 
+  const welcomePhrases = [
+    'greeting_welcome',
+    'greeting_hey_there',
+    'greeting_good_to_see_you',
+    'greeting_lets_play',
+    'greeting_hello',
+  ];
+
+  const [randomGreetingKey, setRandomGreetingKey] = useState(welcomePhrases[0]);
+
+  useEffect(() => {
+    const getRandomGreeting = () => {
+      const randomIndex = Math.floor(Math.random() * welcomePhrases.length);
+      return welcomePhrases[randomIndex];
+    };
+    setRandomGreetingKey(getRandomGreeting());
+  }, []);
+
+  const [userName, setUserName] = useState('');
+  const SelfAPI = 'http://localhost:3000/api/user/profile/self';
+
+  useEffect(() => {
+    const fetchUserName = async () => {
+      try {
+        const response = await fetch(SelfAPI, {
+          method: 'GET',
+          credentials: 'include',
+          headers: {},
+        });
+        if (response.status === 401) {
+          throw new Error('User not authenticated.');
+        }
+        if (!response.ok) {
+          throw new Error(`HTTP Error: ${response.status}`);
+        }
+        const result = await response.json();
+
+        if (result.data && result.data.userName) {
+          setUserName(result.data.userName);
+        } else {
+          throw new Error(result.message);
+        }
+      } catch (e) {
+        console.error('Failed to fetch user profile: ', e);
+        setUserName('Player1');
+      }
+    };
+    fetchUserName();
+  }, []);
+
   return (
-    <div className="relative h-screen overflow-hidden">
-		
+    <div className="relative">
       <SettingsMenu />
-      {/* <Header
-        appName="PONG"
-        playerName={userName}
-        onFriendsClick={handleFriendsClick}
-        onLogout={handleLogout}
-      />*/}
-      <div 
-        className={`${colorClasses.bgGlow} flex items-center justify-center p-4`}
-        style={{ height: 'calc(100vh - 3.5rem)' }} // make sure content fits below header
+      <div
+        className={`${colorClasses.bgGlow} flex flex-col items-center justify-center p-4 w-full`}
+        style={{ height: 'calc(100vh - 80px)' }} // make sure content fits below header
       >
+        <div className="mb-12 p-6 text-center max-w-5xl w-full z-10">
+          <h1 className="text-2xl font-extrabold tracking-tight sm:pb-2 bg-clip-text text-transparent bg-linear-to-r from-indigo-700 to-blue-200 sm:text-4xl lg:text-5xl">
+            {t(randomGreetingKey)}, {userName}!
+          </h1>
+        </div>
         <div className="flex flex-col lg:flex-row items-center gap-12 max-w-7xl mx-auto z-10">
-          
           <MenuCard
             title={t('single_match')}
             colorClass={colorClasses.start}
