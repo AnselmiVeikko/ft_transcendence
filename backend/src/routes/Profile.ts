@@ -4,14 +4,7 @@ import { Static } from "@sinclair/typebox";
 import { ProfileSelfQuerySchema, ProfileSelfResponseSchema, ErrorResponseSchema } from "../schemas/UserSchema";
 import { ProfileAllfQuerySchema, ProfileAllResponseSchema } from "../schemas/UserSchema";
 import { ProfileSelf, ProfileAll, errorResponse } from "../utils/UserResponses";
-import jwt from "jsonwebtoken";
-
-
-interface JWTPayLoad {
-    userId: number;
-    iat?:   number;
-    exp?:   number;
-}
+import { verifyAccess } from "../utils/auth";
 
 type ProfileSelfRequest = FastifyRequest<{ Querystring: Static<typeof ProfileSelfQuerySchema> }>;
 type ProfileAllRequest = FastifyRequest<{ Querystring: Static<typeof ProfileAllfQuerySchema> }>;
@@ -25,21 +18,15 @@ export default async function profileRoutes(app: FastifyInstance) {
 			}
 		}
 	},
-	async (request: FastifyRequest, reply: FastifyReply) => {
-		const token = request.cookies?.accessJWT;
-			if (!token) {
-				return reply.status(401).send({ message: "Missing token "});
-			}
-			const payload = jwt.verify(token, process.env.JWT_ACCESS_SECRET || "access-secret") as JWTPayLoad;
-				(request as any).user = payload;
-			
+	async (request: ProfileSelfRequest, reply: FastifyReply) => {
 
-		if (isNaN(payload.userId)) {
-			return reply.status(400).send(errorResponse(400, "Invalid userId format"));
+		const userId = await verifyAccess(request, reply);
+		if (!userId) {
+			return;
 		}
 
 		const userProfile = await prisma.user_info.findUnique({
-			where: { userId: payload.userId }
+			where: { userId: userId }
 		});
 
 		if (!userProfile) {

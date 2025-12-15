@@ -8,26 +8,38 @@ datasource db {
 }
 
 model user_info {
-  userId      Int      @id @default(autoincrement())
-  userName    String   @unique
-  email       String   @unique
-  password    String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now())
+  userId      String       @id @default(cuid())
+  userName    String       @unique
+  email       String       @unique
+  password    String    
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @default(now())
+  status      OnlineStatus @default(OFFLINE)
 
   // Relation with friend_request
   sentRequests      friend_request[] @relation("Sender")
   receivedRequests  friend_request[] @relation("Receiver")
 }
 
+enum FriendRequestStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
+enum OnlineStatus{
+  OFFLINE
+  INACTIVE
+  ONLINE
+}
 
 model friend_request {
-  friendRId       Int        @id @default(autoincrement())
-  senderId        Int
-  receiverId      Int
-  requestStatus   Boolean   @default(false)
+  friendRId       String        @id @default(cuid())
+  senderId        String
+  receiverId      String
+  requestStatus   FriendRequestStatus   @default(PENDING)
   sentAt          DateTime  @default(now())
-  acceptedAt      DateTime?
+  updatedAt       DateTime?
 
   // Relation with user_info
   sender    user_info @relation("Sender", fields: [senderId], references: [userId])

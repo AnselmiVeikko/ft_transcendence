@@ -19,7 +19,7 @@ const SingleMatch = () => {
   const { t } = useTranslation();
 
   return (
-	<div className="relative h-screen overflow-hidden">
+	<div className="relative">
 		
 	  <SettingsMenu />
 	  {/* <Header
@@ -30,9 +30,9 @@ const SingleMatch = () => {
 	  /> */}
 	  <div 
 		className={`${colorClasses.bgGlow} flex items-center justify-center p-4`}
-		style={{ height: 'calc(100vh - 3.5rem)' }} // make sure content fits below header
+		style={{ height: 'calc(100vh - 80px)' }} // header height h-20 = 80px
 	  >
-		<div className="flex lg:flex-row items-center max-w-full mx-auto z-0">
+		<div className="flex lg:flex-row bg-opacity-50 backdrop-blur-sm items-center max-w-full mx-auto z-0">
 
 		  <iframe
 			id="game"
