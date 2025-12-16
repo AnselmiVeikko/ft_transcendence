@@ -8,6 +8,7 @@ import loginRoutes from "./routes/Login";
 import logoutRoutes from "./routes/Logout"
 import profileRoutes from "./routes/Profile";
 import FriendRequest from "./routes/FriendRequest";
+import FriendList from "./routes/FriendList";
 
 dotenv.config();
 
@@ -21,13 +22,14 @@ async function buildServer() {
 		origin: "http://localhost:5173",
 		credentials: true
 	});
-	
+
 	app.get("/health", async () => ({ Hello: "Backend is running...." }));
-	
+
 	app.register(fastifyCookie);
 	app.register(registrationRoutes);
 	app.register(loginRoutes);
 	app.register(profileRoutes);
+	app.register(FriendList);
 	app.register(FriendRequest);
 	app.register(logoutRoutes);
 }
