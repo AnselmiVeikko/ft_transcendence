@@ -14,7 +14,7 @@ export function PendingList(list: any[]) {
 	return {
 		message: "Friends Pending List",
 		data: list.map(u => ({
-			friendId: u.friendId,
+			friendRId: u.friendRId,
 			userId: u.userId,
 			userName: u.userName
 		})),
@@ -25,7 +25,6 @@ export function SuggestionList(list: any[]) {
 	return {
 		message: "Friends Suggestion List",
 		data: list.map(u => ({
-			friendId: u.friendId,
 			userId: u.userId,
 			userName: u.userName
 		})),
@@ -66,11 +65,13 @@ export function FRDecclineSuccess(request: { friendRId: string, senderId: string
 	};
 }
 
-export function FRDeleteSuccess(request: { friendRId: string}) {
+export function FRDeleteSuccess(request: { friendRId: string, senderId: string, receiverId: string}) {
 	return {
 		message: "Request Deleted",
 		data: {
 			friendRId: request.friendRId,
+			senderId: request.senderId,
+			receiverId: request.receiverId,
 		},
 	};
 }
