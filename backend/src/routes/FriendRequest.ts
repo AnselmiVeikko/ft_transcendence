@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyRequest, FastifyReply, FastifyError } from "fastify";
-import { FRSendBodySchema, FRAcceptBodySchema, FRDeclineBodySchema, FRDeleteQuerySchema} from "../schemas/FriendSchema";
+import { FRSendBodySchema, FRAcceptBodySchema, FRDeclineQuerySchema, FRDeleteQuerySchema} from "../schemas/FriendSchema";
 import { FRSendResponseSchema, FRAcceptResponseSchema, FRDeclineResponseSchema, FRDeleteResponseSchema } from "../schemas/FriendSchema";
 import { FRAcceptSuccess, FRDecclineSuccess, FRSendSuccess, FRDeleteSuccess } from "../utils/FriendResponses";
 import { ErrorResponseSchema } from "../schemas/UserSchema";
@@ -11,7 +11,7 @@ import { verifyAccess } from "../utils/auth";
 
 type FriendRequestSend = FastifyRequest<{ Body: Static<typeof FRSendBodySchema> }>;
 type FriendRequestAccept = FastifyRequest<{ Body: Static<typeof FRAcceptBodySchema> }>;
-type FriendRequestDecline = FastifyRequest<{ Body: Static<typeof FRDeclineBodySchema> }>;
+type FriendRequestDecline = FastifyRequest<{ Querystring: Static<typeof FRDeclineQuerySchema> }>;
 type FriendRequestDelete = FastifyRequest<{ Querystring: Static<typeof FRDeleteQuerySchema> }>;
 
 export default async function FriendRequest(app: FastifyInstance) {
@@ -53,46 +53,14 @@ export default async function FriendRequest(app: FastifyInstance) {
 				where: { senderId_receiverId: {senderId: senderId as string, receiverId: receiverId as string}}});
 
 			if (dirRequestExist) {
-				if (dirRequestExist.requestStatus === "PENDING" || dirRequestExist.requestStatus === "ACCEPTED") {
-					return reply.status(400).send(errorResponse(400, "Friend request already exists"));
-				} else {
-					const updateRequest = await prisma.friend_request.update({
-						where: { senderId_receiverId: {
-							senderId: senderId as string,
-							receiverId: receiverId as string,
-							},
-						},
-						data: {
-							requestStatus: "PENDING",
-							updatedAt: new Date(),
-						},
-					});
-					return reply.status(201).send(FRSendSuccess(updateRequest));
-				}
+				return reply.status(400).send(errorResponse(400, "Friend request already exists"));
 			}
 
 			const revRequestExist = await prisma.friend_request.findUnique({
 				where: { senderId_receiverId: {senderId: receiverId as string, receiverId:  senderId as string}}});
 
 			if (revRequestExist) {
-				if (revRequestExist.requestStatus === "PENDING" || revRequestExist.requestStatus === "ACCEPTED") {
-					return reply.status(400).send(errorResponse(400, "This user already sent you a request"));
-				} else {
-					const updateRequest = await prisma.friend_request.update({
-						where: { senderId_receiverId: {
-							senderId: receiverId as string,
-							receiverId: senderId as string,
-							},
-						},
-						data: {
-							requestStatus: "PENDING",
-							senderId: receiverId as string,
-							receiverId: senderId as string,
-							updatedAt: new Date(),
-						},
-					});
-					return reply.status(201).send(FRSendSuccess(updateRequest));
-				}
+				return reply.status(400).send(errorResponse(400, "This user already sent you a request"));
 			}
 
 			const sendRequest = await prisma.friend_request.create({
@@ -120,35 +88,30 @@ export default async function FriendRequest(app: FastifyInstance) {
 	},
 	async (request: FriendRequestAccept, reply: FastifyReply) => {
 		try{
-			const { senderId } = request.body;
+			const { friendRId } = request.body;
 
 			const receiverId = await verifyAccess(request, reply);
 			if (!receiverId) {
 				return;
 			}
 
-			// add validation : receiverId == userID (from cookie) ***********
-
 			const requestExist = await prisma.friend_request.findUnique({
-				where: { senderId_receiverId: {senderId: senderId as string, receiverId: receiverId as string}}});
+				where: { friendRId: friendRId as string}});
 			if (!requestExist) {
 				return reply.status(404).send(errorResponse(404, "Friend request not found"));
+			}
+
+			if (requestExist.receiverId !== receiverId) {
+				return reply.status(403).send(errorResponse(403, "You are not alloewd to accept this request"))
 			}
 
 			if (requestExist.requestStatus === "ACCEPTED") {
 				return reply.status(400).send(errorResponse(400, "Friend request already accepted"));
 			}
 
-			// What to do when request status is "DECLINED" ??????????
-			if (requestExist.requestStatus === "DECLINED") {
-				return reply.status(400).send(errorResponse(400, "Ivalid friend request"));
-			}
-
 			const acceptRequest = await prisma.friend_request.update({
-				where: { senderId_receiverId: {
-					senderId: senderId as string,
-					receiverId: receiverId as string,
-					},
+				where: {
+					friendRId: friendRId as string,
 				},
 				data: {
 					requestStatus: "ACCEPTED",
@@ -163,9 +126,9 @@ export default async function FriendRequest(app: FastifyInstance) {
 		}
 	});
 
-	app.post( "/api/friendrequest/decline", {
+	app.delete( "/api/friendrequest/decline", {
 		schema: {
-			body: FRDeclineBodySchema,
+			querystring: FRDeclineQuerySchema,
 			response: {
 				200: FRDeclineResponseSchema,
 				default: ErrorResponseSchema,
@@ -174,7 +137,7 @@ export default async function FriendRequest(app: FastifyInstance) {
 	},
 	async (request: FriendRequestDecline, reply: FastifyReply) => {
 		try{
-			const { senderId } = request.body;
+			const { friendRId } = request.query;
 
 			const receiverId =  await verifyAccess(request, reply);
 			if (!receiverId) {
@@ -182,28 +145,22 @@ export default async function FriendRequest(app: FastifyInstance) {
 			}
 
 			const requestExist = await prisma.friend_request.findUnique({
-				where: { senderId_receiverId: {senderId: senderId as string, receiverId: receiverId as string}}});
+				where: { friendRId: friendRId as string}});
 			if (!requestExist) {
 				return reply.status(404).send(errorResponse(404, "Friend request not found"));
+			}
+
+			if (requestExist.receiverId !== receiverId) {
+				return reply.status(403).send(errorResponse(403, "You are not alloewd to decline this request"))
 			}
 
 			if (requestExist.requestStatus === "ACCEPTED") {
 				return reply.status(400).send(errorResponse(400, "Friend request already accepted"));
 			}
 
-			if (requestExist.requestStatus === "DECLINED") {
-				return reply.status(400).send(errorResponse(400, "Friend request already declined"));
-			}
-
-			const declineRequest = await prisma.friend_request.update({
-				where: { senderId_receiverId: {
-					senderId: senderId as string,
-					receiverId: receiverId as string,
-					},
-				},
-				data: {
-					requestStatus: "DECLINED",
-					updatedAt: new Date(),
+			const declineRequest = await prisma.friend_request.delete({
+				where: {
+					friendRId: friendRId as string,
 				},
 			});
 
@@ -246,12 +203,9 @@ export default async function FriendRequest(app: FastifyInstance) {
 				return reply.status(400).send(errorResponse(400, "Not friend"));
 			}
 
-			const deleteRequest = await prisma.friend_request.update({
-				where: { friendRId: friendRId as string,
-				},
-				data: {
-					requestStatus: "DECLINED",
-					updatedAt: new Date(),
+			const deleteRequest = await prisma.friend_request.delete({
+				where: {
+					friendRId: friendRId as string,
 				},
 			});
 
