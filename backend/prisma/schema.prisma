@@ -23,7 +23,6 @@ model user_info {
 enum FriendRequestStatus {
   PENDING
   ACCEPTED
-  DECLINED
 }
 
 model friend_request {
