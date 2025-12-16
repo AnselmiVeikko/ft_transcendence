@@ -27,6 +27,7 @@ export const FLPendingResponseSchema = Type.Object({
 	message: Type.String(),
 	data: Type.Array(
 		Type.Object({
+			friendRId: Type.String(),
 			userId: Type.String(),
 			userName: Type.String(),
 			//avatar:
@@ -58,6 +59,7 @@ export const FRSendBodySchema = Type.Object({
 export const FRSendResponseSchema = Type.Object({
 	message: Type.String(),
 	data: Type.Object({
+		friendRId: Type.String(),
 		senderId: Type.String(),
 		receiverId: Type.String(),
 	}),
@@ -65,7 +67,6 @@ export const FRSendResponseSchema = Type.Object({
 
 export const FRAcceptBodySchema = Type.Object({
 	friendRId: Type.String(),
-	senderId: Type.String(),
 })
 
 export const FRAcceptResponseSchema = Type.Object({
@@ -77,9 +78,8 @@ export const FRAcceptResponseSchema = Type.Object({
 	})
 })
 
-export const FRDeclineBodySchema = Type.Object({
+export const FRDeclineQuerySchema = Type.Object({
 	friendRId: Type.String(),
-	senderId: Type.String(),
 })
 
 export const FRDeclineResponseSchema = Type.Object({
@@ -99,5 +99,7 @@ export const FRDeleteResponseSchema = Type.Object({
 	message: Type.String(),
 	data: Type.Object({
 		friendRId: Type.String(),
+		senderId: Type.String(),
+		receiverId: Type.String(),
 	})
 })
