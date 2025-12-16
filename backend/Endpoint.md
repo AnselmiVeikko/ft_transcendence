@@ -200,10 +200,6 @@ Status: 200 OK
 	"message": "Friends Pending List",
 	"data": [
 		{
-			"userId": "cmj7cofp70000yiwd622qn61c",
-			"userName": "test"
-		},
-		{
 			"userId": "cmj7cymbk0000yi0cwrv56pt3",
 			"userName": "test1"
 		},
@@ -237,11 +233,108 @@ Status: 200 OK
 		{
 			"userId": "cmj7cymbk0000yi0cwrv56pt3",
 			"userName": "test1"
-		},
-		{
-			"userId": "cmj7cytgg0001yi0covsdqv4m",
-			"userName": "test2"
 		}
 	]
+}
+```
+
+## FRIEND REQUEST
+
+### POST: /api/friendrequest/send
+Endpoint to send a friend request
+
+Body:
+```json
+{
+	"receiverId": "userId of friend request receiver"
+}
+```
+
+Success Response:
+
+```json
+Status: 201 CREATED
+{
+	"message": "Request sent",
+	"data": {
+		"friendRId": "friend request ID",
+		"senderId": "sender userID",
+		"receiverId": "receiver userId",
+	},
+}
+```
+
+
+### POST: /api/friendrequest/accept
+Endpoint to send a friend request
+
+Body:
+```json
+{
+	"friendRId": "friend request unique id"
+}
+```
+
+Success Response:
+
+```json
+Status: 200 OK
+{
+	"message": "Request Accepted",
+	"data": {
+		"friendRId": "friend request ID",
+		"senderId": "sender userID",
+		"receiverId": "receiver userId",
+	},
+}
+```
+
+
+### DELETE: /api/friendrequest/decline
+Endpoint to send a friend request
+
+Query String:
+```json
+
+	// /api/friendrequest/decline?friendRId=cmj8nhzmx0001yihlnkmz2bfg
+
+```
+
+Success Response:
+
+```json
+Status: 200 OK
+{
+	"message": "Request Declined",
+	"data": {
+		"friendRId": "friend request ID",
+		"senderId": "sender userID",
+		"receiverId": "receiver userId",
+	},
+}
+```
+
+
+### DELETE: /api/friendrequest/delete
+Endpoint to send a friend request
+
+Query String:
+```json
+
+	// /api/friendrequest/delete?friendRId=cmj8nhzmx0001yihlnkmz2bfg
+
+```
+
+Success Response:
+
+```json
+Status: 200 OK
+{
+	"message": "Request Deleted",
+	"data": {
+		"friendRId": "friend request ID",
+		"senderId": "sender userID",
+		"receiverId": "receiver userId",
+	},
 }
 ```
