@@ -45,7 +45,7 @@ Status: 201 CREATED
 {
 	"message": "Registration succesful",
 	"data": {
-		"userId": "ID as number",
+		"userId": "ID as string(cuid)",
 		"userName": "username",
 	},
 }
@@ -73,7 +73,7 @@ Status: 200 OK
 {
 	"message": "Login succesful",
 	"data": {
-		"userId": "ID as number",
+		"userId": "ID as string(cuid)",
 		"userName": "username",
 	},
 }
@@ -98,7 +98,7 @@ Status: 200 OK
 {
 	"message": "Profile retrieve successful",
 	"data": {
-		"userId": "ID as number",
+		"userId": "ID as string(cuid)",
 		"userName": "username",
 		"email": "email"
 	},
@@ -131,12 +131,12 @@ Status: 200 OK
   "message": "All profiles retrieve successful",
   "data": [
     {
-      "userId": 1,
+      "userId": "cmj7cofp70000yiwd622qn61c",
       "userName": "User 1",
       "email": "user1@example.com"
     },
     {
-      "userId": 2,
+      "userId": "cmj7cofp70000yiwd622qn61s",
       "userName": "User 2",
       "email": "user2@example.com"
     }
@@ -147,5 +147,194 @@ Status: 200 OK
     "totalUser": 2,
     "totalPage": 1
   }
+}
+```
+
+
+## FRIEND LIST
+
+### GET: /api/friendlist/current
+Active friend list.
+
+Query Parameter:
+```json
+// No need to send any parameter. Backend will retrieve userId from cookie
+```
+
+Success Response:
+
+```json
+Status: 200 OK
+{
+	"message": "Friends List",
+	"data": [
+		{
+			"userId": "cmj7cofp70000yiwd622qn61c",
+			"userName": "test"
+		},
+		{
+			"userId": "cmj7cymbk0000yi0cwrv56pt3",
+			"userName": "test1"
+		},
+		{
+			"userId": "cmj7cytgg0001yi0covsdqv4m",
+			"userName": "test2"
+		}
+	]
+}
+```
+
+### GET: /api/friendlist/pending
+List of pending friend request sent by other users.
+
+Query Parameter:
+```json
+// No need to send any parameter. Backend will retrieve userId from cookie
+```
+
+Success Response:
+
+```json
+Status: 200 OK
+{
+	"message": "Friends Pending List",
+	"data": [
+		{
+			"userId": "cmj7cymbk0000yi0cwrv56pt3",
+			"userName": "test1"
+		},
+		{
+			"userId": "cmj7cytgg0001yi0covsdqv4m",
+			"userName": "test2"
+		}
+	]
+}
+```
+
+### GET: /api/friendlist/suggestion
+List of users who can be friend.
+
+Query Parameter:
+```json
+// No need to send any parameter. Backend will retrieve userId from cookie
+```
+
+Success Response:
+
+```json
+Status: 200 OK
+{
+	"message": "Friends Suggestion List",
+	"data": [
+		{
+			"userId": "cmj7cofp70000yiwd622qn61c",
+			"userName": "test"
+		},
+		{
+			"userId": "cmj7cymbk0000yi0cwrv56pt3",
+			"userName": "test1"
+		}
+	]
+}
+```
+
+## FRIEND REQUEST
+
+### POST: /api/friendrequest/send
+Endpoint to send a friend request
+
+Body:
+```json
+{
+	"receiverId": "userId of friend request receiver"
+}
+```
+
+Success Response:
+
+```json
+Status: 201 CREATED
+{
+	"message": "Request sent",
+	"data": {
+		"friendRId": "friend request ID",
+		"senderId": "sender userID",
+		"receiverId": "receiver userId",
+	},
+}
+```
+
+
+### POST: /api/friendrequest/accept
+Endpoint to send a friend request
+
+Body:
+```json
+{
+	"friendRId": "friend request unique id"
+}
+```
+
+Success Response:
+
+```json
+Status: 200 OK
+{
+	"message": "Request Accepted",
+	"data": {
+		"friendRId": "friend request ID",
+		"senderId": "sender userID",
+		"receiverId": "receiver userId",
+	},
+}
+```
+
+
+### DELETE: /api/friendrequest/decline
+Endpoint to send a friend request
+
+Query String:
+```json
+
+	// /api/friendrequest/decline?friendRId=cmj8nhzmx0001yihlnkmz2bfg
+
+```
+
+Success Response:
+
+```json
+Status: 200 OK
+{
+	"message": "Request Declined",
+	"data": {
+		"friendRId": "friend request ID",
+		"senderId": "sender userID",
+		"receiverId": "receiver userId",
+	},
+}
+```
+
+
+### DELETE: /api/friendrequest/delete
+Endpoint to send a friend request
+
+Query String:
+```json
+
+	// /api/friendrequest/delete?friendRId=cmj8nhzmx0001yihlnkmz2bfg
+
+```
+
+Success Response:
+
+```json
+Status: 200 OK
+{
+	"message": "Request Deleted",
+	"data": {
+		"friendRId": "friend request ID",
+		"senderId": "sender userID",
+		"receiverId": "receiver userId",
+	},
 }
 ```
