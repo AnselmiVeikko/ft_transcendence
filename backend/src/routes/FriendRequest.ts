@@ -49,17 +49,17 @@ export default async function FriendRequest(app: FastifyInstance) {
 				return reply.status(401).send(errorResponse(401, "Receiver does not exists"));
 			}
 
-			const dirRequestExist = await prisma.friend_request.findUnique({
+			const sentRequestExist = await prisma.friend_request.findUnique({
 				where: { senderId_receiverId: {senderId: senderId as string, receiverId: receiverId as string}}});
 
-			if (dirRequestExist) {
+			if (sentRequestExist) {
 				return reply.status(400).send(errorResponse(400, "Friend request already exists"));
 			}
 
-			const revRequestExist = await prisma.friend_request.findUnique({
+			const revceivedRequestExist = await prisma.friend_request.findUnique({
 				where: { senderId_receiverId: {senderId: receiverId as string, receiverId:  senderId as string}}});
 
-			if (revRequestExist) {
+			if (revceivedRequestExist) {
 				return reply.status(400).send(errorResponse(400, "This user already sent you a request"));
 			}
 
@@ -102,7 +102,7 @@ export default async function FriendRequest(app: FastifyInstance) {
 			}
 
 			if (requestExist.receiverId !== receiverId) {
-				return reply.status(403).send(errorResponse(403, "You are not alloewd to accept this request"))
+				return reply.status(403).send(errorResponse(403, "You are not allowed to accept this request"))
 			}
 
 			if (requestExist.requestStatus === "ACCEPTED") {
@@ -151,7 +151,7 @@ export default async function FriendRequest(app: FastifyInstance) {
 			}
 
 			if (requestExist.receiverId !== receiverId) {
-				return reply.status(403).send(errorResponse(403, "You are not alloewd to decline this request"))
+				return reply.status(403).send(errorResponse(403, "You are not allowed to decline this request"))
 			}
 
 			if (requestExist.requestStatus === "ACCEPTED") {
@@ -196,7 +196,7 @@ export default async function FriendRequest(app: FastifyInstance) {
 			}
 
 			if (requestExist.senderId !== deleteBy && requestExist.receiverId !== deleteBy) {
-				return reply.status(403).send(errorResponse(403, "You are not alloewd to delete this request"))
+				return reply.status(403).send(errorResponse(403, "You are not allowed to delete this request"))
 			}
 
 			if (requestExist.requestStatus !== "ACCEPTED") {

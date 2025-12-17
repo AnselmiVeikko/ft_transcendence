@@ -8,12 +8,13 @@ datasource db {
 }
 
 model user_info {
-  userId      String   @id @default(cuid())
-  userName    String   @unique
-  email       String   @unique
-  password    String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now())
+  userId      String       @id @default(cuid())
+  userName    String       @unique
+  email       String       @unique
+  password    String    
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @default(now())
+  status      OnlineStatus @default(OFFLINE)
 
   // Relation with friend_request
   sentRequests      friend_request[] @relation("Sender")
@@ -23,6 +24,12 @@ model user_info {
 enum FriendRequestStatus {
   PENDING
   ACCEPTED
+}
+
+enum OnlineStatus{
+  OFFLINE
+  INACTIVE
+  ONLINE
 }
 
 model friend_request {

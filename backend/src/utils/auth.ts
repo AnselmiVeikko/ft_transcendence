@@ -71,3 +71,13 @@ export function setCookies(reply: FastifyReply, userId: string) {
 
     return reply;
 }
+
+export function clearCookies(reply: FastifyReply)
+{
+    reply.clearCookie("accessJWT", {
+        path: "/",
+    });
+    reply.clearCookie("refreshJWT", {
+        path: "/auth/refresh",
+    });
+}

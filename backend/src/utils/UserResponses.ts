@@ -8,6 +8,16 @@ export function loginSuccess(user: { userId: string, userName: string }) {
 	};
 }
 
+export function logoutSuccess(user: { userId: string, userName: string }) {
+	return {
+		message: "Logout succesful",
+		data: {
+			userId: user.userId,
+			userName: user.userName
+		},
+	};
+}
+
 export function RegistrationSuccess(user: { userId: string, userName: string }) {
 	return {
 		message: "Registration succesful",
