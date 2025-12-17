@@ -26,7 +26,7 @@ WORKDIR /app
 
 # Copy build output from stage 1
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modu es ./node_modules
+COPY --from=builder /app/node_modules ./node_modules
 
 EXPOSE 4000
 
