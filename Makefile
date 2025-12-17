@@ -92,6 +92,7 @@ logs:
 # -----------------------
 re:
 	@echo "Cleaning and restarting all services..."
+	$(MAKE) stop
 	$(MAKE) clean
 	$(MAKE) build
 	$(MAKE) up
