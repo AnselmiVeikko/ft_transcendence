@@ -1,14 +1,14 @@
-import { Ball } from "./ball";
-import { Paddle } from "./paddle";
-import { checkCollision } from "./physics";
-import { AIController } from "../AI/aiController";
-import { render } from "../renderer/render";
+import { Ball } from "./ball.js";
+import { Paddle } from "./paddle.js";
+import { checkCollision } from "./physics.js";
+import { AIController } from "../AI/aiController.js";
+import type { GameState, InputEvent } from "../types/gameState.js";
 
 type GameMode = "2P" | "AI" | null;
 
 export class Game {
-  private canvas: HTMLCanvasElement;
-  private ctx: CanvasRenderingContext2D;
+  private canvasWidth: number;
+  private canvasHeight: number;
   private ball: Ball;
   private leftPlayer: Paddle;
   private rightPlayer: Paddle;
@@ -16,28 +16,60 @@ export class Game {
   private gameMode: GameMode = null;
   private gameMessage: string | null = "Welcome to Pong!";
   private aiController: AIController | null = null;
-  private aiInterval: number | null = null;
+  private aiInterval: NodeJS.Timeout | null = null;
   private stepDiff = 0;
   private remainSteps = 0;
+  private gameLoopInterval: NodeJS.Timeout | null = null;
+  private onStateUpdate: ((state: GameState) => void) | null = null;
 
-  public getCtx() { return this.ctx; }
-  public getBall() { return this.ball; }
-  public getLeftPlayer() { return this.leftPlayer; }
-  public getRightPlayer() { return this.rightPlayer; }
-  public getGameMessage() { return this.gameMessage; }
+  constructor(canvasWidth: number, canvasHeight: number) {
+    this.canvasWidth = canvasWidth;
+    this.canvasHeight = canvasHeight;
 
-  constructor(canvas: HTMLCanvasElement) {
-    this.canvas = canvas;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) throw new Error("Cannot get canvas context");
-    this.ctx = ctx;
+    this.ball = new Ball(canvasWidth / 2, canvasHeight / 2);
+    this.leftPlayer = new Paddle("Player1", 30, canvasHeight / 2 - 50);
+    this.rightPlayer = new Paddle("Player2", canvasWidth - 40, canvasHeight / 2 - 50);
 
-    this.ball = new Ball(canvas.width / 2, canvas.height / 2);
-    this.leftPlayer = new Paddle("Player1", 30, canvas.height / 2 - 50);
-    this.rightPlayer = new Paddle("Player2", canvas.width - 40, canvas.height / 2 - 50);
+    this.startGameLoop();
+  }
 
-    this.registerInputHandlers();
-    this.gameLoop();
+  public setOnStateUpdate(callback: (state: GameState) => void) {
+    this.onStateUpdate = callback;
+  }
+
+  public handleInput(event: InputEvent) {
+    const normalizeKey = (key: string) => (key.length === 1 ? key.toLowerCase() : key);
+    const normalizedKey = normalizeKey(event.key);
+    this.keys[normalizedKey] = event.type === 'keydown';
+  }
+
+  public getState(): GameState {
+    return {
+      ball: {
+        x: this.ball.x,
+        y: this.ball.y,
+        radius: this.ball.radius,
+      },
+      leftPlayer: {
+        name: this.leftPlayer.name,
+        x: this.leftPlayer.x,
+        y: this.leftPlayer.y,
+        width: this.leftPlayer.width,
+        height: this.leftPlayer.height,
+        life: this.leftPlayer.life,
+      },
+      rightPlayer: {
+        name: this.rightPlayer.name,
+        x: this.rightPlayer.x,
+        y: this.rightPlayer.y,
+        width: this.rightPlayer.width,
+        height: this.rightPlayer.height,
+        life: this.rightPlayer.life,
+      },
+      gameMessage: this.gameMessage,
+      canvasWidth: this.canvasWidth,
+      canvasHeight: this.canvasHeight,
+    };
   }
 
   start(gameMode: "2P" | "AI", player1: string, player2?: string) {
@@ -55,20 +87,18 @@ export class Game {
     }
   }
 
-  private registerInputHandlers() {
-    const normalizeKey = (key: string) => (key.length === 1 ? key.toLowerCase() : key);
-
-    window.addEventListener("keydown", (e) => {
-      this.keys[normalizeKey(e.key)] = true;
-    });
-    window.addEventListener("keyup", (e) => {
-      this.keys[normalizeKey(e.key)] = false;
-    });
+  public stop() {
+    this.gameMode = null;
+    this.stopAI();
+    if (this.gameLoopInterval) {
+      clearInterval(this.gameLoopInterval);
+      this.gameLoopInterval = null;
+    }
   }
 
   private moveLeftPaddle() {
     if (this.keys["w"] && this.leftPlayer.y > 0) this.leftPlayer.moveUp();
-    if (this.keys["s"] && this.leftPlayer.y + this.leftPlayer.height < this.canvas.height)
+    if (this.keys["s"] && this.leftPlayer.y + this.leftPlayer.height < this.canvasHeight)
       this.leftPlayer.moveDown();
   }
 
@@ -76,15 +106,15 @@ export class Game {
     if (this.keys["ArrowUp"] && this.rightPlayer.y > 0) this.rightPlayer.moveUp();
     if (
       this.keys["ArrowDown"] &&
-      this.rightPlayer.y + this.rightPlayer.height < this.canvas.height
+      this.rightPlayer.y + this.rightPlayer.height < this.canvasHeight
     )
       this.rightPlayer.moveDown();
   }
 
   private startAI() {
     this.stopAI();
-    this.aiController = new AIController(this.keys, this.canvas.height);
-    this.aiInterval = window.setInterval(() => {
+    this.aiController = new AIController(this.keys, this.canvasHeight);
+    this.aiInterval = setInterval(() => {
       if (!this.aiController || !this.gameMode) return;
       this.stepDiff = this.aiController.calculateSteps(this.ball, this.rightPlayer);
       this.remainSteps = this.stepDiff;
@@ -102,9 +132,12 @@ export class Game {
   }
 
   private resetGame() {
-    this.ball.reset(this.canvas.width / 2, this.canvas.height / 2);
-    this.leftPlayer.y = this.canvas.height / 2 - this.leftPlayer.height / 2;
-    this.rightPlayer.y = this.canvas.height / 2 - this.rightPlayer.height / 2;
+    this.ball.x = this.canvasWidth / 2;
+    this.ball.y = this.canvasHeight / 2;
+    this.ball.speedX = (Math.random() > 0.5 ? 1 : -1) * (Math.random() + 6);
+    this.ball.speedY = (Math.random() - 0.5) * 10;
+    this.leftPlayer.y = this.canvasHeight / 2 - this.leftPlayer.height / 2;
+    this.rightPlayer.y = this.canvasHeight / 2 - this.rightPlayer.height / 2;
     this.leftPlayer.life = this.leftPlayer.defaultLife;
     this.rightPlayer.life = this.rightPlayer.defaultLife;
     this.gameMessage = null;
@@ -114,10 +147,10 @@ export class Game {
 
   private checkState() {
     if (this.ball.x < 0) {
-      this.ball.reset(
-        this.leftPlayer.x + this.leftPlayer.width + this.ball.radius,
-        this.leftPlayer.y + this.leftPlayer.height / 2
-      );
+      this.ball.x = this.leftPlayer.x + this.leftPlayer.width + this.ball.radius;
+      this.ball.y = this.leftPlayer.y + this.leftPlayer.height / 2;
+      this.ball.speedX = Math.abs(this.ball.speedX);
+      this.ball.speedY = (Math.random() - 0.5) * 10;
       if (--this.leftPlayer.life <= 0) {
         this.gameMessage = `${this.rightPlayer.name} won!`;
         this.gameMode = null;
@@ -125,11 +158,11 @@ export class Game {
       }
     }
 
-    if (this.ball.x > this.canvas.width) {
-      this.ball.reset(
-        this.rightPlayer.x - this.ball.radius,
-        this.rightPlayer.y + this.rightPlayer.height / 2
-      );
+    if (this.ball.x > this.canvasWidth) {
+      this.ball.x = this.rightPlayer.x - this.ball.radius;
+      this.ball.y = this.rightPlayer.y + this.rightPlayer.height / 2;
+      this.ball.speedX = -Math.abs(this.ball.speedX);
+      this.ball.speedY = (Math.random() - 0.5) * 10;
       if (--this.rightPlayer.life <= 0) {
         this.gameMessage = `${this.leftPlayer.name} won!`;
         this.gameMode = null;
@@ -138,25 +171,45 @@ export class Game {
     }
   }
 
-  private gameLoop = () => {
-    if (this.gameMode) {
-      this.ball.move();
-      this.ball.bounce(this.canvas.height);
+  private startGameLoop() {
+    const TARGET_FPS = 60;
+    const FRAME_TIME = 1000 / TARGET_FPS;
+    let lastState: GameState | null = null;
 
-      checkCollision(this.ball, this.leftPlayer);
-      checkCollision(this.ball, this.rightPlayer);
+    this.gameLoopInterval = setInterval(() => {
+      if (this.gameMode) {
+        this.ball.move();
+        this.ball.bounce(this.canvasHeight);
 
-      if (this.aiController && this.ball.x > this.canvas.width / 3) {
-        this.remainSteps = this.aiController.control(this.remainSteps);
+        checkCollision(this.ball, this.leftPlayer);
+        checkCollision(this.ball, this.rightPlayer);
+
+        if (this.aiController && this.ball.x > this.canvasWidth / 3) {
+          this.remainSteps = this.aiController.control(this.remainSteps);
+        }
+
+        this.moveLeftPaddle();
+        this.moveRightPaddle();
+
+        this.checkState();
       }
 
-      this.moveLeftPaddle();
-      this.moveRightPaddle();
-
-      this.checkState();
-    }
-
-    render(this);
-    requestAnimationFrame(this.gameLoop);
-  };
+      // Send state update to frontend
+      if (this.onStateUpdate) {
+        const currentState = this.getState();
+        
+        // Always send updates when game is active
+        if (this.gameMode !== null) {
+          this.onStateUpdate(currentState);
+          lastState = currentState;
+        } 
+        // When game ends, only send update if message changed (game just ended)
+        else if (currentState.gameMessage && (!lastState || lastState.gameMessage !== currentState.gameMessage)) {
+          this.onStateUpdate(currentState);
+          lastState = currentState;
+        }
+        // If game is over and already sent the end message, don't send more updates
+      }
+    }, FRAME_TIME);
+  }
 }
