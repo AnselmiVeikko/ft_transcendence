@@ -59,7 +59,7 @@ export default async function FriendList(app: FastifyInstance) {
 			return reply.status(200).send(CurrentList(friendsList));
 
 		} catch(error) {
-			return reply.status(500).send(errorResponse(500, "Intenal server error"));
+			return reply.status(500).send(errorResponse(500, "Internal server error"));
 		}
 
 	});
@@ -99,7 +99,7 @@ export default async function FriendList(app: FastifyInstance) {
 			return reply.status(200).send(PendingList(pendingList));
 
 		} catch(error) {
-			return reply.status(500).send(errorResponse(500, "Intenal server error"));
+			return reply.status(500).send(errorResponse(500, "Internal server error"));
 		}
 
 	});
@@ -151,7 +151,7 @@ export default async function FriendList(app: FastifyInstance) {
 			return reply.status(200).send(SuggestionList(suggestionList));
 
 		} catch(error) {
-			return reply.status(500).send(errorResponse(500, "Intenal server error"));
+			return reply.status(500).send(errorResponse(500, "Internal server error"));
 		}
 	});
 }
