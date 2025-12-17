@@ -1,4 +1,4 @@
-import { Game } from "../core/game";
+import type { GameState } from "../types/gameState";
 
 const drawRoundedRect = (
   ctx: CanvasRenderingContext2D,
@@ -22,15 +22,31 @@ const drawRoundedRect = (
   ctx.closePath();
 };
 
-export function render(game: Game) {
-  const ctx = game.getCtx();
-  const leftPlayer = game.getLeftPlayer();
-  const rightPlayer = game.getRightPlayer();
-  const ball = game.getBall();
-  const message = game.getGameMessage();
-
+export function render(ctx: CanvasRenderingContext2D, state: GameState | null) {
   const { width, height } = ctx.canvas;
   ctx.clearRect(0, 0, width, height);
+
+  // If no state, render welcome screen
+  if (!state) {
+    // Background gradient
+    const gradient = ctx.createLinearGradient(0, 0, width, height);
+    gradient.addColorStop(0, "#050816");
+    gradient.addColorStop(0.45, "#0a1133");
+    gradient.addColorStop(1, "#1a0f2f");
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, width, height);
+
+    // Welcome message
+    ctx.fillStyle = "#ffebf7";
+    ctx.font = "600 34px 'Space Grotesk', sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText("Welcome to Pong!", width / 2, height / 2 - 20);
+    ctx.font = "400 18px 'Space Grotesk', sans-serif";
+    ctx.fillText("Click a button to start", width / 2, height / 2 + 20);
+    return;
+  }
+
+  const { leftPlayer, rightPlayer, ball, gameMessage: message } = state;
 
   // Background gradient + center glow
   const gradient = ctx.createLinearGradient(0, 0, width, height);
