@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next'
 import SettingsMenu from './SettingsMenu'
-import { FaPlay, FaTrophy, FaChartBar } from 'react-icons/fa'
+import { FaPlay, FaUserEdit, FaChartBar, FaPlayCircle, FaCogs, FaCog, FaUserAstronaut, FaUserAlt, FaUserCog } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
+import { FaCirclePlay } from 'react-icons/fa6';
 
 interface MenuCardProps {
   title: string;
@@ -13,7 +14,7 @@ interface MenuCardProps {
 
 const colorClasses = {
 	start: 'bg-gradient-to-b from-indigo-700 to-blue-300 hover:bg-gradient-to-r hover:to-indigo-200',
-	tournament: 'bg-gradient-to-b from-violet-700 to-blue-300 hover:bg-gradient-to-r hover:to-violet-200',
+	custom_game: 'bg-gradient-to-b from-violet-700 to-blue-300 hover:bg-gradient-to-r hover:to-violet-200',
 	stats: 'bg-gradient-to-b from-fuchsia-600 to-blue-300 hover:bg-gradient-to-r hover:to-fuchsia-200',
 	bgGlow: 'bg-glow [animation:blob-drift_30s_ease-in-out_infinite]',
 };
@@ -103,16 +104,16 @@ const Menu = () => {
             to="/singlematch"
           />
           <MenuCard
-            title={t('tournament')}
-            colorClass={colorClasses.tournament}
-            icon={<FaTrophy />}
+            title={t('custom_game')}
+            colorClass={colorClasses.custom_game}
+            icon={<FaPlay />}
             to="/"
           />
           <MenuCard
-            title={t('stats')}
+            title={t('profile')}
             colorClass={colorClasses.stats}
-            icon={<FaChartBar />}
-            to="/"
+            icon={<FaUserEdit />}
+            to="/profile"
           />
         </div>
       </div>
