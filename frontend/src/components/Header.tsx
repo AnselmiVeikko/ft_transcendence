@@ -85,7 +85,7 @@ const Header = () => {
 			<button
 			  onClick={handleProfileClick}
 			  className="flex items-center gap-2 px-4 py-2 text-white hover:bg-white/10 rounded-lg transform hover:scale-[1.03] duration-300">
-              <FaUser className="w-5 h-5" />
+              <img src='avatars/avatar01.png' className="w-7 h-7" />
               <span className="font-semibold">{userName}</span>
 			</button>
           </div>
