@@ -1,5 +1,5 @@
 // Friend List Responses
-export function CurrentList(list: any[]) {
+export function CurrentList(list: any[], pageNo: number, limit: number, totalFriend: number) {
 	return {
 		message: "Friends List",
 		data: list.map(u => ({
@@ -7,6 +7,12 @@ export function CurrentList(list: any[]) {
 			userId: u.userId,
 			userName: u.userName
 		})),
+		pagination: {
+			pageNo,
+			limit,
+			totalFriend,
+			totalPage: Math.ceil(totalFriend / limit),
+		}
 	};
 }
 
