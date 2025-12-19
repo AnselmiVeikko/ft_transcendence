@@ -7,6 +7,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model game_match {
+  matchId      String @id @default(cuid())
+  playerOneId  String
+  playerTwoId  String?
+  status       MatchStatus @default(MATCHMAKING)
+
+}
+
 model user_info {
   userId      String       @id @default(cuid())
   userName    String       @unique
@@ -19,6 +27,12 @@ model user_info {
   // Relation with friend_request
   sentRequests      friend_request[] @relation("Sender")
   receivedRequests  friend_request[] @relation("Receiver")
+}
+
+enum MatchStatus {
+  MATCHMAKING
+  IN_PROGRESS
+  FINISHED
 }
 
 enum FriendRequestStatus {
