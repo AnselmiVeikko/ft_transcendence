@@ -38,10 +38,9 @@ Body:
 }
 ```
 
-Success Response:
+Success Response: 201 CREATED
 
 ```json
-Status: 201 CREATED
 {
 	"message": "Registration succesful",
 	"data": {
@@ -66,10 +65,9 @@ Body:
 }
 ```
 
-Success Response:
+Success Response: 200 OK
 
 ```json
-Status: 200 OK
 {
 	"message": "Login succesful",
 	"data": {
@@ -91,10 +89,9 @@ Query Parameter:
 
 ```
 
-Success Response:
+Success Response: 200 OK
 
 ```json
-Status: 200 OK
 {
 	"message": "Profile retrieve successful",
 	"data": {
@@ -115,18 +112,15 @@ All user profile limited information view.
 Query Parameter:
 ```json
 
-/api/user/profile/all?pageNo=1&limit=10
+//	/api/user/profile/all?pageNo=1&limit=10
+		// pageNo: Page number (total page = total user/ limit)
+		// limit: User data liimit per page
 
-[
-	pageNo: Page number (total page = total user/ limit)
-	limit: User data liimit per page
-]
 ```
 
-Success Response:
+Success Response: 200 OK
 
 ```json
-Status: 200 OK
 {
   "message": "All profiles retrieve successful",
   "data": [
@@ -158,13 +152,12 @@ Active friend list.
 
 Query Parameter:
 ```json
-// No need to send any parameter. Backend will retrieve userId from cookie
+// /api/friendlist/current?pageNo=1&limit=5
 ```
 
-Success Response:
+Success Response: 200 OK
 
 ```json
-Status: 200 OK
 {
 	"message": "Friends List",
 	"data": [
@@ -192,10 +185,9 @@ Query Parameter:
 // No need to send any parameter. Backend will retrieve userId from cookie
 ```
 
-Success Response:
+Success Response: 200 OK
 
 ```json
-Status: 200 OK
 {
 	"message": "Friends Pending List",
 	"data": [
@@ -219,10 +211,9 @@ Query Parameter:
 // No need to send any parameter. Backend will retrieve userId from cookie
 ```
 
-Success Response:
+Success Response: 200 OK
 
 ```json
-Status: 200 OK
 {
 	"message": "Friends Suggestion List",
 	"data": [
@@ -250,10 +241,9 @@ Body:
 }
 ```
 
-Success Response:
+Success Response: 201 CREATED
 
 ```json
-Status: 201 CREATED
 {
 	"message": "Request sent",
 	"data": {
@@ -275,10 +265,9 @@ Body:
 }
 ```
 
-Success Response:
+Success Response: 200 OK
 
 ```json
-Status: 200 OK
 {
 	"message": "Request Accepted",
 	"data": {
@@ -300,10 +289,9 @@ Query String:
 
 ```
 
-Success Response:
+Success Response: 200 OK
 
 ```json
-Status: 200 OK
 {
 	"message": "Request Declined",
 	"data": {
@@ -325,10 +313,9 @@ Query String:
 
 ```
 
-Success Response:
+Success Response: 200 OK
 
 ```json
-Status: 200 OK
 {
 	"message": "Request Deleted",
 	"data": {
