@@ -10,7 +10,6 @@ import { verifyAccess } from "../utils/auth";
 import prisma from "../plugins/prisma";
 
 
-// Friend List **
 type FriendCurrentList = FastifyRequest<{ Querystring: Static<typeof FLCurrentQuerySchema> }>;
 type FriendPendingList = FastifyRequest<{ Querystring: Static<typeof FLPendingQuerySchema> }>;
 type FriendSuggestion = FastifyRequest<{ Querystring: Static<typeof FLSuggestionQuerySchema>}>;
@@ -32,6 +31,17 @@ export default async function FriendList(app: FastifyInstance) {
 			if (!userId) {
 				return;
 			}
+
+			const pageNo = request.query.pageNo? Math.max(1, Number(request.query.pageNo)) : 1;
+			const limit = request.query.limit? Math.max(1, Number(request.query.limit))	: 10;
+			const skip = (pageNo - 1) * limit;
+			const totalFriend = await prisma.friend_request.count({
+				where: {
+					requestStatus: "ACCEPTED",
+					OR: [ { senderId: userId }, {receiverId: userId } ],
+				},
+			});
+
 			const relationList = await prisma.friend_request.findMany({
 				where: {
 					requestStatus: "ACCEPTED",
@@ -44,6 +54,11 @@ export default async function FriendList(app: FastifyInstance) {
 					sender: true,
 					receiver: true,
 				},
+				skip,
+				take: limit,
+				orderBy: {
+					updatedAt: "desc",
+				}
 			});
 
 			const friendsList = relationList.map(rel => {
@@ -56,12 +71,10 @@ export default async function FriendList(app: FastifyInstance) {
 				};
 			});
 
-			return reply.status(200).send(CurrentList(friendsList));
-
+			return reply.status(200).send(CurrentList(friendsList, pageNo, limit, totalFriend));
 		} catch(error) {
 			return reply.status(500).send(errorResponse(500, "Internal server error"));
 		}
-
 	});
 
 	app.get( "/api/friendlist/pending", {
@@ -101,7 +114,6 @@ export default async function FriendList(app: FastifyInstance) {
 		} catch(error) {
 			return reply.status(500).send(errorResponse(500, "Internal server error"));
 		}
-
 	});
 
 	app.get( "/api/friendlist/suggestion", {
