@@ -95,6 +95,8 @@ const RegisterForm = ()=> {
 						id="username"
 						name="username"
 						autoComplete="username"
+                		minLength={2}
+                		maxLength={20}
 						className={`${formFieldStyle}`}
 						placeholder={t('enter-username')}
 						/>
@@ -108,6 +110,8 @@ const RegisterForm = ()=> {
 						id="email"
 						name="email"
 						autoComplete="email"
+                		minLength={6}
+                		maxLength={30}
 						className={`${formFieldStyle}`}
 						placeholder={t('enter-email')}
 					/>
@@ -121,6 +125,8 @@ const RegisterForm = ()=> {
 						id="password"
 						name="password"
 						autoComplete="new-password"
+						minLength={4}
+                		maxLength={30}
 						className={`${formFieldStyle}`}
 						placeholder={t('enter-password')}
 					/>
@@ -134,6 +140,8 @@ const RegisterForm = ()=> {
 						id="confirmPassword"
 						name="confirmPassword"
 						autoComplete="new-password"
+						minLength={4}
+                		maxLength={30}
 						className={`${formFieldStyle}`}
 						placeholder={t('confirm_password')}
 					/>
