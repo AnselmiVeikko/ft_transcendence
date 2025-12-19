@@ -101,6 +101,17 @@ const SettingsMenu = ()=> {
                                 <Languages size={20} />
                                 {t('language_fi')}
                             </button>
+							<button
+                                onClick={() => handleLanguageChange('sv')}
+                                className={`w-full text-left flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150 ${
+                                    i18n.language === 'sv' 
+                                        ? 'bg-blue-50 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 font-medium' 
+                                        : 'text-gray-700 dark:text-gray-300'
+                                }`}
+                            >
+                                <Languages size={20} />
+                                {t('language_sv')}
+                            </button>
                         </div>
 
                     </div>
