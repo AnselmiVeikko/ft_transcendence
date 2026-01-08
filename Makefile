@@ -73,7 +73,7 @@ rm:
 # -----------------------
 clean:
 	@echo "Stopping and removing all containers, networks, and volumes..."
-	@ocker stop $$(docker ps -aq) 2>/dev/null || true
+	@docker stop $$(docker ps -aq) 2>/dev/null || true
 	@echo "Stopped all containers"
 	@docker rm $$(docker ps -aq) 2>/dev/null || true
 	@docker network prune -f
