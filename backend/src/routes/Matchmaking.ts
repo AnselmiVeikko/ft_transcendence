@@ -9,13 +9,13 @@ export default async function matchmakingRequest(app: FastifyInstance) {
     app.post( "/api/game/matchmaking", {
         schema: {
             response: {
-                200: MatchmakingResponseSchema,
+                 200: MatchmakingResponseSchema,
                 default: ErrorResponseSchema,
             },
         },
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
-        const userId = verifyAccess(request, reply);
+        const userId = await verifyAccess(request, reply);
         if (!userId)
             return ;
 
