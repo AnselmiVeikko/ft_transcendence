@@ -27,7 +27,7 @@ const LogIn = ()=> {
 					<h2 className="dark:text-white text-xl sm:text-2xl lg:text-3xl font-bold mb-4 sm:mb-6 lg:mb-8">{t('log_in_play')}</h2>
 					<h3 className="dark:text-white text-sm sm:text-base lg:text-lg mb-6 sm:mb-8">
 						{t('not_registered_yet')}{' '}
-						<Link to="/register" className="text-blue-600 underline hover:text-blue-800">
+						<Link to="/register" className="text-blue-600 dark:text-blue-300 underline hover:text-blue-800">
 						{t('register_here')}</Link>
 					</h3>
 					<LogInForm />
