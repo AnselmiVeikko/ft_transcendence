@@ -8,8 +8,8 @@ import loginRoutes from "./routes/Login";
 import logoutRoutes from "./routes/Logout"
 import profileRoutes from "./routes/Profile";
 import FriendRequest from "./routes/FriendRequest";
-import matchmakingRequest from "./routes/matchmakingRequest";
 import FriendList from "./routes/FriendList";
+import MatchmakingRequest from "./routes/Matchmaking";
 
 dotenv.config();
 
@@ -33,7 +33,7 @@ async function buildServer() {
 	app.register(FriendList);
 	app.register(FriendRequest);
 	app.register(logoutRoutes);
-	app.register(matchmakingRoutes);
+	app.register(MatchmakingRequest);
 }
 
 

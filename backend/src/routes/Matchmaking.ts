@@ -6,7 +6,7 @@ import { MatchCreatedResponseSchema, MatchFoundResponseSchema } from "../schemas
 import prisma from "../plugins/prisma";
 import { MatchCreated, MatchFound } from "../utils/GameResponses";
 
-export default async function matchmakingRequest(app: FastifyInstance) {
+export default async function MatchmakingRequest(app: FastifyInstance) {
     app.post( "/api/game/matchmaking", {
         schema: {
             response: {
