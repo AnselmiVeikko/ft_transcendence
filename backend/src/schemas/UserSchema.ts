@@ -82,7 +82,7 @@ export const ProfileAllResponseSchema = Type.Object({
 
 // Error Response
 export const ErrorResponseSchema = Type.Object({
-    //statusCode: Type.Number(),
+    statusCode: Type.Number(),
     error: Type.String(),
     message: Type.String(),
 });

@@ -5,6 +5,12 @@ import { syncBuiltinESMExports } from "module";
 
 export const FLCurrentQuerySchema = Type.Object({
 	// userId will retrieve from cookies
+	pageNo: Type.Optional(
+		Type.String({ pattern: "^[0-9]+$" })
+	),
+	limit: Type.Optional(
+		Type.String({ pattern: "^[0-9]+$" })
+	),
 })
 
 export const FLCurrentResponseSchema = Type.Object({
@@ -17,6 +23,13 @@ export const FLCurrentResponseSchema = Type.Object({
 			//avatar:
 		}),
 	),
+
+	pagination: Type.Object({
+		pageNo:     Type.Number(),
+		limit:      Type.Number(),
+		totalFriend:  Type.Number(),
+		totalPage:  Type.Number(),
+	})
 })
 
 export const FLPendingQuerySchema = Type.Object({
