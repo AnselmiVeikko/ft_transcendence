@@ -1,5 +1,5 @@
-import { Ball } from "./ball";
-import { Paddle } from "./paddle";
+import { Ball } from "./ball.js";
+import { Paddle } from "./paddle.js";
 
 export function checkCollision(ball: Ball, paddle: Paddle) {
   // check collision area between ball and paddle
