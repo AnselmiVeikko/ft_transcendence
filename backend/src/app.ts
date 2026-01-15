@@ -34,7 +34,8 @@ async function buildServer() {
 	app.register(FriendList);
 	app.register(FriendRequest);
 	app.register(logoutRoutes);
-	app.register(matchmakingRoutes);
+	app.register(MatchmakingRequest);
+	app.register(gameTokenRoute);
 }
 
 
