@@ -15,6 +15,7 @@ export default async function MatchmakingRequest(app: FastifyInstance) {
             },
         },
     },
+
     async (request: FastifyRequest, reply: FastifyReply) => {
         try {
             const userId = await verifyAccess(request, reply);
@@ -27,6 +28,20 @@ export default async function MatchmakingRequest(app: FastifyInstance) {
 
             if (!user) {
                 return reply.status(401).send(errorResponse(400, "User profile not found"));
+            }
+
+            const existingMatch = await prisma.game_match.findFirst({
+                where: {
+                    OR: [
+                        { playerOneId: userId },
+                        { playerTwoId: userId }
+                    ],
+                    status: { in: ["MATCHMAKING", "STARTING", "IN_PROGRESS"] }
+                }
+            });
+
+            if (existingMatch) {
+                return reply.status(409).send(errorResponse(409, "Player already in matchmaking"));
             }
 
             const availableMatch = await prisma.game_match.findFirst({
