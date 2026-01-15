@@ -1,4 +1,4 @@
-export function MatchFound( match: {matchId: string, playerOneId: string, playerTwoId: string} ) {
+export function MatchFound( match: { matchId: string, playerOneId: string, playerTwoId: string | null } ) {
     return {
         message: "Match found",
         data: {
