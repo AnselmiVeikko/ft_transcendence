@@ -1,4 +1,5 @@
 {
+  "ai_match": "AI Match",
   "all_fields_required": "Please fill all the fields",
   "already_registered": "Already registered?",
   "app_title": "Pong",
@@ -67,5 +68,6 @@
   "theme.dark": "Dark",
   "theme.light": "Light",
   "theme.system": "System",
-  "username": "Username"
+  "username": "Username",
+  "waiting_player": "Waiting for a player..."
 }
