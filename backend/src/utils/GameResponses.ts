@@ -19,3 +19,21 @@ export function MatchCreated( match: { matchId: string, playerOneId: string } ) 
         },
     };
 }
+
+export function GameTokenCreated(
+    token: { gameToken: string, matchId: string, wsUrl: string },
+    player: { userId: string, username: string }
+) {
+    return {
+        message: "Game token created",
+        data: {
+            gameToken: token.gameToken,
+            matchId: token.matchId,
+            wsUrl: token.wsUrl,
+            player: {
+                userId: player.userId,
+                username: player.username,
+            },
+        },
+    };
+}
