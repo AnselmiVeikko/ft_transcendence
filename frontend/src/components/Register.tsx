@@ -27,7 +27,7 @@ const Register = ()=> {
 						{t('create_account_message')}</h1>
 					<h3 className="dark:text-white text-sm sm:text-base lg:text-lg mb-6 sm:mb-8">
 						{t('already_registered')}{' '}
-						<Link to="/" className="text-blue-600 underline hover:text-blue-800">
+						<Link to="/" className="text-blue-600 dark:text-blue-300 underline hover:text-blue-800">
 						{t('log_in')}</Link>
 					</h3>
 					<RegisterForm />

@@ -10,7 +10,8 @@ import Register from "./components/Register.tsx";
 import ProtectedRoutes from "./utils/ProtectedRoutes.tsx";
 import PageNotFound from "./components/PageNotFound.tsx";
 import FriendsList from "./components/FriendsList.tsx";
-import SingleMatch from './components/SingleMatch.tsx'
+import SingleMatch from './components/SingleMatch.tsx';
+import Profile from "./components/Profile.tsx"
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,7 @@ const router = createBrowserRouter([
           { path: "/menu", element: <Menu /> },
           { path: "/friends", element: <FriendsList /> },
           { path: "/singlematch", element: <SingleMatch />},
+		  { path: "/profile", element: <Profile />},
         ],
       },
 
