@@ -8,12 +8,12 @@ import prisma from "../plugins/prisma"
 import { matchStatusResponse } from "../utils/GameResponses";
 
 
-type MatchStatusRequest = FastifyRequest<{ Body: Static<typeof MatchStatusQuerySchema> }>;
+type MatchStatusRequest = FastifyRequest<{ Querystring: Static<typeof MatchStatusQuerySchema> }>;
 
 export default async function matchStatus(app: FastifyInstance) {
     app.get( "/api/game/matchstatus", {
         schema: {
-            body: MatchStatusQuerySchema,
+            querystring: MatchStatusQuerySchema,
             response: {
                 200: MatchStatusResponseSchema,
                 default: ErrorResponseSchema,
@@ -27,7 +27,7 @@ export default async function matchStatus(app: FastifyInstance) {
             if (!userId)
                 return ;
 
-            const matchId = request.body.matchId;
+            const matchId = request.query.matchId;
             if (!matchId)
                 return reply.status(400).send(errorResponse(400, "No match id provided"));
 
