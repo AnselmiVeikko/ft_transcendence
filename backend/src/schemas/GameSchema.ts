@@ -7,6 +7,11 @@ export const MatchFoundResponseSchema = Type.Object({
         matchId: Type.String(),
         playerOneId: Type.String(),
         playerTwoId: Type.String(),
+        gameToken: Type.String(),
+        player: Type.Object({
+            userId: Type.String(),
+            username: Type.String(),
+        }),
     }),
 });
 
@@ -15,6 +20,11 @@ export const MatchCreatedResponseSchema = Type.Object({
     data: Type.Object({
         matchId: Type.String(),
         playerOneId: Type.String(),
+        gameToken: Type.String(),
+        player: Type.Object({
+            userId: Type.String(),
+            username: Type.String(),
+        }),
     }),
 });
 
@@ -27,21 +37,5 @@ export const MatchStatusResponseSchema = Type.Object({
     message: Type.String(),
     data: Type.Object({
         matchStatus: Type.String(),
-    }),
-});
-
-export const GameTokenBodySchema = Type.Object({
-    matchId: Type.String(),
-});
-
-export const GameTokenResponseSchema = Type.Object({
-    message: Type.String(),
-    data: Type.Object({
-        gameToken: Type.String(),
-        matchId: Type.String(),
-        player: Type.Object({
-            userId: Type.String(),
-            username: Type.String(),
-        }),
     }),
 });

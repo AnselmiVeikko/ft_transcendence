@@ -1,21 +1,33 @@
-export function matchFound( match: { matchId: string, playerOneId: string, playerTwoId: string | null } ) {
+export function matchFound(
+    match: { matchId: string, playerOneId: string, playerTwoId: string | null },
+    gameToken: string,
+    player: { userId: string, username: string }
+) {
     return {
         message: "Match found",
         data: {
             matchId: match.matchId,
             playerOneId: match.playerOneId,
             playerTwoId: match.playerTwoId,
+            gameToken,
+            player,
         },
     };
 
 }
 
-export function matchCreated( match: { matchId: string, playerOneId: string } ) {
+export function matchCreated(
+    match: { matchId: string, playerOneId: string },
+    gameToken: string,
+    player: { userId: string, username: string }
+) {
     return {
         message: "Match created",
         data: {
             matchId: match.matchId,
             playerOneId: match.playerOneId,
+            gameToken,
+            player,
         },
     };
 }
