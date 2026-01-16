@@ -18,6 +18,18 @@ export const MatchCreatedResponseSchema = Type.Object({
     }),
 });
 
+export const MatchStatusQuerySchema = Type.Object({
+    matchId: Type.String(),
+});
+
+
+export const MatchStatusResponseSchema = Type.Object({
+    message: Type.String(),
+    data: Type.Object({
+        matchStatus: Type.String(),
+    }),
+});
+
 export const GameTokenBodySchema = Type.Object({
     matchId: Type.String(),
 });

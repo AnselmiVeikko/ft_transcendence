@@ -20,6 +20,13 @@ export function MatchCreated( match: { matchId: string, playerOneId: string } ) 
     };
 }
 
+export function MatchStatusResponse( matchStatus: string ) {
+    return {
+        message: "Match status query succesful",
+        data: { matchStatus },
+    };
+}
+
 export function GameTokenCreated(
     token: { gameToken: string, matchId: string, wsUrl: string },
     player: { userId: string, username: string }
