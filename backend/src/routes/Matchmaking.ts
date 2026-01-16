@@ -83,7 +83,7 @@ export default async function matchmakingRequest(app: FastifyInstance) {
             
         } catch (error) {
             app.log.error(error);
-            return reply.status(500).send(errorResponse(500, "Internal server error during matchmaking"));
+            return reply.status(500).send(errorResponse(500, "Internal server error"));
         }
 
     });
