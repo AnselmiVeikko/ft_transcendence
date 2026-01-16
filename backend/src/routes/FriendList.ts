@@ -61,7 +61,7 @@ export default async function friendList(app: FastifyInstance) {
 				}
 			});
 
-			const friendsList = relationList.map(rel => {
+			const friendsList = relationList.map((rel: any) => {
 				const friend = rel.senderId === userId? rel.receiver : rel.sender;
 
 				return {
@@ -103,7 +103,7 @@ export default async function friendList(app: FastifyInstance) {
 				}
 			});
 
-			const pendingList = relationList.map(rel => ({
+			const pendingList = relationList.map((rel: any) => ({
 				friendRId: rel.friendRId,
 				userId: rel.sender.userId,
 				userName: rel.sender.userName,
@@ -145,7 +145,7 @@ export default async function friendList(app: FastifyInstance) {
 			const ignoreList = new Set<string>();
 			ignoreList.add(userId);
 
-			relationList.forEach(rel => {
+			relationList.forEach((rel: { senderId: string; receiverId: string; }) => {
 				ignoreList.add(rel.senderId);
 				ignoreList.add(rel.receiverId);
 			})
