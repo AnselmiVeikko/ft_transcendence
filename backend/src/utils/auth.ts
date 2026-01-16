@@ -81,3 +81,16 @@ export function clearCookies(reply: FastifyReply)
         path: "/auth/refresh",
     });
 }
+
+export function genGameToken(matchId: string, userId: string, username: string) {
+    const gameToken = jwt.sign(
+        {
+            userId: userId,
+            username: username,
+            matchId: matchId,
+        },
+        process.env.GAME_TOKEN_SECRET || "game-secret-change-this",
+        { expiresIn: "15m" });
+
+    return gameToken;
+}
