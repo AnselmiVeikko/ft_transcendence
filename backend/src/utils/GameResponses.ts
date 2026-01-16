@@ -28,7 +28,7 @@ export function matchStatusResponse( matchStatus: string ) {
 }
 
 export function gameTokenCreated(
-    token: { gameToken: string, matchId: string, wsUrl: string },
+    token: { gameToken: string, matchId: string },
     player: { userId: string, username: string }
 ) {
     return {
@@ -36,7 +36,6 @@ export function gameTokenCreated(
         data: {
             gameToken: token.gameToken,
             matchId: token.matchId,
-            wsUrl: token.wsUrl,
             player: {
                 userId: player.userId,
                 username: player.username,

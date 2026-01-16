@@ -69,7 +69,6 @@ export default async function gameTokenRoute(app: FastifyInstance) {
                 {
                     gameToken,
                     matchId,
-                    wsUrl: process.env.GAME_WS_URL || "ws://localhost:4000/game",
                 },
                 {
                     userId: userId,

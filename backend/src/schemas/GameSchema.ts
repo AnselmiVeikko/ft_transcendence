@@ -39,7 +39,6 @@ export const GameTokenResponseSchema = Type.Object({
     data: Type.Object({
         gameToken: Type.String(),
         matchId: Type.String(),
-        wsUrl: Type.String(),
         player: Type.Object({
             userId: Type.String(),
             username: Type.String(),
