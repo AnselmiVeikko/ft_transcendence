@@ -103,13 +103,13 @@ export default async function friendList(app: FastifyInstance) {
 				}
 			});
 
-			const pendingList = relationList.map((rel: any) => ({
+			const pendingListData = relationList.map((rel: any) => ({
 				friendRId: rel.friendRId,
 				userId: rel.sender.userId,
 				userName: rel.sender.userName,
 			}));
 
-			return reply.status(200).send(pendingList(pendingList));
+			return reply.status(200).send(pendingList(pendingListData));
 
 		} catch(error) {
 			return reply.status(500).send(errorResponse(500, "Internal server error"));
@@ -150,7 +150,7 @@ export default async function friendList(app: FastifyInstance) {
 				ignoreList.add(rel.receiverId);
 			})
 
-			const suggestionList = await prisma.user_info.findMany({
+			const suggestionListData = await prisma.user_info.findMany({
 				where: {
 					userId: { notIn: Array.from(ignoreList)},
 				},
@@ -160,7 +160,7 @@ export default async function friendList(app: FastifyInstance) {
 				},
 			});
 
-			return reply.status(200).send(suggestionList(suggestionList));
+			return reply.status(200).send(suggestionList(suggestionListData));
 
 		} catch(error) {
 			return reply.status(500).send(errorResponse(500, "Internal server error"));
