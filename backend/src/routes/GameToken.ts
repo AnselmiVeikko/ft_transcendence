@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import { prisma } from "../plugins/prisma";
 import { verifyAccess } from "../utils/auth";
 import { errorResponse } from "../utils/UserResponses";
-import { GameTokenCreated } from "../utils/GameResponses";
+import { gameTokenCreated } from "../utils/GameResponses";
 import { GameTokenResponseSchema, GameTokenBodySchema } from "../schemas/GameSchema";
 import { ErrorResponseSchema } from "../schemas/UserSchema";
 
@@ -65,7 +65,7 @@ export default async function gameTokenRoute(app: FastifyInstance) {
                 { expiresIn: "15m" }
             );
 
-            return reply.status(200).send(GameTokenCreated(
+            return reply.status(200).send(gameTokenCreated(
                 {
                     gameToken,
                     matchId,

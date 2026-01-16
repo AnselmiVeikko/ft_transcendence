@@ -2,7 +2,7 @@ import bcrypt  from "bcrypt";
 import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import { prisma } from '../plugins/prisma';
 import { Static } from "@sinclair/typebox";
-import { errorResponse, RegistrationSuccess } from "../utils/UserResponses";
+import { errorResponse, registrationSuccess } from "../utils/UserResponses";
 import { RegisterBodySchema, RegisterResponseSchema, ErrorResponseSchema } from "../schemas/UserSchema";
 
 type RegisterRequest = FastifyRequest<{ Body: Static<typeof RegisterBodySchema> }>;
@@ -49,6 +49,6 @@ export default async function registrationRoutes(app: FastifyInstance) {
 			userName: user.userName,
 		};
 
-		return reply.status(201).send(RegistrationSuccess(responseUser));
+		return reply.status(201).send(registrationSuccess(responseUser));
 	});
 }

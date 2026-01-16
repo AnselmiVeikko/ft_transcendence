@@ -4,9 +4,9 @@ import { verifyAccess } from "../utils/auth";
 import { errorResponse } from "../utils/UserResponses";
 import { MatchCreatedResponseSchema, MatchFoundResponseSchema } from "../schemas/GameSchema";
 import prisma from "../plugins/prisma";
-import { MatchCreated, MatchFound } from "../utils/GameResponses";
+import { matchCreated, matchFound } from "../utils/GameResponses";
 
-export default async function MatchmakingRequest(app: FastifyInstance) {
+export default async function matchmakingRequest(app: FastifyInstance) {
     app.post( "/api/game/matchmaking", {
         schema: {
             response: {
@@ -60,18 +60,17 @@ export default async function MatchmakingRequest(app: FastifyInstance) {
                     }
                 });
 
-                return reply.status(200).send(MatchFound(updatedMatch));
+                return reply.status(200).send(matchFound(updatedMatch));
             }
             else {
                 const newMatch = await prisma.game_match.create({ data: { playerOneId: userId } });
 
-                return reply.status(200).send(MatchCreated(newMatch));
+                return reply.status(200).send(matchCreated(newMatch));
             }
         } catch (error) {
             app.log.error(error);
             return reply.status(500).send(errorResponse(500, "Internal server error during matchmaking"));
         }
 
-    }
-)
+    });
 }

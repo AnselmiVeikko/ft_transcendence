@@ -5,12 +5,12 @@ import { Static } from "@sinclair/typebox";
 import { verifyAccess } from "../utils/auth";
 import { errorResponse } from "../utils/UserResponses";
 import prisma from "../plugins/prisma"
-import { MatchStatusResponse } from "../utils/GameResponses";
+import { matchStatusResponse } from "../utils/GameResponses";
 
 
-type MatchStatusRequest= FastifyRequest<{ Body: Static<typeof MatchStatusQuerySchema> }>;
+type MatchStatusRequest = FastifyRequest<{ Body: Static<typeof MatchStatusQuerySchema> }>;
 
-export default async function MatchStatus(app: FastifyInstance) {
+export default async function matchStatus(app: FastifyInstance) {
     app.get( "/api/game/matchstatus", {
         schema: {
             body: MatchStatusQuerySchema,
@@ -37,12 +37,11 @@ export default async function MatchStatus(app: FastifyInstance) {
             if (!match)
                 return reply.status(400).send(errorResponse(400, "Invalid match id"));
 
-            return reply.status(200).send(MatchStatusResponse(match.status))
+            return reply.status(200).send(matchStatusResponse(match.status));
             
         } catch (error) {
             app.log.error(error);
             return reply.status(500).send(errorResponse(500, "Internal server error"));
         }
-    }
-)
+    });
 }

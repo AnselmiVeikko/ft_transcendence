@@ -5,18 +5,18 @@ import cors from "@fastify/cors";
 import fastifyCookie from "@fastify/cookie";
 import registrationRoutes from "./routes/Register";
 import loginRoutes from "./routes/Login";
-import logoutRoutes from "./routes/Logout"
+import logoutRoutes from "./routes/Logout";
 import profileRoutes from "./routes/Profile";
-import FriendRequest from "./routes/FriendRequest";
-import FriendList from "./routes/FriendList";
-import MatchmakingRequest from "./routes/Matchmaking";
+import friendRequest from "./routes/FriendRequest";
+import friendList from "./routes/FriendList";
+import matchmakingRequest from "./routes/Matchmaking";
 import gameTokenRoute from "./routes/GameToken";
-import MatchStatus from "./routes/MatchStatus"
+import matchStatus from "./routes/MatchStatus";
 
 dotenv.config();
 
 const app = Fastify({ logger: true }).withTypeProvider<TypeBoxTypeProvider>();
-const port = process.env.BACKEND_PORT? Number(process.env.BACKEND_PORT) : 3000
+const port = process.env.BACKEND_PORT? Number(process.env.BACKEND_PORT) : 3000;
 
 
 async function buildServer() {
@@ -32,12 +32,12 @@ async function buildServer() {
 	app.register(registrationRoutes);
 	app.register(loginRoutes);
 	app.register(profileRoutes);
-	app.register(FriendList);
-	app.register(FriendRequest);
+	app.register(friendList);
+	app.register(friendRequest);
 	app.register(logoutRoutes);
-	app.register(MatchmakingRequest);
+	app.register(matchmakingRequest);
 	app.register(gameTokenRoute);
-	app.register(MatchStatus);
+	app.register(matchStatus);
 }
 
 

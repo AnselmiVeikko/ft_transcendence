@@ -1,4 +1,4 @@
-export function MatchFound( match: { matchId: string, playerOneId: string, playerTwoId: string | null } ) {
+export function matchFound( match: { matchId: string, playerOneId: string, playerTwoId: string | null } ) {
     return {
         message: "Match found",
         data: {
@@ -10,7 +10,7 @@ export function MatchFound( match: { matchId: string, playerOneId: string, playe
 
 }
 
-export function MatchCreated( match: { matchId: string, playerOneId: string } ) {
+export function matchCreated( match: { matchId: string, playerOneId: string } ) {
     return {
         message: "Match created",
         data: {
@@ -20,14 +20,14 @@ export function MatchCreated( match: { matchId: string, playerOneId: string } ) 
     };
 }
 
-export function MatchStatusResponse( matchStatus: string ) {
+export function matchStatusResponse( matchStatus: string ) {
     return {
         message: "Match status query succesful",
         data: { matchStatus },
     };
 }
 
-export function GameTokenCreated(
+export function gameTokenCreated(
     token: { gameToken: string, matchId: string, wsUrl: string },
     player: { userId: string, username: string }
 ) {

@@ -18,7 +18,7 @@ export function logoutSuccess(user: { userId: string, userName: string }) {
 	};
 }
 
-export function RegistrationSuccess(user: { userId: string, userName: string }) {
+export function registrationSuccess(user: { userId: string, userName: string }) {
 	return {
 		message: "Registration succesful",
 		data: {
@@ -28,7 +28,7 @@ export function RegistrationSuccess(user: { userId: string, userName: string }) 
 	};
 }
 
-export function ProfileSelf(userProfile: {userId: string, userName: string, email: string}) {
+export function profileSelf(userProfile: {userId: string, userName: string, email: string}) {
 	return {
 		message: "Profile retrieve successful",
 		data: {
@@ -58,7 +58,7 @@ export function errorResponse(status: number, message: string) {
 }
 
 
-export function ProfileAll(userProfile: any[], pageNo: number, limit: number, totalUser: number) {
+export function profileAll(userProfile: any[], pageNo: number, limit: number, totalUser: number) {
 	return {
 		message: "All profiles retrieve successful",
 		data: userProfile.map(u => ({

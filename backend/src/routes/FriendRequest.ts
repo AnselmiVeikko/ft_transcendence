@@ -1,7 +1,7 @@
 import { FastifyInstance, FastifyRequest, FastifyReply, FastifyError } from "fastify";
 import { FRSendBodySchema, FRAcceptBodySchema, FRDeclineQuerySchema, FRDeleteQuerySchema} from "../schemas/FriendSchema";
 import { FRSendResponseSchema, FRAcceptResponseSchema, FRDeclineResponseSchema, FRDeleteResponseSchema } from "../schemas/FriendSchema";
-import { FRAcceptSuccess, FRDecclineSuccess, FRSendSuccess, FRDeleteSuccess } from "../utils/FriendResponses";
+import { frAcceptSuccess, frDeclineSuccess, frSendSuccess, frDeleteSuccess } from "../utils/FriendResponses";
 import { ErrorResponseSchema } from "../schemas/UserSchema";
 import { errorResponse } from "../utils/UserResponses";
 import { Static } from "@fastify/type-provider-typebox";
@@ -14,7 +14,7 @@ type FriendRequestAccept = FastifyRequest<{ Body: Static<typeof FRAcceptBodySche
 type FriendRequestDecline = FastifyRequest<{ Querystring: Static<typeof FRDeclineQuerySchema> }>;
 type FriendRequestDelete = FastifyRequest<{ Querystring: Static<typeof FRDeleteQuerySchema> }>;
 
-export default async function FriendRequest(app: FastifyInstance) {
+export default async function friendRequest(app: FastifyInstance) {
 
 	app.post( "/api/friendrequest/send", {
 		schema: {
@@ -69,7 +69,7 @@ export default async function FriendRequest(app: FastifyInstance) {
 					receiverId: receiverId as string,
 				}
 			});
-			return reply.status(201).send(FRSendSuccess(sendRequest));
+			return reply.status(201).send(frSendSuccess(sendRequest));
 
 		} catch (error) {
 			app.log.error(error);
@@ -119,7 +119,7 @@ export default async function FriendRequest(app: FastifyInstance) {
 				},
 			});
 
-			return reply.status(200).send(FRAcceptSuccess(acceptRequest));
+			return reply.status(200).send(frAcceptSuccess(acceptRequest));
 		} catch (error) {
 			app.log.error(error);
 			return reply.status(500).send(errorResponse(500, "Internal server error"));
@@ -164,7 +164,7 @@ export default async function FriendRequest(app: FastifyInstance) {
 				},
 			});
 
-			return reply.status(200).send(FRDecclineSuccess(declineRequest));
+			return reply.status(200).send(frDeclineSuccess(declineRequest));
 		} catch (error) {
 			app.log.error(error);
 			return reply.status(500).send(errorResponse(500, "Internal server error"));
@@ -209,7 +209,7 @@ export default async function FriendRequest(app: FastifyInstance) {
 				},
 			});
 
-			return reply.status(200).send(FRDeleteSuccess(deleteRequest));
+			return reply.status(200).send(frDeleteSuccess(deleteRequest));
 		} catch (error) {
 			app.log.error(error);
 			return reply.status(500).send(errorResponse(500, "Internal server error"));
