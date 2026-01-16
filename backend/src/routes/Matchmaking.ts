@@ -1,8 +1,9 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
+import jwt from "jsonwebtoken";
 import { ErrorResponseSchema } from "../schemas/UserSchema";
-import { verifyAccess } from "../utils/auth";
+import { genGameToken, verifyAccess } from "../utils/auth";
 import { errorResponse } from "../utils/UserResponses";
-import { MatchCreatedResponseSchema, MatchFoundResponseSchema } from "../schemas/GameSchema";
+import { MatchmakingResponseSchema } from "../schemas/GameSchema";
 import prisma from "../plugins/prisma";
 import { matchCreated, matchFound } from "../utils/GameResponses";
 
@@ -10,7 +11,7 @@ export default async function matchmakingRequest(app: FastifyInstance) {
     app.post( "/api/game/matchmaking", {
         schema: {
             response: {
-                 200: MatchFoundResponseSchema || MatchCreatedResponseSchema,
+                 200: MatchmakingResponseSchema,
                 default: ErrorResponseSchema,
             },
         },
@@ -60,13 +61,26 @@ export default async function matchmakingRequest(app: FastifyInstance) {
                     }
                 });
 
-                return reply.status(200).send(matchFound(updatedMatch));
+                const gameToken = genGameToken(updatedMatch.matchId, userId, user.userName);
+
+                return reply.status(200).send(matchFound( 
+                    updatedMatch.matchId,
+                    gameToken,
+                    { userId: userId, username: user.userName }));
             }
+            
             else {
                 const newMatch = await prisma.game_match.create({ data: { playerOneId: userId } });
 
-                return reply.status(200).send(matchCreated(newMatch));
+                const gameToken = genGameToken(newMatch.matchId, userId, user.userName);
+
+                return reply.status(200).send(matchCreated(
+                    newMatch.matchId,
+                    gameToken,
+                    { userId: userId, username: user.userName }
+                ));
             }
+            
         } catch (error) {
             app.log.error(error);
             return reply.status(500).send(errorResponse(500, "Internal server error during matchmaking"));
