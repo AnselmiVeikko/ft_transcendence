@@ -1,12 +1,10 @@
 import './style.css';
 import { render } from "./renderer/render";
-import type { GameState, InputEvent, GameStartEvent } from "./types/gameState";
+import type { GameState } from "./types/gameState";
 
 const canvas = document.getElementById("pongCanvas") as HTMLCanvasElement;
-const play2PButton = document.getElementById("play2PButton");
-const playAIButton = document.getElementById("playAIButton");
 
-if (!canvas || !play2PButton || !playAIButton) {
+if (!canvas) {
   throw new Error("Missing required DOM elements to start the game");
 }
 
@@ -15,38 +13,46 @@ if (!ctx) {
   throw new Error("Cannot get canvas context");
 }
 
-// WebSocket connection
-// In browser, use the same hostname and port as the frontend, but connect to backend port
-const getWebSocketURL = () => {
-  const envUrl = (import.meta as any).env?.VITE_WS_URL;
-  if (envUrl) return envUrl;
-  
-  // Use window.location to determine the correct WebSocket URL
-  if (typeof window !== 'undefined' && window.location) {
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const host = window.location.hostname;
-    // Backend runs on port 4000
-    return `${protocol}//${host}:4000/game`;
-  }
-  
-  // Fallback
-  return `ws://localhost:4000/game`;
-};
+// Data received from Main FE via postMessage
+interface GameInitData {
+  matchId: string;
+  player: {
+    id: string;
+    username: string;
+  };
+  gameWsUrl: string;
+  accessToken: string;
+}
 
-const WS_URL = getWebSocketURL();
 let ws: WebSocket | null = null;
 let currentState: GameState | null = null;
 let isConnected = false;
+let gameInitData: GameInitData | null = null;
+let keysPressed: Set<string> = new Set();
 
-function connectWebSocket() {
-  console.log(`🔌 Attempting to connect to WebSocket: ${WS_URL}`);
+/**
+ * Connect to Game BE WebSocket with matchId and token
+ * Format: wss://game-be.domain/ws?matchId=m456&token=JWT_TOKEN
+ */
+function connectWebSocket(data: GameInitData) {
+  if (!data.gameWsUrl || !data.matchId || !data.accessToken) {
+    console.error("❌ Missing required data to connect:", data);
+    return;
+  }
+
+  // Build WebSocket URL with matchId and token as query params
+  const url = new URL(data.gameWsUrl);
+  url.searchParams.set('matchId', data.matchId);
+  url.searchParams.set('token', data.accessToken);
+  
+  const wsUrl = url.toString();
+  console.log(`🔌 Attempting to connect to WebSocket: ${wsUrl.replace(/token=[^&]+/, 'token=***')}`);
   
   try {
-    ws = new WebSocket(WS_URL);
+    ws = new WebSocket(wsUrl);
 
     ws.onopen = () => {
       console.log("✅ Connected to game server");
-      console.log("WebSocket URL:", WS_URL);
       isConnected = true;
       updateConnectionStatus();
     };
@@ -55,16 +61,17 @@ function connectWebSocket() {
       try {
         const message = JSON.parse(event.data);
         
-        if (message.type === "connected") {
-          console.log("✅ Server confirmed connection:", message.message);
-        } else if (message.type === "state" && ctx) {
+        if (message.type === "STATE_UPDATE" && ctx) {
           currentState = message.state as GameState;
           // Trigger render
           if (currentState) {
             render(ctx, currentState);
           }
+        } else if (message.type === "GAME_OVER") {
+          console.log("🎮 Game Over!", message.result);
+          // Display game over message
+          displayGameOver(message.result);
         } else {
-          // Only log non-state messages
           console.log("📨 Received message:", message.type);
         }
       } catch (error) {
@@ -74,23 +81,22 @@ function connectWebSocket() {
 
     ws.onerror = (error) => {
       console.error("❌ WebSocket error:", error);
-      console.error("Error details:", {
-        type: error.type,
-        target: error.target,
-        url: WS_URL
-      });
       isConnected = false;
+      updateConnectionStatus();
     };
 
     ws.onclose = (event) => {
       console.log(`🔌 WebSocket connection closed. Code: ${event.code}, Reason: ${event.reason || 'No reason provided'}`);
       isConnected = false;
       updateConnectionStatus();
-      // Attempt to reconnect after 3 seconds
-      setTimeout(() => {
-        console.log("🔄 Attempting to reconnect...");
-        connectWebSocket();
-      }, 3000);
+      
+      // Only reconnect if not a normal closure (code 1000)
+      if (event.code !== 1000 && gameInitData) {
+        setTimeout(() => {
+          console.log("🔄 Attempting to reconnect...");
+          connectWebSocket(gameInitData!);
+        }, 3000);
+      }
     };
   } catch (error) {
     console.error("Failed to create WebSocket connection:", error);
@@ -98,67 +104,117 @@ function connectWebSocket() {
   }
 }
 
-function sendInput(event: InputEvent) {
+/**
+ * Send input to Game BE
+ * Format: { type: "INPUT", action: "MOVE_UP" | "MOVE_DOWN" | "STOP" }
+ * According to secure_game_flow.md: Do NOT send userId, username, or JWT
+ */
+function sendInput(action: 'MOVE_UP' | 'MOVE_DOWN' | 'STOP') {
   if (ws && ws.readyState === WebSocket.OPEN) {
-    ws.send(JSON.stringify({ type: "input", input: event }));
+    ws.send(JSON.stringify({ type: "INPUT", action }));
   } else {
     console.warn("Cannot send input: WebSocket not connected");
   }
 }
 
-function startGame(event: GameStartEvent) {
-  console.log("startGame called. WebSocket state:", {
-    ws: ws ? "exists" : "null",
-    readyState: ws?.readyState,
-    OPEN: WebSocket.OPEN,
-    isConnected: isConnected
-  });
+// Handle keyboard input
+// Map keys to actions based on which player this is
+// For simplicity, assume left player uses W/S, right player uses Arrow keys
+// In a real scenario, you'd determine this based on player position in match
+window.addEventListener("keydown", (e) => {
+  const key = e.key.toLowerCase();
   
-  if (ws && ws.readyState === WebSocket.OPEN) {
-    console.log("Starting game:", event);
-    ws.send(JSON.stringify({ type: "start", ...event }));
-  } else {
-    console.error("Cannot start game: WebSocket not connected. ReadyState:", ws?.readyState);
-    console.error("WebSocket states: CONNECTING=0, OPEN=1, CLOSING=2, CLOSED=3");
-    
-    // Try to reconnect if not connected
-    if (!ws || ws.readyState === WebSocket.CLOSED) {
-      console.log("Attempting to reconnect...");
-      connectWebSocket();
-      // Wait a bit and try again
-      setTimeout(() => {
-        if (ws && ws.readyState === WebSocket.OPEN) {
-          console.log("Reconnected! Starting game now...");
-          ws.send(JSON.stringify({ type: "start", ...event }));
-        } else {
-          alert("Cannot start game: Not connected to server. Please check the browser console for errors.");
-        }
-      }, 1000);
-    } else {
-      alert("Cannot start game: Not connected to server. Please wait for connection...");
+  // Prevent default to avoid scrolling
+  if (['w', 's', 'arrowup', 'arrowdown'].includes(key)) {
+    e.preventDefault();
+  }
+  
+  if (key === 'w' || key === 'arrowup') {
+    if (!keysPressed.has(key)) {
+      keysPressed.add(key);
+      sendInput('MOVE_UP');
+    }
+  } else if (key === 's' || key === 'arrowdown') {
+    if (!keysPressed.has(key)) {
+      keysPressed.add(key);
+      sendInput('MOVE_DOWN');
     }
   }
-}
-
-// Handle keyboard input
-const normalizeKey = (key: string) => (key.length === 1 ? key.toLowerCase() : key);
-
-window.addEventListener("keydown", (e) => {
-  sendInput({ type: "keydown", key: normalizeKey(e.key) });
 });
 
 window.addEventListener("keyup", (e) => {
-  sendInput({ type: "keyup", key: normalizeKey(e.key) });
+  const key = e.key.toLowerCase();
+  
+  if (key === 'w' || key === 'arrowup' || key === 's' || key === 'arrowdown') {
+    keysPressed.delete(key);
+    // Send STOP when key is released (or continue based on other pressed keys)
+    if (keysPressed.size === 0) {
+      sendInput('STOP');
+    }
+  }
 });
 
-// Button handlers
-play2PButton.addEventListener("click", () => {
-  startGame({ gameMode: "2P", player1: "Player1", player2: "Player2" });
+/**
+ * Listen for postMessage from Main FE
+ * Expected data: { matchId, player: { id, username }, gameWsUrl, accessToken }
+ */
+window.addEventListener("message", (event) => {
+  // Security: Always validate origin
+  // In production, validate against known Main FE origin
+  console.log("📨 Received postMessage from:", event.origin);
+  
+  try {
+    const data = event.data as GameInitData;
+    
+    // Validate required fields
+    if (!data.matchId || !data.player || !data.gameWsUrl || !data.accessToken) {
+      console.error("❌ Invalid game init data:", data);
+      return;
+    }
+    
+    console.log("✅ Received game init data:", {
+      matchId: data.matchId,
+      player: data.player.username,
+      gameWsUrl: data.gameWsUrl
+    });
+    
+    gameInitData = data;
+    
+    // Connect to WebSocket
+    connectWebSocket(data);
+  } catch (error) {
+    console.error("Error handling postMessage:", error);
+  }
 });
 
-playAIButton.addEventListener("click", () => {
-  startGame({ gameMode: "AI", player1: "Player1" });
-});
+function displayGameOver(result: { winnerId: string; score: Record<string, number> }) {
+  // Create or update game over message
+  let gameOverEl = document.getElementById('game-over-message');
+  if (!gameOverEl) {
+    gameOverEl = document.createElement('div');
+    gameOverEl.id = 'game-over-message';
+    gameOverEl.style.position = 'fixed';
+    gameOverEl.style.top = '50%';
+    gameOverEl.style.left = '50%';
+    gameOverEl.style.transform = 'translate(-50%, -50%)';
+    gameOverEl.style.backgroundColor = 'rgba(0,0,0,0.9)';
+    gameOverEl.style.color = '#fff';
+    gameOverEl.style.padding = '2rem';
+    gameOverEl.style.borderRadius = '8px';
+    gameOverEl.style.zIndex = '2000';
+    gameOverEl.style.textAlign = 'center';
+    document.body.appendChild(gameOverEl);
+  }
+  
+  const winnerName = gameInitData?.player.username === result.winnerId ? 
+    gameInitData.player.username : 'Opponent';
+  
+  gameOverEl.innerHTML = `
+    <h2>Game Over!</h2>
+    <p>Winner: ${winnerName}</p>
+    <p>Scores: ${JSON.stringify(result.score)}</p>
+  `;
+}
 
 // Start render loop
 function renderLoop() {
@@ -195,12 +251,11 @@ if (!document.getElementById('connection-status')) {
   statusEl.style.borderRadius = '4px';
   statusEl.style.fontSize = '14px';
   statusEl.style.zIndex = '1000';
-  statusEl.textContent = '🔴 Disconnected';
+  statusEl.textContent = '🔴 Waiting for game data...';
   document.body.appendChild(statusEl);
 }
 
-// Initialize
-connectWebSocket();
+// Initialize render loop (will wait for postMessage to connect)
 renderLoop();
 
 // Update connection status periodically
