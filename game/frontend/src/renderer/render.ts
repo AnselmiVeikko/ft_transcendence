@@ -41,8 +41,6 @@ export function render(ctx: CanvasRenderingContext2D, state: GameState | null) {
     ctx.font = "600 34px 'Space Grotesk', sans-serif";
     ctx.textAlign = "center";
     ctx.fillText("Welcome to Pong!", width / 2, height / 2 - 20);
-    ctx.font = "400 18px 'Space Grotesk', sans-serif";
-    ctx.fillText("Click a button to start", width / 2, height / 2 + 20);
     return;
   }
 

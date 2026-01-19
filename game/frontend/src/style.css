@@ -29,15 +29,14 @@
 
 body {
   margin: 0;
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding: 2.5rem 2rem;
+  padding: 1rem;
   background: var(--bg);
   color: inherit;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: hidden; /* keep game+controls on one page, no scrolling while playing */
   position: relative;
 }
 
@@ -78,12 +77,13 @@ body {
 }
 
 .game-shell {
-  width: min(1600px, 100%);
+  width: min(1200px, 100%);
   display: grid;
-  grid-template-columns: minmax(280px, 340px) 1fr;
+  /* Always stack: game canvas on top, controls under (even on wide screens). */
+  grid-template-columns: 1fr;
   grid-template-areas:
-    "intro arena"
-    "guides arena";
+    "arena"
+    "guides";
   gap: 1.5rem;
   padding: 1.5rem;
   border-radius: 32px;
@@ -93,6 +93,8 @@ body {
   position: relative;
   z-index: 1;
   backdrop-filter: blur(30px);
+  max-height: calc(100vh - 2rem); /* body padding (1rem top + 1rem bottom) */
+  overflow: hidden;
 }
 
 .intro-panel {
@@ -222,7 +224,8 @@ body {
 
 .canvas-wrap canvas {
   width: 100%;
-  height: auto;
+  height: min(64vh, 600px); /* keep room for controls */
+  object-fit: contain;
   display: block;
   border-radius: 22px;
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -272,7 +275,7 @@ body {
 
 @media (max-width: 960px) {
   body {
-    padding: 1.5rem;
+    padding: 0.75rem;
   }
   .game-shell {
     grid-template-columns: 1fr;
