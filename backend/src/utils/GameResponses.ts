@@ -31,7 +31,7 @@ export function matchCreated(
 
 export function matchStatusResponse( matchStatus: string ) {
     return {
-        message: "Match status query succesful",
+        message: "Match status query successful",
         data: { matchStatus },
     };
 }
