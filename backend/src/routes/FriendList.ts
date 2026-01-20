@@ -3,7 +3,7 @@ import { Static } from "@fastify/type-provider-typebox";
 import { Prisma } from "@prisma/client";
 import { FLCurrentQuerySchema, FLPendingQuerySchema, FLSuggestionQuerySchema } from "../schemas/FriendSchema";
 import { FLCurrentResponseSchema, FLPendingResponseSchema, FLSuggestionResponseSchema } from "../schemas/FriendSchema";
-import { CurrentList, PendingList, SuggestionList } from "../utils/FriendResponses";
+import { currentList, pendingList, suggestionList } from "../utils/FriendResponses";
 import { ErrorResponseSchema } from "../schemas/UserSchema";
 import { errorResponse } from "../utils/UserResponses";
 import { verifyAccess } from "../utils/auth";
@@ -14,7 +14,7 @@ type FriendCurrentList = FastifyRequest<{ Querystring: Static<typeof FLCurrentQu
 type FriendPendingList = FastifyRequest<{ Querystring: Static<typeof FLPendingQuerySchema> }>;
 type FriendSuggestion = FastifyRequest<{ Querystring: Static<typeof FLSuggestionQuerySchema>}>;
 
-export default async function FriendList(app: FastifyInstance) {
+export default async function friendList(app: FastifyInstance) {
 	app.get( "/api/friendlist/current", {
 		schema: {
 			querystring: FLCurrentQuerySchema,
@@ -61,7 +61,7 @@ export default async function FriendList(app: FastifyInstance) {
 				}
 			});
 
-			const friendsList = relationList.map(rel => {
+			const friendsList = relationList.map((rel: any) => {
 				const friend = rel.senderId === userId? rel.receiver : rel.sender;
 
 				return {
@@ -71,7 +71,7 @@ export default async function FriendList(app: FastifyInstance) {
 				};
 			});
 
-			return reply.status(200).send(CurrentList(friendsList, pageNo, limit, totalFriend));
+			return reply.status(200).send(currentList(friendsList, pageNo, limit, totalFriend));
 		} catch(error) {
 			return reply.status(500).send(errorResponse(500, "Internal server error"));
 		}
@@ -103,13 +103,13 @@ export default async function FriendList(app: FastifyInstance) {
 				}
 			});
 
-			const pendingList = relationList.map(rel => ({
+			const pendingList = relationList.map((rel: any) => ({
 				friendRId: rel.friendRId,
 				userId: rel.sender.userId,
 				userName: rel.sender.userName,
 			}));
 
-			return reply.status(200).send(PendingList(pendingList));
+			return reply.status(200).send(pendingList(pendingList));
 
 		} catch(error) {
 			return reply.status(500).send(errorResponse(500, "Internal server error"));
@@ -145,7 +145,7 @@ export default async function FriendList(app: FastifyInstance) {
 			const ignoreList = new Set<string>();
 			ignoreList.add(userId);
 
-			relationList.forEach(rel => {
+			relationList.forEach((rel: { senderId: string; receiverId: string; }) => {
 				ignoreList.add(rel.senderId);
 				ignoreList.add(rel.receiverId);
 			})
@@ -160,7 +160,7 @@ export default async function FriendList(app: FastifyInstance) {
 				},
 			});
 
-			return reply.status(200).send(SuggestionList(suggestionList));
+			return reply.status(200).send(suggestionList(suggestionList));
 
 		} catch(error) {
 			return reply.status(500).send(errorResponse(500, "Internal server error"));

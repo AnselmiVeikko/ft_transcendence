@@ -1,5 +1,5 @@
 // Friend List Responses
-export function CurrentList(list: any[], pageNo: number, limit: number, totalFriend: number) {
+export function currentList(list: any[], pageNo: number, limit: number, totalFriend: number) {
 	return {
 		message: "Friends List",
 		data: list.map(u => ({
@@ -16,7 +16,7 @@ export function CurrentList(list: any[], pageNo: number, limit: number, totalFri
 	};
 }
 
-export function PendingList(list: any[]) {
+export function pendingList(list: any[]) {
 	return {
 		message: "Friends Pending List",
 		data: list.map(u => ({
@@ -27,7 +27,7 @@ export function PendingList(list: any[]) {
 	};
 }
 
-export function SuggestionList(list: any[]) {
+export function suggestionList(list: any[]) {
 	return {
 		message: "Friends Suggestion List",
 		data: list.map(u => ({
@@ -38,7 +38,7 @@ export function SuggestionList(list: any[]) {
 }
 
 // Friend Request Responses
-export function FRSendSuccess(request: { friendRId: string, senderId: string, receiverId: string}) {
+export function frSendSuccess(request: { friendRId: string, senderId: string, receiverId: string}) {
 	return {
 		message: "Request sent",
 		data: {
@@ -49,7 +49,7 @@ export function FRSendSuccess(request: { friendRId: string, senderId: string, re
 	};
 }
 
-export function FRAcceptSuccess(request: { friendRId: string, senderId: string, receiverId: string}) {
+export function frAcceptSuccess(request: { friendRId: string, senderId: string, receiverId: string}) {
 	return {
 		message: "Request Accepted",
 		data: {
@@ -60,7 +60,7 @@ export function FRAcceptSuccess(request: { friendRId: string, senderId: string, 
 	};
 }
 
-export function FRDecclineSuccess(request: { friendRId: string, senderId: string, receiverId: string}) {
+export function frDeclineSuccess(request: { friendRId: string, senderId: string, receiverId: string}) {
 	return {
 		message: "Request Declined",
 		data: {
@@ -71,7 +71,7 @@ export function FRDecclineSuccess(request: { friendRId: string, senderId: string
 	};
 }
 
-export function FRDeleteSuccess(request: { friendRId: string, senderId: string, receiverId: string}) {
+export function frDeleteSuccess(request: { friendRId: string, senderId: string, receiverId: string}) {
 	return {
 		message: "Request Deleted",
 		data: {

@@ -4,6 +4,7 @@ import { GiHamburgerMenu } from 'react-icons/gi';
 import { FaUser, FaUserFriends, FaSignOutAlt } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
+import { HandHelping } from 'lucide-react';
 
 /* interface HeaderProps {
   appName: string;
@@ -15,14 +16,25 @@ const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
   const navigate = useNavigate();
 
+  const handlePongClick = () => {
+    setShowMenu(false);
+    navigate('/menu');
+  };
+
   const handleFriendsClick = () => {
     setShowMenu(false);
     navigate('/friends');
   };
 
+  const handleProfileClick = () => {
+    setShowMenu(false);
+    navigate('/profile');
+  };
+
   const handleLogoutClick = () => {
     setShowMenu(false);
   };
+
   const { t } = useTranslation();
 
   const [userName, setUserName] = useState('');
@@ -37,9 +49,11 @@ const Header = () => {
           headers: {},
         });
         if (response.status === 401) {
+		  navigate("/");
           throw new Error('User not authenticated.');
         }
         if (!response.ok) {
+		  navigate("/");
           throw new Error(`HTTP Error: ${response.status}`);
         }
         const result = await response.json();
@@ -59,19 +73,23 @@ const Header = () => {
   }, []);
 
   return (
-    <header className="bg-linear-to-b from-slate-900 to-slate-700  p-4 sticky top-0 z-10">
+    <header className="bg-linear-to-b from-slate-900 to-slate-700 p-4 h-20 sticky top-0 z-15">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <h1 className="text-2xl sm:text-3xl font-bold text-white px-4 py-2">
-            PONG
-          </h1>
+          <button
+		  	  onClick={handlePongClick}
+			  className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-linear-to-t from-indigo-700 to-blue-200 px-4 transform hover:scale-[1.05] py-2 duration-300">
+              PONG
+          </button>
 
           <div className="hidden sm:flex items-center gap-4">
             <div className="h-8 w-px bg-purple-500/50"></div>
-            <div className="flex items-center gap-2 text-white px-4 py-2">
-              <FaUser className="w-5 h-5" />
+			<button
+			  onClick={handleProfileClick}
+			  className="flex items-center gap-2 px-4 py-2 text-white hover:bg-white/10 rounded-lg transform hover:scale-[1.03] duration-300">
+              <img src='avatars/avatar01.png' className="w-7 h-7" />
               <span className="font-semibold">{userName}</span>
-            </div>
+			</button>
           </div>
         </div>
 

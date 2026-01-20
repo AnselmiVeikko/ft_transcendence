@@ -38,7 +38,7 @@ services:
       - transcendence
 
   backend:
-    container_name: transcendence_be
+    container_name: backend
     restart: unless-stopped
     environment:
       - DATABASE_URL=${DATABASE_URL}
