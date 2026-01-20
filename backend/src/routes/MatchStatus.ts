@@ -11,7 +11,7 @@ import { matchStatusResponse } from "../utils/GameResponses";
 type MatchStatusRequest = FastifyRequest<{ Querystring: Static<typeof MatchStatusQuerySchema> }>;
 
 export default async function matchStatus(app: FastifyInstance) {
-    app.get( "/api/game/matchstatus", {
+    app.post( "/api/game/matchstatus", {
         schema: {
             querystring: MatchStatusQuerySchema,
             response: {
