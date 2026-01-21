@@ -16,7 +16,19 @@ export function currentList(list: any[], pageNo: number, limit: number, totalFri
 	};
 }
 
-export function pendingList(list: any[]) {
+export function SearchtList(list: any[]) {
+	return {
+		message: "Search List",
+		data: list.map(u => ({
+			friendRId: u.friendRId,
+			userId: u.userId,
+			userName: u.userName,
+			status: u.status
+		})),
+	};
+}
+
+export function PendingList(list: any[]) {
 	return {
 		message: "Friends Pending List",
 		data: list.map(u => ({
