@@ -1,7 +1,7 @@
 import type { FastifyRequest, FastifyReply } from "fastify";
 import jwt from "jsonwebtoken";
 
-interface JWTPayLoad {
+interface JWTPayload {
     userId: string;
     iat?:   number;
     exp?:   number;
@@ -12,9 +12,9 @@ export async function verifyAccess(request: FastifyRequest, reply: FastifyReply)
   if (!token) {
       return reply.status(401).send({ message: "Missing token "});
   }
-  let payload: JWTPayLoad | undefined;
+  let payload: JWTPayload | undefined;
   try {
-      payload = jwt.verify(token, process.env.JWT_ACCESS_SECRET || "access-secret") as JWTPayLoad;
+      payload = jwt.verify(token, process.env.JWT_ACCESS_SECRET || "access-secret") as JWTPayload;
   } catch (err) {
       return reply.status(401).send({ message: "Invalid token" });
   }
@@ -30,7 +30,7 @@ export async function refreshAccess(request: FastifyRequest, reply: FastifyReply
 
      const user = request.cookies?.userId;
      try {
-        const payload = jwt.verify(token, process.env.JWT_REFRESH_SECRET || "refresh-secret") as JWTPayLoad;
+        const payload = jwt.verify(token, process.env.JWT_REFRESH_SECRET || "refresh-secret") as JWTPayload;
 
         setCookies(reply, payload.userId);
         return reply.status(200).send({ message: "Token refreshed" });
@@ -80,4 +80,17 @@ export function clearCookies(reply: FastifyReply)
     reply.clearCookie("refreshJWT", {
         path: "/auth/refresh",
     });
+}
+
+export function genGameToken(matchId: string, userId: string, username: string) {
+    const gameToken = jwt.sign(
+        {
+            userId: userId,
+            username: username,
+            matchId: matchId,
+        },
+        process.env.GAME_TOKEN_SECRET || "game-secret-change-this",
+        { expiresIn: "15m" });
+
+    return gameToken;
 }

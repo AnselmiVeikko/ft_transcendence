@@ -1,5 +1,5 @@
-import { Ball } from "../core/ball";
-import { Paddle } from "../core/paddle";
+import { Ball } from "../core/ball.js";
+import { Paddle } from "../core/paddle.js";
 
 type KeyMap = Record<string, boolean>;
 

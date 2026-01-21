@@ -73,10 +73,12 @@ rm:
 # -----------------------
 clean:
 	@echo "Stopping and removing all containers, networks, and volumes..."
-	docker stop $$(docker ps -aq) 2>/dev/null || true
-	docker rm $$(docker ps -aq) 2>/dev/null || true
-	docker network prune -f
-	docker volume prune -f
+	@docker stop $$(docker ps -aq) 2>/dev/null || true
+	@echo "Stopped all containers"
+	@docker rm $$(docker ps -aq) 2>/dev/null || true
+	@docker network prune -f
+	@docker volume prune -f
+	@echo "Removed all containers, networks, and volumes..."
 
 # -----------------------
 # Logs
@@ -86,9 +88,11 @@ logs:
 	$(DC) --env-file $(ENV_FILE) -f $(COMPOSE_FILE) logs -f
 
 # -----------------------
-# Rebuild and restart
+# Clean, build and restart
 # -----------------------
-rebuild:
-	@echo "Rebuilding and restarting all services..."
+re:
+	@echo "Cleaning and restarting all services..."
+	$(MAKE) stop
+	$(MAKE) clean
 	$(MAKE) build
 	$(MAKE) up
