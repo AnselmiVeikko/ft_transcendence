@@ -6,17 +6,13 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { HandHelping } from 'lucide-react';
 import { useLogout } from '../hooks/useLogout';
-
-/* interface HeaderProps {
-  appName: string;
-  playerName: string;
-  onLogout: () => void;
-} */
+import { useUser } from '../hooks/useUser';
 
 const Header = () => {
   const { logout } = useLogout();
   const [showMenu, setShowMenu] = useState(false);
   const navigate = useNavigate();
+  const { userName, loading: userLoading } = useUser();
 
   const handlePongClick = () => {
     setShowMenu(false);
@@ -40,40 +36,7 @@ const Header = () => {
 
   const { t } = useTranslation();
 
-  const [userName, setUserName] = useState('');
-  const SelfAPI = 'http://localhost:3000/api/user/profile/self';
-
-  useEffect(() => {
-    const fetchUserName = async () => {
-      try {
-        const response = await fetch(SelfAPI, {
-          method: 'GET',
-          credentials: 'include',
-          headers: {},
-        });
-        if (response.status === 401) {
-		  navigate("/");
-          throw new Error('User not authenticated.');
-        }
-        if (!response.ok) {
-		  navigate("/");
-          throw new Error(`HTTP Error: ${response.status}`);
-        }
-        const result = await response.json();
-
-        if (result.data && result.data.userName) {
-          //console.log(result.data.userName);
-          setUserName(result.data.userName);
-        } else {
-          throw new Error(result.message);
-        }
-      } catch (e) {
-        console.error('Failed to fetch user profile: ', e);
-        setUserName('Player1');
-      }
-    };
-    fetchUserName();
-  }, []);
+  if (userLoading) return null;
 
   return (
     <header className="bg-linear-to-b from-slate-900 to-slate-700 p-4 h-20 sticky top-0 z-15">

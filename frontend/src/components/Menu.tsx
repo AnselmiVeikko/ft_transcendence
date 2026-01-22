@@ -4,6 +4,7 @@ import SettingsMenu from './SettingsMenu'
 import { FaPlay, FaUserEdit, FaChartBar, FaPlayCircle, FaCogs, FaCog, FaUserAstronaut, FaUserAlt, FaUserCog, FaRobot } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import { FaCirclePlay } from 'react-icons/fa6';
+import { useUser } from '../hooks/useUser';
 
 interface MenuCardProps {
   title: string;
@@ -33,6 +34,7 @@ const MenuCard = ({ title, colorClass, icon, to }: MenuCardProps) => (
 
 const Menu = () => {
   const { t } = useTranslation();
+  const { userName, loading: userLoading } = useUser();
 
   const welcomePhrases = [
     'greeting_welcome',
@@ -50,38 +52,6 @@ const Menu = () => {
       return welcomePhrases[randomIndex];
     };
     setRandomGreetingKey(getRandomGreeting());
-  }, []);
-
-  const [userName, setUserName] = useState('');
-  const SelfAPI = 'http://localhost:3000/api/user/profile/self';
-
-  useEffect(() => {
-    const fetchUserName = async () => {
-      try {
-        const response = await fetch(SelfAPI, {
-          method: 'GET',
-          credentials: 'include',
-          headers: {},
-        });
-        if (response.status === 401) {
-          throw new Error('User not authenticated.');
-        }
-        if (!response.ok) {
-          throw new Error(`HTTP Error: ${response.status}`);
-        }
-        const result = await response.json();
-
-        if (result.data && result.data.userName) {
-          setUserName(result.data.userName);
-        } else {
-          throw new Error(result.message);
-        }
-      } catch (e) {
-        console.error('Failed to fetch user profile: ', e);
-        setUserName('Player1');
-      }
-    };
-    fetchUserName();
   }, []);
 
   return (
