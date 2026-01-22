@@ -199,12 +199,14 @@ const ProfileSettings = () => {
               <img
                 src={avatarUrl}
                 className="w-20 h-20 rounded-full border border-black/10 dark:border-white/50 shadow-lg object-cover"
+				onClick={() => { setSelectedAvatar(avatarUrl); setIsAvatarModalOpen(true); }}
                 alt="User Avatar"
               />
             </div>
             <div className="flex flex-col gap-1">
               <h2 className="text-2xl font-black uppercase tracking-tight
-			  bg-clip-text text-transparent bg-linear-to-r from-indigo-700 dark:from-indigo-500 to-blue-400 hover:bg-linear-to-bl">
+			  bg-clip-text text-transparent bg-linear-to-r from-indigo-700 dark:from-indigo-500 to-blue-400 hover:bg-linear-to-bl"
+			  onClick={() => setIsuserNameModalOpen(true)}>
                 {userName}
               </h2>
               <p className="text-xl font-medium bg-clip-text text-transparent bg-linear-to-r from-indigo-500 to-blue-400 hover:bg-linear-to-bl">{email}</p>
