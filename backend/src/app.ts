@@ -11,6 +11,7 @@ import friendRequest from "./routes/FriendRequest";
 import friendList from "./routes/FriendList";
 import matchmakingRequest from "./routes/Matchmaking";
 import matchStatus from "./routes/MatchStatus";
+import refreshAccess  from "./routes/RefreshAccess";
 
 dotenv.config();
 
@@ -36,6 +37,7 @@ async function buildServer() {
 	app.register(logoutRoutes);
 	app.register(matchmakingRequest);
 	app.register(matchStatus);
+	app.register(refreshAccess);
 }
 
 
