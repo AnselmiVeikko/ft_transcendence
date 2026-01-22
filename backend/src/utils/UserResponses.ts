@@ -28,6 +28,13 @@ export function registrationSuccess(user: { userId: string, userName: string }) 
 	};
 }
 
+export function accessRefreshed() {
+	return {
+		message: "Access token refreshed",
+
+	};
+}
+
 export function profileSelf(userProfile: {userId: string, userName: string, email: string}) {
 	return {
 		message: "Profile retrieve successful",
