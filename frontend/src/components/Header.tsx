@@ -5,6 +5,7 @@ import { FaUser, FaUserFriends, FaSignOutAlt } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { HandHelping } from 'lucide-react';
+import { useLogout } from '../hooks/useLogout';
 
 /* interface HeaderProps {
   appName: string;
@@ -13,6 +14,7 @@ import { HandHelping } from 'lucide-react';
 } */
 
 const Header = () => {
+  const { logout } = useLogout();
   const [showMenu, setShowMenu] = useState(false);
   const navigate = useNavigate();
 
@@ -33,6 +35,7 @@ const Header = () => {
 
   const handleLogoutClick = () => {
     setShowMenu(false);
+	logout();
   };
 
   const { t } = useTranslation();
