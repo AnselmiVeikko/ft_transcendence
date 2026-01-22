@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import SettingsMenu from './SettingsMenu';
-import { useUser } from '../hooks/useUser';
 import { useMatchmaking } from '../hooks/useMatchmaking';
 
 const colorClasses = {
@@ -10,10 +9,7 @@ const colorClasses = {
 
 const SingleMatch = () => {
   const { t } = useTranslation();
-  const { userName, loading: userLoading } = useUser();
   const { isWaiting, gameStarted, matchId } = useMatchmaking();
-
-  if (userLoading) return null;
 
   return (
     <div className="relative">

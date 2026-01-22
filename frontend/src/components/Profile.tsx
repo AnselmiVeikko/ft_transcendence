@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import SettingsMenu from './SettingsMenu';
+import { useUser } from '../hooks/useUser';
 import {
   FaUserEdit,
   FaCameraRetro,
@@ -78,6 +79,7 @@ const ProfileModal = ({ isOpen, onClose, children }: ProfileModalProps) => {
 };
 
 const ProfileSettings = () => {
+  const { userName, email, loading: userLoading } = useUser();
   const { t } = useTranslation();
 
   const welcomePhrases = [
@@ -96,44 +98,6 @@ const ProfileSettings = () => {
       return welcomePhrases[randomIndex];
     };
     setRandomGreetingKey(getRandomGreeting());
-  }, []);
-
-  const [userName, setUserName] = useState('');
-  const [email, setEmail] = useState('');
-  const SelfAPI = 'http://localhost:3000/api/user/profile/self';
-
-  useEffect(() => {
-    const fetchUserName = async () => {
-      try {
-        const response = await fetch(SelfAPI, {
-          method: 'GET',
-          credentials: 'include',
-          headers: {},
-        });
-        if (response.status === 401) {
-          throw new Error('User not authenticated.');
-        }
-        if (!response.ok) {
-          throw new Error(`HTTP Error: ${response.status}`);
-        }
-        const result = await response.json();
-
-        if (result.data && result.data.userName) {
-          setUserName(result.data.userName);
-        } else {
-          throw new Error(result.message);
-        }
-		if (result.data && result.data.email) {
-          setEmail(result.data.email);
-        } else {
-          throw new Error(result.message);
-        }
-      } catch (e) {
-        console.error('Failed to fetch user profile: ', e);
-        setUserName('Player1');
-      }
-    };
-    fetchUserName();
   }, []);
 
   const avatars = Array.from({ length: 20 }, (_, i) =>
@@ -177,6 +141,8 @@ const ProfileSettings = () => {
       setNewAvatarFile(e.target.files[0]);
     }
   };
+
+  if (userLoading) return null;
 
   return (
     <div className="relative">

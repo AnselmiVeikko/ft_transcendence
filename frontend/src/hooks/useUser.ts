@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 export const useUser = () => {
   const [userName, setUserName] = useState('');
   const [userId, setUserId] = useState('');
+  const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -22,6 +23,7 @@ export const useUser = () => {
       const result = await response.json();
       setUserName(result.data.userName);
       setUserId(result.data.userId);
+	  setEmail(result.data.email);
     } catch (e) {
       console.error('Failed to fetch user:', e);
       setUserName('Player');
@@ -34,5 +36,5 @@ export const useUser = () => {
     fetchUser();
   }, []);
 
-  return { userName, userId, loading, refetch: fetchUser };
+  return { userName, userId, loading, email, refetch: fetchUser };
 };
