@@ -38,6 +38,10 @@ export const RegisterResponseSchema = Type.Object({
     }),
 });
 
+export const refreshAccessResponseSchema = Type.Object({
+    message: Type.String(),
+});
+
 // SELF Profile Query and response schema
 export const ProfileSelfQuerySchema = Type.Object({
     //userId: Type.String(),
