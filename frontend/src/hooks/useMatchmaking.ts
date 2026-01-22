@@ -6,6 +6,7 @@ export const useMatchmaking = () => {
   const [matchId, setMatchId] = useState('');
   const [gameToken, setGameToken] = useState('');
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const matchmakingStarted = useRef(false);
 
   const MATCHMAKING_API = 'http://localhost:3000/api/game/matchmaking';
   const STATUS_API = 'http://localhost:3000/api/game/matchstatus';
@@ -23,6 +24,7 @@ export const useMatchmaking = () => {
       });
       if (response.status === 409) {
 		setIsWaiting(true);
+		return;
 	  }
       const result = await response.json();
 
@@ -70,6 +72,8 @@ export const useMatchmaking = () => {
 
   //start matchmaking on load
   useEffect(() => {
+    if (matchmakingStarted.current) return; // prevent double-fire (self-match)
+    matchmakingStarted.current = true;
     startMatchmaking();
     return () => stopPolling();
   }, []);
