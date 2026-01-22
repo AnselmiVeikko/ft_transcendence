@@ -1,9 +1,9 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
-import { Static } from "@fastify/type-provider-typebox";
+import { Static, StaticAny } from "@fastify/type-provider-typebox";
 import { Prisma } from "@prisma/client";
-import { FLCurrentQuerySchema, FLPendingQuerySchema, FLSuggestionQuerySchema } from "../schemas/FriendSchema";
-import { FLCurrentResponseSchema, FLPendingResponseSchema, FLSuggestionResponseSchema } from "../schemas/FriendSchema";
-import { currentList, pendingList, suggestionList } from "../utils/FriendResponses";
+import { FLCurrentQuerySchema, FLSearchQuerySchema, FLPendingQuerySchema, FLSuggestionQuerySchema } from "../schemas/FriendSchema";
+import { FLCurrentResponseSchema, FLSearchResponseSchema, FLPendingResponseSchema, FLSuggestionResponseSchema } from "../schemas/FriendSchema";
+import { CurrentList, SearchtList, PendingList, SuggestionList } from "../utils/FriendResponses";
 import { ErrorResponseSchema } from "../schemas/UserSchema";
 import { errorResponse } from "../utils/UserResponses";
 import { verifyAccess } from "../utils/auth";
@@ -11,6 +11,7 @@ import prisma from "../plugins/prisma";
 
 
 type FriendCurrentList = FastifyRequest<{ Querystring: Static<typeof FLCurrentQuerySchema> }>;
+type FriendSearchList = FastifyRequest<{ Querystring: Static<typeof FLSearchQuerySchema> }>;
 type FriendPendingList = FastifyRequest<{ Querystring: Static<typeof FLPendingQuerySchema> }>;
 type FriendSuggestion = FastifyRequest<{ Querystring: Static<typeof FLSuggestionQuerySchema>}>;
 
@@ -72,6 +73,68 @@ export default async function friendList(app: FastifyInstance) {
 			});
 
 			return reply.status(200).send(currentList(friendsList, pageNo, limit, totalFriend));
+		} catch(error) {
+			return reply.status(500).send(errorResponse(500, "Internal server error"));
+		}
+	});
+
+	app.get( "/api/friendlist/search", {
+		schema: {
+			querystring: FLSearchQuerySchema,
+			response: {
+				200: FLSearchResponseSchema,
+				default: ErrorResponseSchema,
+			},
+		},
+	},
+
+	async (request: FriendSearchList, reply: FastifyReply) => {
+		try {
+			const userId = await verifyAccess(request, reply);
+			if (!userId) {
+				return;
+			}
+
+			const { keyWord, onlineStatus = "ALL" } = request.query;
+
+
+			const relationList = await prisma.friend_request.findMany({
+				where: {
+					requestStatus: "ACCEPTED",
+					OR: [
+						{ senderId: userId },
+						{ receiverId: userId }
+					]
+				},
+				include: {
+					sender: true,
+					receiver: true,
+				},
+			});
+
+			let friendsList = relationList.map(rel => {
+				const friend = rel.senderId === userId? rel.receiver : rel.sender;
+
+				return {
+					friendRId: rel.friendRId,
+					userId: friend.userId,
+					userName: friend.userName,
+					status: friend.status,
+				};
+			});
+
+			if (keyWord && keyWord.trim() !== "") {
+				friendsList = friendsList.filter( friend =>
+					friend.userName.toLowerCase().includes(keyWord.toLocaleLowerCase())
+				);
+			}
+
+			if (onlineStatus !== "ALL") {
+				friendsList = friendsList.filter (
+					friend => friend.status === onlineStatus);
+			}
+
+			return reply.status(200).send(SearchtList(friendsList));
 		} catch(error) {
 			return reply.status(500).send(errorResponse(500, "Internal server error"));
 		}
