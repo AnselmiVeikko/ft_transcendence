@@ -21,25 +21,6 @@ export async function verifyAccess(request: FastifyRequest, reply: FastifyReply)
   return payload.userId;
 }
 
-
-export async function refreshAccess(request: FastifyRequest, reply: FastifyReply){
-     const token = request.cookies?.refreshJWT;
-     if (!token) {
-        return reply.status(401).send({ error: "Missing token" });
-     }
-
-     const user = request.cookies?.userId;
-     try {
-        const payload = jwt.verify(token, process.env.JWT_REFRESH_SECRET || "refresh-secret") as JWTPayload;
-
-        setCookies(reply, payload.userId);
-        return reply.status(200).send({ message: "Token refreshed" });
-
-     } catch (err) {
-        return reply.status(401).send({ error: "Invalid token" });
-     }
-}
-
 export function setCookies(reply: FastifyReply, userId: string) {
 
     const accessJWT = jwt.sign(

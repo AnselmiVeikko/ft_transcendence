@@ -1,5 +1,4 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
-import jwt from "jsonwebtoken";
 import { ErrorResponseSchema } from "../schemas/UserSchema";
 import { genGameToken, verifyAccess } from "../utils/auth";
 import { errorResponse } from "../utils/UserResponses";

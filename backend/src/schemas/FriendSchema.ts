@@ -32,6 +32,33 @@ export const FLCurrentResponseSchema = Type.Object({
 	})
 })
 
+export const FLSearchQuerySchema = Type.Object({
+	// userId will retrieve from cookies
+	keyWord: Type.Optional(Type.String()),
+	onlineStatus: Type.Optional(
+		Type.Union([
+			Type.Literal("ONLINE"),
+			Type.Literal("OFFLINE"),
+			Type.Literal("ALL"),
+			// add inactive later
+		])
+	),
+})
+
+export const FLSearchResponseSchema = Type.Object({
+	message: Type.String(),
+	data: Type.Array(
+		Type.Object({
+			friendRId: Type.String(),
+			userId: Type.String(),
+			userName: Type.String(),
+			status: Type.String(),
+			//avatar:
+		}),
+	),
+})
+
+
 export const FLPendingQuerySchema = Type.Object({
 	// userId will retrieve from cookies
 })
