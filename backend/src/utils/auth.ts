@@ -22,7 +22,7 @@ export async function verifyAccess(request: FastifyRequest, reply: FastifyReply)
 }
 
 
-export async function refreshAccess(request: FastifyRequest, reply: FastifyReply){
+export async function refreshTokens(request: FastifyRequest, reply: FastifyReply){
      const token = request.cookies?.refreshJWT;
      if (!token) {
         return reply.status(401).send({ error: "Missing token" });
