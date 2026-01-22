@@ -32,8 +32,9 @@ export default async function refreshAccess(app: FastifyInstance) {
 
             setCookies(reply, payload.userId);
             return reply.status(200).send(accessRefreshed());
+
         } catch (err) {
-            return reply.status(401).send({ error: "Invalid token" });
+            return reply.status(401).send(errorResponse(401, "Invalid token" ));
         }
-    }
+    });
 }
