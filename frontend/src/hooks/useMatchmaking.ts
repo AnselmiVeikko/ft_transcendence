@@ -42,10 +42,10 @@ export const useMatchmaking = () => {
   const checkStatus = async () => {
     if (!matchId) return;
     try {
-      const response = await fetch(STATUS_API, {
-        method: 'POST',
+	  const urlWithQuery = `${STATUS_API}?matchId=${encodeURIComponent(matchId)}`;
+      const response = await fetch(urlWithQuery, {
+        method: 'GET',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ matchId }),
         credentials: 'include',
       });
       const result = await response.json();
