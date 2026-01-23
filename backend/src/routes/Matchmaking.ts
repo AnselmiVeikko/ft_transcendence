@@ -36,7 +36,7 @@ export default async function matchmakingRequest(app: FastifyInstance) {
                         { playerOneId: userId },
                         { playerTwoId: userId }
                     ],
-                    status: { in: ["MATCHMAKING", "STARTING", "IN_PROGRESS"] }
+                    status: { in: ["MATCHMAKING", "IN_PROGRESS"] }
                 }
             });
 
