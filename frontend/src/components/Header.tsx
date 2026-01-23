@@ -44,7 +44,7 @@ const Header = () => {
         <div className="flex items-center gap-4">
           <button
 		  	  onClick={handlePongClick}
-			  className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-linear-to-t from-indigo-700 to-blue-200 px-4 transform hover:scale-[1.05] py-2 duration-300">
+			  className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-linear-to-t from-indigo-700 to-blue-200 px-4 transform hover:scale-[1.05] py-2 duration-300 cursor-pointer">
               PONG
           </button>
 
@@ -52,7 +52,7 @@ const Header = () => {
             <div className="h-8 w-px bg-purple-500/50"></div>
 			<button
 			  onClick={handleProfileClick}
-			  className="flex items-center gap-2 px-4 py-2 text-white hover:bg-white/10 rounded-lg transform hover:scale-[1.03] duration-300">
+			  className="flex items-center gap-2 px-4 py-2 text-white hover:bg-white/10 rounded-lg transform hover:scale-[1.03] duration-300 cursor-pointer">
               <img src='avatars/avatar01.png' className="w-7 h-7" />
               <span className="font-semibold">{userName}</span>
 			</button>
@@ -62,7 +62,7 @@ const Header = () => {
         <nav className="hidden sm:flex items-center gap-6">
           <button
             onClick={handleFriendsClick}
-            className="flex items-center gap-2 px-4 py-2 text-white hover:bg-white/10 rounded-lg transform hover:scale-[1.03] duration-300"
+            className="flex items-center gap-2 px-4 py-2 text-white hover:bg-white/10 rounded-lg transform hover:scale-[1.03] duration-300 cursor-pointer"
           >
             <FaUserFriends className="w-5 h-5" />
             <span className="font-semibold">{t('friends')}</span>
@@ -70,7 +70,7 @@ const Header = () => {
 
           <button
             onClick={handleLogoutClick}
-            className="flex items-center gap-2 px-4 py-2 text-white hover:bg-white/10 rounded-lg transform hover:scale-[1.03] duration-300"
+            className="flex items-center gap-2 px-4 py-2 text-white hover:bg-white/10 rounded-lg transform hover:scale-[1.03] duration-300 cursor-pointer"
           >
             <FaSignOutAlt className="w-5 h-5" />
             <span className="font-semibold">{t('log_out')}</span>
@@ -81,7 +81,7 @@ const Header = () => {
         <nav className="sm:hidden flex flex-col items-end gap-2 relative">
           <button
             onClick={() => setShowMenu(!showMenu)}
-            className="text-white font-bold text-2xl hover:bg-white/10 p-2 rounded-lg"
+            className="text-white font-bold text-2xl hover:bg-white/10 p-2 rounded-lg cursor-pointer"
             aria-label={showMenu ? 'Close menu' : 'Open menu'}
           >
             {showMenu ? <GrClose /> : <GiHamburgerMenu />}
@@ -89,14 +89,17 @@ const Header = () => {
 
           {showMenu && (
             <div className="absolute top-12 right-0 bg-slate-900/95 rounded-lg shadow-xl overflow-hidden min-w-[200px]">
-              <div className="flex items-center gap-2 px-4 py-3 hover:bg-white/10 text-white font-semibold border-b border-gray-500/30">
-                <FaUser className="w-5 h-5" />
-                <span>Player1</span>
-              </div>
+              <button
+                onClick={handleProfileClick}
+                className="flex items-center gap-2 px-4 py-3 hover:bg-white/10 text-white font-semibold border-b border-gray-500/30 w-full text-left cursor-pointer"
+              >
+                <img src='avatars/avatar01.png' className="w-5 h-5" />
+                <span>{userName}</span>
+              </button>
 
               <button
                 onClick={handleFriendsClick}
-                className="flex items-center gap-2 px-4 py-3 hover:bg-white/10 text-white font-semibold w-full text-left"
+                className="flex items-center gap-2 px-4 py-3 hover:bg-white/10 text-white font-semibold w-full text-left cursor-pointer"
               >
                 <FaUserFriends className="w-5 h-5" />
                 <span>{t('friends')}</span>
@@ -104,7 +107,7 @@ const Header = () => {
 
               <button
                 onClick={handleLogoutClick}
-                className="flex items-center gap-2 px-4 py-3 hover:bg-white/10 text-white font-semibold w-full text-left border-t border-gray-500/30"
+                className="flex items-center gap-2 px-4 py-3 hover:bg-white/10 text-white font-semibold w-full text-left border-t border-gray-500/30 cursor-pointer"
               >
                 <FaSignOutAlt className="w-5 h-5" />
                 <span>{t('log_out')}</span>
