@@ -1,27 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Friend from "./Friend";
 import FriendRequest from "./FriendRequest";
 import FriendSuggestion from "./FriendSuggestion";
+import { friendsApi } from "../utils/friendsApi";
 
 interface Friend {
-  id: string;
-  name: string;
-  avatar: string;
+  userId: string;
+  userName: string;
+  friendRId: string;
 }
 
 interface FriendRequest {
-  id: string;
-  name: string;
-  avatar: string;
+  userId: string;
+  userName: string;
+  friendRId: string;
 }
 
 interface FriendSuggestion {
-  id: string;
-  name: string;
-  avatar: string;
+  userId: string;
+  userName: string;
 }
 
-const friendsListData: Friend[] = [
+/* const friendsListData: Friend[] = [
   { id: "1", name: "Joulupuki", avatar: "J" },
   { id: "2", name: "Bob Bob", avatar: "BB" },
   { id: "3", name: "PingOfPongs", avatar: "PP" },
@@ -37,39 +37,118 @@ const friendSuggestionData: FriendSuggestion[] = [
   { id: "7", name: "Ermi", avatar: "ER" },
   { id: "8", name: "Titi", avatar: "TT" },
   { id: "9", name: "Zula", avatar: "ZU" },
-];
+]; */
 
 const FriendsList = () => {
-  const [friends, setFriends] = useState<Friend[]>(friendsListData);
-  const [friendRequests, setFriendRequests] =
-    useState<FriendRequest[]>(friendRequestData);
-  const [friendSuggestions, setFriendSuggestions] =
-    useState<FriendSuggestion[]>(friendSuggestionData);
+  const [friends, setFriends] = useState<Friend[]>([]);
+  const [friendRequests, setFriendRequests] = useState<FriendRequest[]>([]);
+  const [friendSuggestions, setFriendSuggestions] = useState<FriendSuggestion[]>([]);
 
-  const acceptFriendRequest = (id: string) => {
-    const request = friendRequests.find((r) => r.id === id);
-    if (request) {
-      setFriends([...friends, request]);
-      setFriendRequests(friendRequests.filter((r) => r.id !== id));
+  const [loading, setLoading] = useState(true);
+
+  const fetchAllData = async () => {
+    try {
+      setLoading(true);
+
+      const [friendsData, requestsData, suggestionsData] = await Promise.all([
+        friendsApi.getCurrentFriends(),
+        friendsApi.getPendingRequests(),
+        friendsApi.getSuggestions()
+      ]);
+
+      setFriends(friendsData.data || []);
+      setFriendRequests(requestsData.data || []);
+      setFriendSuggestions(suggestionsData.data || []);
+    } catch (error) {
+      console.error('Error fetching friends data:', error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    fetchAllData();
+  }, []);
+
+  console.log('friendSuggestions', friendSuggestions);
+  console.log('friends', friends);
+  console.log('friendRequests', friendRequests);
+
+  const acceptFriendRequest = async (friendRId: string) => {
+    try {
+      await friendsApi.acceptFriendRequest(friendRId);
+      const request = friendRequests.find((r) => r.friendRId === friendRId);
+      if (request) {
+        setFriends([...friends, request]);
+        setFriendRequests(friendRequests.filter((r) => r.friendRId !== friendRId));
+      }
+    } catch (error) {
+      console.error('Error accepting friend request:', error);
     }
   };
 
-  const declineFriendRequest = (id: string) => {
-    setFriendRequests(friendRequests.filter((r) => r.id !== id));
+  const declineFriendRequest = async (friendRId: string) => {
+    try {
+      await friendsApi.declineFriendRequest(friendRId);
+      setFriendRequests(friendRequests.filter((r) => r.friendRId !== friendRId));
+    } catch (error) {
+      console.error('Error declining friend request:', error);
+    }
   };
 
-  const removeFriend = (id: string) => {
-    setFriends(friends.filter((f) => f.id !== id));
+  const removeFriend = async (friendRId: string) => {
+    try {
+      await friendsApi.removeFriend(friendRId);
+      setFriends(friends.filter((f) => f.friendRId !== friendRId));
+    } catch (err) {
+      console.error('Error removing friend:', err);
+    }
   };
 
-  const addFriend = (id: string) => {
-    setFriendSuggestions(friendSuggestions.filter((s) => s.id !== id));
+  const addFriend = async (userId: string) => {
+    try {
+      await friendsApi.sendFriendRequest(userId);
+      setFriendSuggestions(friendSuggestions.filter((s) => s.userId !== userId));
+    } catch (error) {
+      console.error('Error sending friend request:', error);
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-lg text-gray-600">Loading friends...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-2xl mx-auto">
         <h1 className="text-2xl font-bold text-gray-900 mb-8">Friends</h1>
+
+        {/* Friends List */}
+        {friends.length > 0 && (
+          <div className="mb-8">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+              My Friends ({friends.length})
+            </h2>
+            <div className="space-y-3">
+              {friends.map((friend) => (
+                <div
+                  key={friend.userId}
+                  className="bg-white p-4 rounded-lg border border-gray-200 flex items-center justify-between"
+                >
+                  <Friend
+                    avatar={friend.userName.substring(0, 2).toUpperCase()}
+                    name={friend.userName}
+                    onRemoveFriend={() => removeFriend(friend.friendRId)}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Friend Requests */}
         {friendRequests.length > 0 && (
@@ -80,41 +159,20 @@ const FriendsList = () => {
             <div className="space-y-3">
               {friendRequests.map((request: FriendRequest) => (
                 <div
-                  key={request.id}
+                  key={request.userId}
                   className="bg-white p-4 rounded-lg border border-gray-200 flex items-center justify-between"
                 >
                   <FriendRequest
-                    avatar={request.avatar}
-                    name={request.name}
-                    onAccept={() => acceptFriendRequest(request.id)}
-                    onDecline={() => declineFriendRequest(request.id)}
+                    avatar={request.userName.substring(0, 2).toUpperCase()}
+                    name={request.userName}
+                    onAccept={() => acceptFriendRequest(request.friendRId)}
+                    onDecline={() => declineFriendRequest(request.friendRId)}
                   />
                 </div>
               ))}
             </div>
           </div>
         )}
-
-        {/* Friends List */}
-        <div className="mb-8">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
-            My Friends ({friends.length})
-          </h2>
-          <div className="space-y-3">
-            {friends.map((friend) => (
-              <div
-                key={friend.id}
-                className="bg-white p-4 rounded-lg border border-gray-200 flex items-center justify-between"
-              >
-                <Friend
-                  avatar={friend.avatar}
-                  name={friend.name}
-                  onRemoveFriend={() => removeFriend(friend.id)}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
 
         {/* Suggestions */}
         {friendSuggestions.length > 0 && (
@@ -125,13 +183,13 @@ const FriendsList = () => {
             <div className="space-y-3">
               {friendSuggestions.map((suggestion) => (
                 <div
-                  key={suggestion.id}
+                  key={suggestion.userId}
                   className="bg-white p-4 rounded-lg border border-gray-200 flex items-center justify-between"
                 >
                   <FriendSuggestion
-                    avatar={suggestion.avatar}
-                    name={suggestion.name}
-                    onAddFriend={() => addFriend(suggestion.id)}
+                    avatar={suggestion.userName.substring(0, 2).toUpperCase()}
+                    name={suggestion.userName}
+                    onAddFriend={() => addFriend(suggestion.userId)}
                   />
                 </div>
               ))}
