@@ -15,7 +15,7 @@ const Friend = ({ name, avatar, onRemoveFriend }: FriendProps) => {
       </div>
       <button
         onClick={onRemoveFriend}
-        className="px-4 py-2 bg-red-50 text-red-600 rounded-md text-sm hover:bg-red-100"
+        className="px-4 py-2 bg-red-50 text-red-600 rounded-md text-sm hover:bg-red-100 cursor-pointer"
       >
         Remove
       </button>

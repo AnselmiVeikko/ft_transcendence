@@ -22,13 +22,13 @@ const FriendRequest = ({
       <div className="flex gap-2">
         <button
           onClick={onAccept}
-          className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700"
+          className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700 cursor-pointer"
         >
           Accept
         </button>
         <button
           onClick={onDecline}
-          className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md text-sm hover:bg-gray-300"
+          className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md text-sm hover:bg-gray-300 cursor-pointer"
         >
           Decline
         </button>
