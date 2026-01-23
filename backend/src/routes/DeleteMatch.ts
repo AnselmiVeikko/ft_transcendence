@@ -22,14 +22,14 @@ export default async function deleteMatch(app: FastifyInstance) {
     
     async (request: DeleteMatchRequest, reply: FastifyReply) => {
         try {
-            const userId = verifyAccess(request, reply);
+            const userId = await verifyAccess(request, reply);
             if (!userId) {
                 return ;
             }
 
             const matchId = request.query.matchId;
 
-            prisma.game_match.delete( { 
+            await prisma.game_match.delete( { 
                 where: {matchId: matchId},
             });
 
