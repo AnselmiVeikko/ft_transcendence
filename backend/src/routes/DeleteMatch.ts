@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { DeleteMatchQuerySchema, DeleteMatchResponseSchema } from "../schemas/GameSchema";
+import { DeleteMatchBodySchema, DeleteMatchResponseSchema } from "../schemas/GameSchema";
 import { ErrorResponseSchema } from "../schemas/UserSchema";
 import { verifyAccess } from "../utils/auth";
 import { Static } from "@sinclair/typebox";
@@ -7,12 +7,12 @@ import { errorResponse } from "../utils/UserResponses";
 import prisma from "../plugins/prisma";
 import { matchDeleted } from "../utils/GameResponses";
 
-type DeleteMatchRequest = FastifyRequest<{ Querystring: Static<typeof DeleteMatchQuerySchema> }>;
+type DeleteMatchRequest = FastifyRequest<{ Body: Static<typeof DeleteMatchBodySchema> }>;
 
 export default async function deleteMatch(app: FastifyInstance) {
-    app.delete( "/api/game/deleteMatch", {
+    app.post( "/api/game/deleteMatch", {
         schema: {
-            querystring: DeleteMatchQuerySchema,
+            body: DeleteMatchBodySchema,
             response: {
                 200: DeleteMatchResponseSchema,
                 default: ErrorResponseSchema,
@@ -27,7 +27,7 @@ export default async function deleteMatch(app: FastifyInstance) {
                 return ;
             }
 
-            const matchId = request.query.matchId;
+            const matchId = request.body.matchId;
 
             await prisma.game_match.delete( { 
                 where: {matchId: matchId},
@@ -35,8 +35,13 @@ export default async function deleteMatch(app: FastifyInstance) {
 
             return reply.status(200).send(matchDeleted(matchId));
 
-        } catch(err) {
-            app.log.error(err);
+        } catch(error: any) {
+
+            if (error.code === 'P2025') {
+                return reply.status(404).send(errorResponse(404, "Match not found"));
+            }
+
+            app.log.error(error);
             return reply.status(500).send(errorResponse(500, "Internal server error"));
         }
     });
