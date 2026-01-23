@@ -45,10 +45,12 @@ const FriendsList = () => {
   const [friendSuggestions, setFriendSuggestions] = useState<FriendSuggestion[]>([]);
 
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchAllData = async () => {
     try {
       setLoading(true);
+      setError(null);
 
       const [friendsData, requestsData, suggestionsData] = await Promise.all([
         friendsApi.getCurrentFriends(),
@@ -60,6 +62,7 @@ const FriendsList = () => {
       setFriendRequests(requestsData.data || []);
       setFriendSuggestions(suggestionsData.data || []);
     } catch (error) {
+      setError('Failed to load friends data. Please try again.');
       console.error('Error fetching friends data:', error);
     } finally {
       setLoading(false);
@@ -121,7 +124,22 @@ const FriendsList = () => {
       </div>
     );
   }
-
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-lg text-red-600 mb-2">Oops!</p>
+          <p className="text-lg text-red-600 mb-4">{error}</p>
+          <button
+            onClick={fetchAllData}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 cursor-pointer"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-2xl mx-auto">
