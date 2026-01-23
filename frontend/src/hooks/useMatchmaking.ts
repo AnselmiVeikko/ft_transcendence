@@ -1,20 +1,47 @@
 import { useState, useEffect, useRef } from 'react';
 
+interface Player {
+	userId: string;
+	username: string;
+}
+
 export const useMatchmaking = () => {
   const [isWaiting, setIsWaiting] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
   const [matchId, setMatchId] = useState('');
   const [gameToken, setGameToken] = useState('');
+  const [player, setPlayer] = useState<Player | null>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const matchmakingStarted = useRef(false);
 
   const MATCHMAKING_API = 'http://localhost:3000/api/game/matchmaking';
   const STATUS_API = 'http://localhost:3000/api/game/matchstatus';
+  const DELETEMATCH_API = 'http://localhost:3000/api/game/deleteMatch';
+
+  useEffect(() => {
+    const cleanUpMatch = () => {
+      if (!isWaiting || !matchId || gameStarted) return;
+
+      const data = JSON.stringify({ matchId });
+	  const blob = new Blob([data], { type: 'application/json' });
+
+	  navigator.sendBeacon(DELETEMATCH_API, blob);
+	  console.log("MATCH DELETED");
+	};
+	const handleUnload = () => cleanUpMatch();
+	window.addEventListener('beforeunload', handleUnload);
+    return () => {
+	  window.removeEventListener('beforeunload', handleUnload);
+      cleanUpMatch();
+      stopPolling();
+    };
+  }, [isWaiting, matchId, gameStarted]);
 
   const gameReady = async () => {
     setGameStarted(true);
     setIsWaiting(false);
     stopPolling();
+	console.log("GAME STARTED");
   };
   const startMatchmaking = async () => {
     try {
@@ -23,19 +50,17 @@ export const useMatchmaking = () => {
         credentials: 'include',
       });
       if (response.status === 409) {
-		setIsWaiting(true);
-		return;
-	  }
+        setIsWaiting(true);
+        return;
+      }
       const result = await response.json();
+	  if (result.data?.player) setPlayer(result.data.player);
 
       console.log(result.message);
       setGameToken(result.data.gameToken);
       setMatchId(result.data.matchId);
       setIsWaiting(true);
       if (result.message === 'Match found') return gameReady();
-	  console.log("gameStarted: ", gameStarted);
-  	  console.log("isWaiting: ", isWaiting);
-      console.log("matchId: ", matchId);
     } catch (e) {
       console.error('Matchmaking error:', e);
     }
@@ -44,7 +69,7 @@ export const useMatchmaking = () => {
   const checkStatus = async () => {
     if (!matchId) return;
     try {
-	  const urlWithQuery = `${STATUS_API}?matchId=${encodeURIComponent(matchId)}`;
+      const urlWithQuery = `${STATUS_API}?matchId=${encodeURIComponent(matchId)}`;
       const response = await fetch(urlWithQuery, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
@@ -86,5 +111,5 @@ export const useMatchmaking = () => {
     return () => stopPolling();
   }, [isWaiting, matchId, gameStarted]);
 
-  return { isWaiting, gameStarted, matchId, gameToken };
+  return { isWaiting, gameStarted, matchId, gameToken, player };
 };
