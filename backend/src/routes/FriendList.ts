@@ -3,7 +3,7 @@ import { Static, StaticAny } from "@fastify/type-provider-typebox";
 import { Prisma } from "@prisma/client";
 import { FLCurrentQuerySchema, FLSearchQuerySchema, FLPendingQuerySchema, FLSuggestionQuerySchema } from "../schemas/FriendSchema";
 import { FLCurrentResponseSchema, FLSearchResponseSchema, FLPendingResponseSchema, FLSuggestionResponseSchema } from "../schemas/FriendSchema";
-import { CurrentList, SearchtList, PendingList, SuggestionList } from "../utils/FriendResponses";
+import { currentList, searchList, pendingList, suggestionList } from "../utils/FriendResponses";
 import { ErrorResponseSchema } from "../schemas/UserSchema";
 import { errorResponse } from "../utils/UserResponses";
 import { verifyAccess } from "../utils/auth";
@@ -134,7 +134,7 @@ export default async function friendList(app: FastifyInstance) {
 					friend => friend.status === onlineStatus);
 			}
 
-			return reply.status(200).send(SearchtList(friendsList));
+			return reply.status(200).send(searchList(friendsList));
 		} catch(error) {
 			return reply.status(500).send(errorResponse(500, "Internal server error"));
 		}
