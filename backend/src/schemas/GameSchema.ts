@@ -25,7 +25,7 @@ export const MatchStatusResponseSchema = Type.Object({
     }),
 });
 
-export const DeleteMatchQuerySchema = Type.Object({
+export const DeleteMatchBodySchema = Type.Object({
     matchId: Type.String(),
 });
 
