@@ -12,6 +12,7 @@ import friendList from "./routes/FriendList";
 import matchmakingRequest from "./routes/Matchmaking";
 import matchStatus from "./routes/MatchStatus";
 import refreshAccess  from "./routes/RefreshAccess";
+import deleteMatch from "./routes/DeleteMatch";
 
 dotenv.config();
 
@@ -38,6 +39,7 @@ async function buildServer() {
 	app.register(matchmakingRequest);
 	app.register(matchStatus);
 	app.register(refreshAccess);
+	app.register(deleteMatch);
 }
 
 
