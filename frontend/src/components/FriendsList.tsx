@@ -87,11 +87,10 @@ const FriendsList = () => {
   const acceptFriendRequest = async (friendRId: string) => {
     try {
       await friendsApi.acceptFriendRequest(friendRId);
-      const request = friendRequests.find((r) => r.friendRId === friendRId);
-      if (request) {
-        setFriends([...friends, request]);
-        setFriendRequests(friendRequests.filter((r) => r.friendRId !== friendRId));
-      }
+
+      setFriendRequests(prevRequests =>
+        prevRequests.filter((r) => r.friendRId !== friendRId)
+      );
       searchFriends();
     } catch (error) {
       console.error('Error accepting friend request:', error);
