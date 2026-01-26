@@ -12,6 +12,21 @@ export const friendsApi = {
 		return response.json();
 	},
 
+	async searchFriends(keyWord = '', onlineStatus = 'ALL') {
+		const params = new URLSearchParams();
+		if (keyWord)
+			params.append('keyWord', keyWord);
+		params.append('onlineStatus', onlineStatus);
+
+		const response = await fetch(
+			`${API_BASE_URL}/api/friendlist/search?${params.toString()}`,
+			{ credentials: 'include' }
+		);
+		if (!response.ok)
+			throw new Error('Failed to search friends');
+		return response.json();
+	},
+
 	// friend requests
 	async getPendingRequests() {
 		const response = await fetch(

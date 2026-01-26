@@ -70,9 +70,31 @@ const FriendsList = () => {
     }
   }
 
+  const searchFriends = async () => {
+    try {
+      setLoading(true);
+      const searchData = await friendsApi.searchFriends(searchQuery, 'ALL');
+      setFriends(searchData.data || []);
+    } catch (error) {
+      console.error('Error searching friends:', error);
+      setFriends([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchAllData();
   }, []);
+
+  // Using debounce pattern, Wait 300ms after user stops typing
+  useEffect(() => {
+    const delaySearch = setTimeout(() => {
+      searchFriends();
+    }, 300);
+
+    return () => clearTimeout(delaySearch);
+  }, [searchQuery]);
 
   console.log('friendSuggestions', friendSuggestions);
   console.log('friends', friends);
