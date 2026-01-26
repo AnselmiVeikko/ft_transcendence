@@ -84,10 +84,6 @@ const FriendsList = () => {
     return () => clearTimeout(delaySearch);
   }, [searchQuery, statusFilter]);
 
-  console.log('friendSuggestions', friendSuggestions);
-  console.log('friends', friends);
-  console.log('friendRequests', friendRequests);
-
   const acceptFriendRequest = async (friendRId: string) => {
     try {
       await friendsApi.acceptFriendRequest(friendRId);
@@ -228,13 +224,6 @@ const FriendsList = () => {
                 </div>
               ))}
             </div>
-          </div>
-        )}
-
-        {/* if search returns no results */}
-        {friends.length === 0 && searchQuery && !searchLoading && (
-          <div className="mb-8 text-center py-8 text-gray-500">
-            No friends found matching "{searchQuery}"
           </div>
         )}
 
