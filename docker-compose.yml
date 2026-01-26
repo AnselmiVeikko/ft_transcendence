@@ -2,10 +2,13 @@ services:
 
   nginx:
     build: ./nginx
-    volumes: ./nginx/ssl:/etc/nginx/ssl:ro
+    volumes:
+      - ./nginx/ssl:/etc/nginx/ssl:ro
     ports:
-     - "443:443"
-     - "80:80"
+      - "443:443"
+      - "80:80"
+    networks:
+    - transcendence
   game_fe:
     image: node:20-alpine
     container_name: game_fe
