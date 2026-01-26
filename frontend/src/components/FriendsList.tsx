@@ -45,12 +45,13 @@ const FriendsList = () => {
   const [friendSuggestions, setFriendSuggestions] = useState<FriendSuggestion[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  const [loading, setLoading] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [searchLoading, setSearchLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const fetchAllData = async () => {
     try {
-      setLoading(true);
+      setInitialLoading(true);
       setError(null);
 
       const [friendsData, requestsData, suggestionsData] = await Promise.all([
@@ -66,20 +67,20 @@ const FriendsList = () => {
       setError('Failed to load friends data. Please try again.');
       console.error('Error fetching friends data:', error);
     } finally {
-      setLoading(false);
+      setInitialLoading(false);
     }
   }
 
   const searchFriends = async () => {
     try {
-      setLoading(true);
+      setSearchLoading(true);
       const searchData = await friendsApi.searchFriends(searchQuery, 'ALL');
       setFriends(searchData.data || []);
     } catch (error) {
       console.error('Error searching friends:', error);
       setFriends([]);
     } finally {
-      setLoading(false);
+      setSearchLoading(false);
     }
   };
 
@@ -89,6 +90,7 @@ const FriendsList = () => {
 
   // Using debounce pattern, Wait 300ms after user stops typing
   useEffect(() => {
+    if (initialLoading) return;
     const delaySearch = setTimeout(() => {
       searchFriends();
     }, 300);
@@ -140,7 +142,7 @@ const FriendsList = () => {
     }
   };
 
-  if (loading) {
+  if (initialLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-lg text-gray-600">Loading friends...</div>
@@ -199,6 +201,13 @@ const FriendsList = () => {
                 </div>
               ))}
             </div>
+          </div>
+        )}
+
+        {/* if search returns no results */}
+        {friends.length === 0 && searchQuery && !searchLoading && (
+          <div className="mb-8 text-center py-8 text-gray-500">
+            No friends found matching "{searchQuery}"
           </div>
         )}
 
