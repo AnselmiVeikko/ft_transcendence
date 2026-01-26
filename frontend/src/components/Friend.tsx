@@ -13,14 +13,12 @@ const Friend = ({ name, avatar, onRemoveFriend, status }: FriendProps) => {
           <div className="w-12 h-12 bg-gray-500 rounded-full flex items-center justify-center text-white font-medium">
             {avatar}
           </div>
-          <div
-            role="status"
           {status && (
             <div
-              role="status"
-              aria-label={status === 'ONLINE' ? 'Online' : 'Offline'}
               className={`absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full border-2 border-white ${status === 'ONLINE' ? 'bg-green-500' : 'bg-gray-400'
                 }`}
+              role="status"
+              aria-label={status === 'ONLINE' ? 'Online' : 'Offline'}
             />
           )}
         </div>
