@@ -1,4 +1,11 @@
 services:
+
+  nginx:
+    build: ./nginx
+    volumes: ./nginx/ssl:/etc/nginx/ssl:ro
+    ports:
+     - "443:443"
+     - "80:80"
   game_fe:
     image: node:20-alpine
     container_name: game_fe
