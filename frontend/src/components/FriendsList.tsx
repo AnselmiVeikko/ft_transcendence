@@ -55,7 +55,7 @@ const FriendsList = () => {
     } finally {
       setInitialLoading(false);
     }
-  }
+  };
 
   const searchFriends = async () => {
     try {
