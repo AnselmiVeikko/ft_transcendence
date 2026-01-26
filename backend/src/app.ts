@@ -23,7 +23,8 @@ async function buildServer() {
 	// Register CORS plugin
 	await app.register(cors, {
 		origin: "http://localhost:5173",
-		credentials: true
+		credentials: true,
+		methods: ['GET', 'POST', 'DELETE', 'OPTIONS']
 	});
 
 	app.get("/health", async () => ({ Hello: "Backend is running...." }));
