@@ -8,6 +8,7 @@ interface Friend {
   userId: string;
   userName: string;
   friendRId: string;
+  status?: 'ONLINE' | 'OFFLINE';
 }
 
 interface FriendRequest {
@@ -21,11 +22,14 @@ interface FriendSuggestion {
   userName: string;
 }
 
+type OnlineStatus = 'ALL' | 'ONLINE' | 'OFFLINE';
+
 const FriendsList = () => {
   const [friends, setFriends] = useState<Friend[]>([]);
   const [friendRequests, setFriendRequests] = useState<FriendRequest[]>([]);
   const [friendSuggestions, setFriendSuggestions] = useState<FriendSuggestion[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [statusFilter, setStatusFilter] = useState<OnlineStatus>('ALL');
 
   const [initialLoading, setInitialLoading] = useState(true);
   const [searchLoading, setSearchLoading] = useState(false);
@@ -37,7 +41,7 @@ const FriendsList = () => {
       setError(null);
 
       const [friendsData, requestsData, suggestionsData] = await Promise.all([
-        friendsApi.getCurrentFriends(),
+        friendsApi.searchFriends('', 'ALL'),
         friendsApi.getPendingRequests(),
         friendsApi.getSuggestions()
       ]);
@@ -56,7 +60,7 @@ const FriendsList = () => {
   const searchFriends = async () => {
     try {
       setSearchLoading(true);
-      const searchData = await friendsApi.searchFriends(searchQuery, 'ALL');
+      const searchData = await friendsApi.searchFriends(searchQuery, statusFilter);
       setFriends(searchData.data || []);
     } catch (error) {
       console.error('Error searching friends:', error);
@@ -78,7 +82,7 @@ const FriendsList = () => {
     }, 300);
 
     return () => clearTimeout(delaySearch);
-  }, [searchQuery]);
+  }, [searchQuery, statusFilter]);
 
   console.log('friendSuggestions', friendSuggestions);
   console.log('friends', friends);
@@ -92,6 +96,7 @@ const FriendsList = () => {
         setFriends([...friends, request]);
         setFriendRequests(friendRequests.filter((r) => r.friendRId !== friendRId));
       }
+      searchFriends();
     } catch (error) {
       console.error('Error accepting friend request:', error);
     }
@@ -167,6 +172,39 @@ const FriendsList = () => {
               <div className="animate-spin h-5 w-5 border-2 border-blue-500 border-t-transparent rounded-full"></div>
             </div>
           )}
+        </div>
+
+        {/* Status filter Buttons online, offline, all */}
+        <div className="mb-6 flex gap-2">
+          <button
+            onClick={() => setStatusFilter('ALL')}
+            className={`px-4 py-2 rounded-lg font-medium cursor-pointer transition-colors ${statusFilter === 'ALL'
+                ? 'bg-blue-600 text-white'
+                : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+              }`}
+          >
+            All
+          </button>
+          <button
+            onClick={() => setStatusFilter('ONLINE')}
+            className={`px-4 py-2 rounded-lg font-medium cursor-pointer transition-colors ${statusFilter === 'ONLINE'
+                ? 'bg-green-600 text-white'
+                : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+              }`}
+          >
+            <span className="inline-block w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+            Online
+          </button>
+          <button
+            onClick={() => setStatusFilter('OFFLINE')}
+            className={`px-4 py-2 rounded-lg font-medium cursor-pointer transition-colors ${statusFilter === 'OFFLINE'
+                ? 'bg-gray-600 text-white'
+                : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+              }`}
+          >
+            <span className="inline-block w-2 h-2 bg-gray-400 rounded-full mr-2"></span>
+            Offline
+          </button>
         </div>
 
         {/* Friends List */}
