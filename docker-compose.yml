@@ -7,6 +7,11 @@ services:
     ports:
       - "443:443"
       - "80:80"
+    depends_on:
+      - frontend
+      - backend
+      - game_fe
+      - game_be
     networks:
     - transcendence
   game_fe:
