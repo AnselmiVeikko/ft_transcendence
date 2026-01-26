@@ -223,6 +223,7 @@ const FriendsList = () => {
                     avatar={friend.userName.substring(0, 2).toUpperCase()}
                     name={friend.userName}
                     onRemoveFriend={() => removeFriend(friend.friendRId)}
+                    status={friend.status}
                   />
                 </div>
               ))}
