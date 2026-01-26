@@ -43,6 +43,7 @@ const FriendsList = () => {
   const [friends, setFriends] = useState<Friend[]>([]);
   const [friendRequests, setFriendRequests] = useState<FriendRequest[]>([]);
   const [friendSuggestions, setFriendSuggestions] = useState<FriendSuggestion[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -144,6 +145,17 @@ const FriendsList = () => {
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-2xl mx-auto">
         <h1 className="text-2xl font-bold text-gray-900 mb-8">Friends</h1>
+
+        {/* Search Bar */}
+        <div className="mb-6">
+          <input
+            type="text"
+            placeholder="Search friends..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
 
         {/* Friends List */}
         {friends.length > 0 && (
