@@ -2,13 +2,7 @@ import { Ball } from "./ball.js";
 import { Paddle } from "./paddle.js";
 import { checkCollision } from "./physics.js";
 import { AIController } from "../AI/aiController.js";
-import type { GameState } from "../types/gameState.js";
-
-// Input event format for internal game logic
-export interface InputEvent {
-  type: 'keydown' | 'keyup';
-  key: string;
-}
+import type { GameState, InputEvent } from "../types/gameState.js";
 
 type GameMode = "2P" | "AI" | null;
 
@@ -27,7 +21,6 @@ export class Game {
   private remainSteps = 0;
   private gameLoopInterval: NodeJS.Timeout | null = null;
   private onStateUpdate: ((state: GameState) => void) | null = null;
-  private onGameEnd: ((winner: string) => void) | null = null;
 
   constructor(canvasWidth: number, canvasHeight: number) {
     this.canvasWidth = canvasWidth;
@@ -42,10 +35,6 @@ export class Game {
 
   public setOnStateUpdate(callback: (state: GameState) => void) {
     this.onStateUpdate = callback;
-  }
-
-  public setOnGameEnd(callback: (winner: string) => void) {
-    this.onGameEnd = callback;
   }
 
   public handleInput(event: InputEvent) {
@@ -166,9 +155,6 @@ export class Game {
         this.gameMessage = `${this.rightPlayer.name} won!`;
         this.gameMode = null;
         this.stopAI();
-        if (this.onGameEnd) {
-          this.onGameEnd(this.rightPlayer.name);
-        }
       }
     }
 
@@ -181,9 +167,6 @@ export class Game {
         this.gameMessage = `${this.leftPlayer.name} won!`;
         this.gameMode = null;
         this.stopAI();
-        if (this.onGameEnd) {
-          this.onGameEnd(this.leftPlayer.name);
-        }
       }
     }
   }

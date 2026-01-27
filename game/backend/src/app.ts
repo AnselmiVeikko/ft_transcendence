@@ -2,21 +2,16 @@ import express, { type Request, type Response } from 'express';
 import { createServer } from 'http';
 import { WebSocketServer, WebSocket } from 'ws';
 import cors from 'cors';
-import { GameManager } from './core/gameManager.js';
-import { verifyJWT, extractAuthParams } from './utils/jwt.js';
-import { matchManager } from './core/matchManager.js';
-import type { AuthenticatedWebSocket } from './types/gameState.js';
+import { GameManager } from './gameManager.js';
 
 const app = express();
 const port = Number(process.env.PORT) || 4000;
-const MAIN_BE_URL = process.env.MAIN_BE_URL || 'http://backend:3000';
-const GAME_SERVICE_TOKEN = process.env.GAME_SERVICE_TOKEN || '';
 
 // Enable CORS for all routes
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type']
 }));
 
 app.use(express.json());
@@ -40,78 +35,32 @@ app.get('/ws-test', (req: Request, res: Response) => {
 const server = createServer(app);
 const wss = new WebSocketServer({ 
   server, 
-  path: '/ws',
+  path: '/game',
   perMessageDeflate: false,
   clientTracking: true
 });
 
 wss.on('connection', (ws: WebSocket, request) => {
   const origin = request.headers.origin || 'unknown';
-  console.log('📡 New WebSocket connection attempt from:', origin);
+  console.log('✅ New WebSocket connection from:', origin);
   console.log('Connection URL:', request.url);
-
-  // Extract matchId and token from query params
-  // Expected format: ws://host/ws?matchId=m456&token=JWT_TOKEN
-  const { matchId, token } = extractAuthParams(request.url || '');
-
-  if (!matchId || !token) {
-    console.error('❌ Missing matchId or token in WebSocket URL');
-    ws.close(1008, 'Missing matchId or token');
-    return;
-  }
-
-  // Verify JWT token
-  const payload = verifyJWT(token);
-  if (!payload) {
-    console.error('❌ JWT verification failed');
-    ws.close(1008, 'Authentication failed');
-    return;
-  }
-
-  const userId = payload.sub;
-  const username = payload.username;
-
-  console.log(`✅ Authenticated user: ${username} (${userId}) for match: ${matchId}`);
-
-  // Create or get match and verify user belongs to it
-  const match = matchManager.createOrGetMatch(matchId, userId, username);
   
-  if (!matchManager.isUserInMatch(matchId, userId)) {
-    console.error(`❌ User ${userId} not authorized for match ${matchId}`);
-    ws.close(1008, 'Not authorized for this match');
-    return;
+  const gameManager = new GameManager(ws);
+
+  // Send welcome message
+  try {
+    ws.send(JSON.stringify({ type: 'connected', message: 'WebSocket connected successfully' }));
+  } catch (error) {
+    console.error('Error sending welcome message:', error);
   }
-
-  // Bind identity to socket context
-  // Create a wrapper object that implements AuthenticatedWebSocket
-  const authWs: AuthenticatedWebSocket = {
-    userId,
-    matchId,
-    username,
-    on: (event: string, listener: (...args: any[]) => void) => {
-      ws.on(event as any, listener);
-    },
-    send: (data: string) => {
-      ws.send(data);
-    },
-    close: (code?: number, reason?: string) => {
-      ws.close(code, reason);
-    },
-    get readyState() {
-      return ws.readyState;
-    }
-  };
-
-  // Create game manager for this connection
-  const gameManager = new GameManager(authWs, matchId, userId, username);
 
   ws.on('close', (code, reason) => {
-    console.log(`🔌 WebSocket connection closed. Code: ${code}, Reason: ${reason.toString()}`);
+    console.log(`WebSocket connection closed. Code: ${code}, Reason: ${reason.toString()}`);
     gameManager.cleanup();
   });
 
   ws.on('error', (error: Error) => {
-    console.error('❌ WebSocket error:', error);
+    console.error('WebSocket error:', error);
     gameManager.cleanup();
   });
 });
