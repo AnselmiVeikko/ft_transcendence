@@ -11,7 +11,7 @@ const RegisterForm = ()=> {
 	const [acceptTerms, setAcceptTerms] = useState(false);
 	const [isModalLoading, setIsModalLoading] = useState(false);
 	const [modalConfig, setModalConfig] = useState({ isOpen: false, title: '', htmlContent: '' });
-	const RegisterAPI = 'http://localhost:3000/api/user/registration';
+	const RegisterAPI = '/api/user/registration';
 
 	// 't' is for translation, 'i18n' is the instance for control
 	const { t, i18n } = useTranslation();

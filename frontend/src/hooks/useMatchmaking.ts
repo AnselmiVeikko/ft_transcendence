@@ -14,9 +14,9 @@ export const useMatchmaking = () => {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const matchmakingStarted = useRef(false);
 
-  const MATCHMAKING_API = 'http://localhost:3000/api/game/matchmaking';
-  const STATUS_API = 'http://localhost:3000/api/game/matchstatus';
-  const DELETEMATCH_API = 'http://localhost:3000/api/game/deleteMatch';
+  const MATCHMAKING_API = '/api/game/matchmaking';
+  const STATUS_API = '/api/game/matchstatus';
+  const DELETEMATCH_API = '/api/game/deleteMatch';
 
   useEffect(() => {
     const cleanUpMatch = () => {
