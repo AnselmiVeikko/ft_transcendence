@@ -46,7 +46,7 @@ export function setCookies(reply: FastifyReply, userId: string) {
             httpOnly: true,
             secure: false,
             sameSite: "strict",
-            path: "/auth/refresh",
+            path: "/",
             maxAge: 7 * 24 * 60 * 60 // 7 days
         });
 
@@ -59,7 +59,7 @@ export function clearCookies(reply: FastifyReply)
         path: "/",
     });
     reply.clearCookie("refreshJWT", {
-        path: "/auth/refresh",
+        path: "/",
     });
 }
 
