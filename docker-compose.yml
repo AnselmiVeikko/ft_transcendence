@@ -2,6 +2,7 @@ services:
 
   nginx:
     build: ./nginx
+    container_name: nginx
     volumes:
       - ./nginx/ssl:/etc/nginx/ssl:ro
     ports:
@@ -14,6 +15,7 @@ services:
       - game_be
     networks:
     - transcendence
+
   game_fe:
     image: node:20-alpine
     container_name: game_fe
