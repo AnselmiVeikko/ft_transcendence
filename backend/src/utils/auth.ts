@@ -37,14 +37,14 @@ export function setCookies(reply: FastifyReply, userId: string) {
     reply
         .setCookie("accessJWT", accessJWT, {
             httpOnly: true,
-            secure: false, //TODO: change to true when https connection is established
+            secure: true,
             sameSite: "lax",
             path: "/",
             maxAge: 15 * 60 // 15 minutes
         })
         .setCookie("refreshJWT", refreshJWT, {
             httpOnly: true,
-            secure: false,
+            secure: true,
             sameSite: "strict",
             path: "/auth/refresh",
             maxAge: 7 * 24 * 60 * 60 // 7 days
