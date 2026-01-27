@@ -46,7 +46,7 @@ export function setCookies(reply: FastifyReply, userId: string) {
             httpOnly: true,
             secure: true,
             sameSite: "strict",
-            path: "/auth/refresh",
+            path: "/api/user/refreshAccess",
             maxAge: 7 * 24 * 60 * 60 // 7 days
         });
 
