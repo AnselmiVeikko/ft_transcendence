@@ -25,6 +25,7 @@ async function buildServer() {
 	await app.register(cors, {
 		origin: "https://localhost",
 		credentials: true
+		methods: ['GET', 'POST', 'DELETE', 'OPTIONS']
 	});
 
 	app.get("/health", async () => ({ Hello: "Backend is running...." }));

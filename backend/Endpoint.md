@@ -177,6 +177,36 @@ Success Response: 200 OK
 }
 ```
 
+### GET: /api/friendlist/search
+Search (keyword search, online status filter (ONLINE, OFFLINE, ALL)) for friend.
+
+Query Parameter:
+```json
+// /api/friendlist/search?keyWord=te&onlineStatus=ALL&pageNo=1&limit=2
+```
+
+Success Response: 200 OK
+
+```json
+{
+	"message": "Search List",
+	"data": [
+		{
+			"friendRId": "j7cofp7",
+			"userId": "cmj7cofp70000yiwd622qn61c",
+			"userName": "test",
+			"status": "ONLINE"
+		},
+		{
+			"friendRId": "j7cofp7343",
+			"userId": "cmj7cofp70000yiwd622qn621",
+			"userName": "test2",
+			"status": "OFFLINE"
+		}
+	]
+}
+```
+
 ### GET: /api/friendlist/pending
 List of pending friend request sent by other users.
 

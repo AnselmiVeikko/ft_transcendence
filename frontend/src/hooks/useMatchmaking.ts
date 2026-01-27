@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 
 interface Player {
-	userId: string;
-	username: string;
+  userId: string;
+  username: string;
 }
 
 export const useMatchmaking = () => {
@@ -13,36 +13,25 @@ export const useMatchmaking = () => {
   const [player, setPlayer] = useState<Player | null>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const matchmakingStarted = useRef(false);
+  const latestStatus = useRef({ isWaiting, gameStarted, matchId });
 
   const MATCHMAKING_API = '/api/game/matchmaking';
   const STATUS_API = '/api/game/matchstatus';
   const DELETEMATCH_API = '/api/game/deleteMatch';
 
+  //ref to track latest states
   useEffect(() => {
-    const cleanUpMatch = () => {
-      if (!isWaiting || !matchId || gameStarted) return;
+    latestStatus.current = { isWaiting, gameStarted, matchId };
+  }, [isWaiting, gameStarted, matchId]);
 
-      const data = JSON.stringify({ matchId });
-	  const blob = new Blob([data], { type: 'application/json' });
-
-	  navigator.sendBeacon(DELETEMATCH_API, blob);
-	  console.log("MATCH DELETED");
-	};
-	const handleUnload = () => cleanUpMatch();
-	window.addEventListener('beforeunload', handleUnload);
-    return () => {
-	  window.removeEventListener('beforeunload', handleUnload);
-      cleanUpMatch();
-      stopPolling();
-    };
-  }, [isWaiting, matchId, gameStarted]);
-
+  //game ready to start
   const gameReady = async () => {
     setGameStarted(true);
     setIsWaiting(false);
     stopPolling();
-	console.log("GAME STARTED");
+    console.log('GAME STARTED');
   };
+
   const startMatchmaking = async () => {
     try {
       const response = await fetch(MATCHMAKING_API, {
@@ -54,7 +43,7 @@ export const useMatchmaking = () => {
         return;
       }
       const result = await response.json();
-	  if (result.data?.player) setPlayer(result.data.player);
+      if (result.data?.player) setPlayer(result.data.player);
 
       console.log(result.message);
       setGameToken(result.data.gameToken);
@@ -94,6 +83,30 @@ export const useMatchmaking = () => {
       intervalRef.current = null;
     }
   };
+
+  // delete match if user abandons queue/page
+  useEffect(() => {
+    const cleanUpMatch = () => {
+      const { isWaiting: waiting, gameStarted: started, matchId: id } = latestStatus.current; //make sure we have up-to-date states using ref
+
+      if (waiting && !started && id) {
+        const data = JSON.stringify({ matchId: id });
+		console.log('Deleting match: ', id);
+        const blob = new Blob([data], { type: 'application/json' });
+
+        navigator.sendBeacon(DELETEMATCH_API, blob);
+        console.log('MATCH DELETED (User abandoned queue)');
+      }
+    };
+    const handleUnload = () => cleanUpMatch();
+    window.addEventListener('beforeunload', handleUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleUnload);
+      cleanUpMatch();
+      stopPolling();
+    };
+  }, []);
 
   //start matchmaking on load
   useEffect(() => {
