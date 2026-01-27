@@ -3,7 +3,7 @@ import { Static, StaticAny } from "@fastify/type-provider-typebox";
 import { Prisma } from "@prisma/client";
 import { FLCurrentQuerySchema, FLSearchQuerySchema, FLPendingQuerySchema, FLSuggestionQuerySchema } from "../schemas/FriendSchema";
 import { FLCurrentResponseSchema, FLSearchResponseSchema, FLPendingResponseSchema, FLSuggestionResponseSchema } from "../schemas/FriendSchema";
-import { CurrentList, SearchtList, PendingList, SuggestionList } from "../utils/FriendResponses";
+import { currentList, searchList, pendingList, suggestionList } from "../utils/FriendResponses";
 import { ErrorResponseSchema } from "../schemas/UserSchema";
 import { errorResponse } from "../utils/UserResponses";
 import { verifyAccess } from "../utils/auth";
@@ -96,7 +96,9 @@ export default async function friendList(app: FastifyInstance) {
 			}
 
 			const { keyWord, onlineStatus = "ALL" } = request.query;
-
+			const pageNo = request.query.pageNo? Math.max(1, Number(request.query.pageNo)) : 1;
+			const limit = request.query.limit? Math.max(1, Number(request.query.limit))	: 10;
+			const skip = (pageNo - 1) * limit;
 
 			const relationList = await prisma.friend_request.findMany({
 				where: {
@@ -134,7 +136,13 @@ export default async function friendList(app: FastifyInstance) {
 					friend => friend.status === onlineStatus);
 			}
 
-			return reply.status(200).send(SearchtList(friendsList));
+			const totalFriend = friendsList.length;
+			const totalPage = Math.ceil(totalFriend / limit);
+
+			const start = (pageNo - 1) * limit;
+			const pagedFriends = friendsList.slice(start, start + limit);
+
+			return reply.status(200).send(searchList(pagedFriends, pageNo, limit, totalFriend, totalPage));
 		} catch(error) {
 			return reply.status(500).send(errorResponse(500, "Internal server error"));
 		}
