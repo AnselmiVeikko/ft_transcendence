@@ -25,31 +25,42 @@ export interface GameState {
   canvasHeight: number;
 }
 
-export interface InputEvent {
-  type: 'keydown' | 'keyup';
-  key: string;
+// Input message format (Game FE → Game BE)
+// According to secure_game_flow.md: Do NOT send userId, username, or JWT
+export interface InputMessage {
+  type: 'INPUT';
+  action: 'MOVE_UP' | 'MOVE_DOWN' | 'STOP';
 }
 
-export interface GameStartEvent {
-  gameMode: '2P' | 'AI';
-  player1: string;
-  player2?: string;
-  matchId?: string;
+// State update message format (Game BE → Game FE)
+export interface StateUpdateMessage {
+  type: 'STATE_UPDATE';
+  state: GameState;
 }
 
+// Game over message format (Game BE → Game FE)
+export interface GameOverMessage {
+  type: 'GAME_OVER';
+  result: {
+    winnerId: string;
+    score: Record<string, number>;
+  };
+}
+
+// Match result to send to Main BE
 export interface MatchResult {
-  matchId: string;
-  winner: string;
-  player1Score: number;
-  player2Score: number;
-  player1Name: string;
-  player2Name: string;
+  winnerId: string;
+  score: Record<string, number>;
 }
 
-export interface StartMatchRequest {
-  matchId: string;
-  player1: string;
-  player2: string;
-  callbackUrl?: string; // URL to notify when game ends
+// Extended WebSocket with user context
+export interface AuthenticatedWebSocket {
+  userId?: string;
+  matchId?: string;
+  username?: string;
+  on(event: string, listener: (...args: any[]) => void): void;
+  send(data: string): void;
+  close(code?: number, reason?: string): void;
+  readonly readyState: number;
 }
 
