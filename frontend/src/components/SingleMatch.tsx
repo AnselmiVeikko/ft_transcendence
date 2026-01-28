@@ -24,7 +24,7 @@ const SingleMatch = () => {
           id: player.userId,
           username: player.username,
         },
-        gameWsUrl: 'ws://localhost:3000/ws',
+        gameWsUrl: 'ws://localhost:4000/ws',
         accessToken: gameToken,
       };
       iframeRef.current.contentWindow?.postMessage(message, "http://localhost:5174");
