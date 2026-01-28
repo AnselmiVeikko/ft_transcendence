@@ -1,6 +1,6 @@
 export function loginSuccess(user: { userId: string, userName: string }) {
 	return {
-		message: "Login succesful",
+		message: "Login successful",
 		data: {
 			userId: user.userId,
 			userName: user.userName
@@ -10,7 +10,7 @@ export function loginSuccess(user: { userId: string, userName: string }) {
 
 export function logoutSuccess(user: { userId: string, userName: string }) {
 	return {
-		message: "Logout succesful",
+		message: "Logout successful",
 		data: {
 			userId: user.userId,
 			userName: user.userName
@@ -20,7 +20,7 @@ export function logoutSuccess(user: { userId: string, userName: string }) {
 
 export function registrationSuccess(user: { userId: string, userName: string }) {
 	return {
-		message: "Registration succesful",
+		message: "Registration successful",
 		data: {
 			userId: user.userId,
 			userName: user.userName
@@ -52,6 +52,7 @@ export function errorResponse(status: number, message: string) {
 		401: "Unauthorized",
 		403: "Forbidden",
 		404: "Not Found",
+		409: "Conflict",
 		500: "Internal Server Error",
 		501: "Not Implemented",
 		503: "Service Unavailable",
