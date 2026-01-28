@@ -14,6 +14,7 @@ import matchmakingRequest from "./routes/Matchmaking";
 import matchStatus from "./routes/MatchStatus";
 import refreshAccess  from "./routes/RefreshAccess";
 import profileUpdateRoutes from "./routes/ProfileUpdate";
+import deleteMatch from "./routes/DeleteMatch";
 
 dotenv.config();
 
@@ -25,7 +26,8 @@ async function buildServer() {
 	// Register CORS plugin
 	await app.register(cors, {
 		origin: "http://localhost:5173",
-		credentials: true
+		credentials: true,
+		methods: ['GET', 'POST', 'DELETE', 'OPTIONS']
 	});
 	// ENABLE multipart/form-data for file uploads
 	await app.register(multipart, {
@@ -47,6 +49,7 @@ async function buildServer() {
 	app.register(matchmakingRequest);
 	app.register(matchStatus);
 	app.register(refreshAccess);
+	app.register(deleteMatch);
 }
 
 

@@ -1,0 +1,10 @@
+# ignore legal HTML files from language statistics
+frontend/public/legal/*.html linguist-vendored
+
+# ignore build artifacts and dependencies
+dist/* linguist-generated
+build/* linguist-generated
+node_modules/* linguist-vendored
+
+# make sure TSX files are attributed to TypeScript
+*.tsx linguist-language=TypeScript
