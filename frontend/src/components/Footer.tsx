@@ -64,7 +64,7 @@ const Footer = () => {
     </footer>
 	<PolicyModal
         isOpen={modalConfig.isOpen}
-        onClose={() => setModalConfig({ ...modalConfig, isOpen: false })}
+        onClose={() => setModalConfig(prev => ({ ...prev, isOpen: false }))}
         title={modalConfig.title}
         htmlContent={modalConfig.htmlContent}
       />
