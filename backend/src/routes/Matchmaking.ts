@@ -36,7 +36,7 @@ export default async function matchmakingRequest(app: FastifyInstance) {
                         { playerOneId: userId },
                         { playerTwoId: userId }
                     ],
-                    status: { in: ["MATCHMAKING", "STARTING", "IN_PROGRESS"] }
+                    status: { in: ["MATCHMAKING", "IN_PROGRESS"] }
                 }
             });
 
@@ -55,7 +55,7 @@ export default async function matchmakingRequest(app: FastifyInstance) {
                 const updatedMatch = await prisma.game_match.update({
                     where: { matchId: availableMatch.matchId },
                     data: {
-                        status: "STARTING",
+                        status: "IN_PROGRESS",
                         playerTwoId: userId,
                     }
                 });

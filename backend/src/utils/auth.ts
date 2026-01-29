@@ -37,16 +37,16 @@ export function setCookies(reply: FastifyReply, userId: string) {
     reply
         .setCookie("accessJWT", accessJWT, {
             httpOnly: true,
-            secure: false, //TODO: change to true when https connection is established
+            secure: true,
             sameSite: "lax",
             path: "/",
             maxAge: 15 * 60 // 15 minutes
         })
         .setCookie("refreshJWT", refreshJWT, {
             httpOnly: true,
-            secure: false,
+            secure: true,
             sameSite: "strict",
-            path: "/auth/refresh",
+            path: "/api/user/refreshAccess",
             maxAge: 7 * 24 * 60 * 60 // 7 days
         });
 
@@ -59,19 +59,26 @@ export function clearCookies(reply: FastifyReply)
         path: "/",
     });
     reply.clearCookie("refreshJWT", {
-        path: "/auth/refresh",
+        path: "/",
     });
 }
 
 export function genGameToken(matchId: string, userId: string, username: string) {
+    // According to secure_game_flow.md: JWT payload should have sub, iss, aud
     const gameToken = jwt.sign(
         {
-            userId: userId,
+            //userId: userId,
+            sub: userId,        // userId
             username: username,
-            matchId: matchId,
+            //matchId: matchId,
+            iss: "main-be",     // issuer
+            aud: "game-be",     // audience
         },
         process.env.GAME_TOKEN_SECRET || "game-secret-change-this",
-        { expiresIn: "15m" });
+        { 
+            algorithm: "HS256",
+            expiresIn: "15m" 
+        });
 
     return gameToken;
 }

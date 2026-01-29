@@ -43,6 +43,10 @@ export const FLSearchQuerySchema = Type.Object({
 			// add inactive later
 		])
 	),
+	pageNo: Type.Optional(
+		Type.String({ pattern: "^[0-9]+$" })),
+	limit: Type.Optional(
+		Type.String({ pattern: "^[0-9]+$" })),
 })
 
 export const FLSearchResponseSchema = Type.Object({
@@ -56,6 +60,13 @@ export const FLSearchResponseSchema = Type.Object({
 			//avatar:
 		}),
 	),
+
+	pagination: Type.Object({
+		pageNo:     Type.Number(),
+		limit:      Type.Number(),
+		totalFriend:  Type.Number(),
+		totalPage:  Type.Number(),
+	})
 })
 
 

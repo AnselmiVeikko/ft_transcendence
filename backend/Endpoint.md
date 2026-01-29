@@ -79,7 +79,7 @@ Success Response: 200 OK
 
 
 
-## USER PROFILE SELF
+## USER PROFILE VIEW (SELF)
 
 ### GET: /api/user/profile/self
 User self profile information view.
@@ -104,7 +104,7 @@ Success Response: 200 OK
 
 
 
-## USER PROFILE ALL
+## USER PROFILE VIEW (ALL)
 
 ### GET: /api/user/profile/all
 All user profile limited information view.
@@ -145,6 +145,32 @@ Success Response: 200 OK
 ```
 
 
+## USER PROFILE UPDATE
+
+### PUT: /api/user/profile/update
+To update userName and email.
+
+Body:
+```json
+{
+	"userName": "newUsername",
+	"email": "newEmail"
+}
+```
+
+Success Response: 200 OK
+
+```json
+{
+	"message": "Profile information update successful",
+	"data": {
+		"userId": "cmkxup8dg0000yiy581237kt5",
+		"userName": "newUserName",
+		"email": "newEmail"
+	},
+}
+```
+
 ## FRIEND LIST
 
 ### GET: /api/friendlist/current
@@ -172,6 +198,36 @@ Success Response: 200 OK
 		{
 			"userId": "cmj7cytgg0001yi0covsdqv4m",
 			"userName": "test2"
+		}
+	]
+}
+```
+
+### GET: /api/friendlist/search
+Search (keyword search, online status filter (ONLINE, OFFLINE, ALL)) for friend.
+
+Query Parameter:
+```json
+// /api/friendlist/search?keyWord=te&onlineStatus=ALL&pageNo=1&limit=2
+```
+
+Success Response: 200 OK
+
+```json
+{
+	"message": "Search List",
+	"data": [
+		{
+			"friendRId": "j7cofp7",
+			"userId": "cmj7cofp70000yiwd622qn61c",
+			"userName": "test",
+			"status": "ONLINE"
+		},
+		{
+			"friendRId": "j7cofp7343",
+			"userId": "cmj7cofp70000yiwd622qn621",
+			"userName": "test2",
+			"status": "OFFLINE"
 		}
 	]
 }

@@ -12,11 +12,11 @@ export function currentList(list: any[], pageNo: number, limit: number, totalFri
 			limit,
 			totalFriend,
 			totalPage: Math.ceil(totalFriend / limit),
-		}
+		},
 	};
 }
 
-export function searchList(list: any[]) {
+export function searchList(list: any[], pageNo: number, limit: number,	totalFriend: number, totalPage: number) {
 	return {
 		message: "Search List",
 		data: list.map(u => ({
@@ -25,6 +25,12 @@ export function searchList(list: any[]) {
 			userName: u.userName,
 			status: u.status
 		})),
+		pagination: {
+			pageNo,
+			limit,
+			totalFriend,
+			totalPage
+		},
 	};
 }
 

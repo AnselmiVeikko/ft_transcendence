@@ -15,9 +15,9 @@ export const useMatchmaking = () => {
   const matchmakingStarted = useRef(false);
   const latestStatus = useRef({ isWaiting, gameStarted, matchId });
 
-  const MATCHMAKING_API = 'http://localhost:3000/api/game/matchmaking';
-  const STATUS_API = 'http://localhost:3000/api/game/matchstatus';
-  const DELETEMATCH_API = 'http://localhost:3000/api/game/deleteMatch';
+  const MATCHMAKING_API = '/api/game/matchmaking';
+  const STATUS_API = '/api/game/matchstatus';
+  const DELETEMATCH_API = '/api/game/deleteMatch';
 
   //ref to track latest states
   useEffect(() => {

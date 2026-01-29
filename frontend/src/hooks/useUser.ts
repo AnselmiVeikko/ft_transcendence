@@ -1,32 +1,25 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import apiClient from '../utils/apiClient';
 
 export const useUser = () => {
   const [userName, setUserName] = useState('');
   const [userId, setUserId] = useState('');
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+
 
   const fetchUser = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/user/profile/self', {
-        method: 'GET',
-        credentials: 'include',
-      });
-
-      if (!response.ok) {
-        if (response.status === 401) navigate("/");
-        throw new Error('Auth failed');
-      }
-
-      const result = await response.json();
-      setUserName(result.data.userName);
-      setUserId(result.data.userId);
-	  setEmail(result.data.email);
+      const { data } = await apiClient.get('/api/user/profile/self');
+      const { userName, userId, email } = data.data;
+      setUserName(userName);
+      setUserId(userId);
+      setEmail(email);
     } catch (e) {
-      console.error('Failed to fetch user:', e);
-      setUserName('Player');
+      //console.error('Failed to fetch user:', e);
+      setUserName('');
+      setUserId('');
+      setEmail('');
     } finally {
       setLoading(false);
     }
