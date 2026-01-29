@@ -10,7 +10,7 @@ export const useUser = () => {
 
   const fetchUser = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/user/profile/self', {
+      const response = await fetch('/api/user/profile/self', {
         method: 'GET',
         credentials: 'include',
       });

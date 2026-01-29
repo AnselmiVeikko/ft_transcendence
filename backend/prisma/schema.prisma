@@ -31,7 +31,6 @@ model user_info {
 
 enum MatchStatus {
   MATCHMAKING
-  STARTING
   IN_PROGRESS
   FINISHED
 }

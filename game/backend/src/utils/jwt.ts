@@ -1,4 +1,6 @@
 import jwt from 'jsonwebtoken';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 interface JWTPayload {
   sub: string; // userId
