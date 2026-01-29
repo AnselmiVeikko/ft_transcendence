@@ -64,14 +64,21 @@ export function clearCookies(reply: FastifyReply)
 }
 
 export function genGameToken(matchId: string, userId: string, username: string) {
+    // According to secure_game_flow.md: JWT payload should have sub, iss, aud
     const gameToken = jwt.sign(
         {
-            userId: userId,
+            //userId: userId,
+            sub: userId,        // userId
             username: username,
-            matchId: matchId,
+            //matchId: matchId,
+            iss: "main-be",     // issuer
+            aud: "game-be",     // audience
         },
         process.env.GAME_TOKEN_SECRET || "game-secret-change-this",
-        { expiresIn: "15m" });
+        { 
+            algorithm: "HS256",
+            expiresIn: "15m" 
+        });
 
     return gameToken;
 }
