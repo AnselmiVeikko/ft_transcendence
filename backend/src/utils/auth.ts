@@ -59,7 +59,7 @@ export function clearCookies(reply: FastifyReply)
         path: "/",
     });
     reply.clearCookie("refreshJWT", {
-        path: "/auth/refresh",
+        path: "/",
     });
 }
 
