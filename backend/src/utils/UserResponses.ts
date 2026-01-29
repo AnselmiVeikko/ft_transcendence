@@ -35,13 +35,14 @@ export function accessRefreshed() {
 	};
 }
 
-export function profileSelf(userProfile: {userId: string, userName: string, email: string}) {
+export function profileSelf(userProfile: {userId: string, userName: string, email: string}, avatarUrl: string) {
 	return {
 		message: "Profile retrieve successful",
 		data: {
 			userId: userProfile.userId,
 			userName: userProfile.userName,
-			email: userProfile.email
+			email: userProfile.email,
+			avatarUrl: avatarUrl,
 		},
 	};
 }
@@ -72,7 +73,8 @@ export function profileAll(userProfile: any[], pageNo: number, limit: number, to
 		data: userProfile.map(u => ({
 			userId: u.userId,
 			userName: u.userName,
-			email: u.email
+			email: u.email,
+			avatarUrl: u.avatarUrl
 		})),
 		pagination: {
 			pageNo,
@@ -83,6 +85,22 @@ export function profileAll(userProfile: any[], pageNo: number, limit: number, to
 	};
 }
 
+
+// AVATAR
+export function profileAvatarSet(user: { userId: string, userName: string, avatarName: string | null }){
+	return {
+	message: "Profile avatar change successful",
+		data: {
+			userId: user.userId,
+			userName: user.userName,
+			avatarName: user.avatarName,
+		},
+	};
+}
+
+export function getAvatarUrl(filename: string | null) {
+	return filename?`../frontend/public/avatars/upload/${filename}`:`../frontend/public/avatars/default/default.webp`;
+}
 
 // export function ProfileAll(userProfile: {userId: number, userName: string, email: string}[])
 
