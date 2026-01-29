@@ -24,3 +24,11 @@ export const MatchStatusResponseSchema = Type.Object({
         matchStatus: Type.String(),
     }),
 });
+
+export const DeleteMatchBodySchema = Type.Object({
+    matchId: Type.String(),
+});
+
+export const DeleteMatchResponseSchema = Type.Object({
+    message: Type.String(),
+})

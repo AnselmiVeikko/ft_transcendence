@@ -6,9 +6,6 @@ import {
   FaUserEdit,
   FaCameraRetro,
   FaTimes,
-  FaRedRiver,
-  FaTimesCircle,
-  FaRegTimesCircle,
 } from 'react-icons/fa';
 
 const colorClasses = {

@@ -35,3 +35,12 @@ export function matchStatusResponse( matchStatus: string ) {
         data: { matchStatus },
     };
 }
+
+export function matchDeleted( matchId: string ) {
+    return {
+        message: "Match deleted",
+        data: {
+            matchId,
+        },
+    };
+}
