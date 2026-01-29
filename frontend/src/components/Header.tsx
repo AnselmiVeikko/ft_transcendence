@@ -39,7 +39,7 @@ const Header = () => {
   if (userLoading) return null;
 
   return (
-    <header className="bg-linear-to-b from-slate-900 to-slate-700 p-4 h-20 sticky top-0 z-15">
+    <header className="border-b border-indigo-900/50 dark:border-indigo-900/30 bg-linear-to-b from-gray-900 to-gray-800 transition-colors p-4 h-20 sticky top-0 z-15">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-4">
           <button
