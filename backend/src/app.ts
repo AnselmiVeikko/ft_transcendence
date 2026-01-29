@@ -26,7 +26,7 @@ async function buildServer() {
 	// Register CORS plugin
 	await app.register(cors, {
 		origin: "https://localhost",
-		credentials: true
+		credentials: true,
 		methods: ['GET', 'POST', 'DELETE', 'OPTIONS']
 	});
 	// ENABLE multipart/form-data for file uploads
