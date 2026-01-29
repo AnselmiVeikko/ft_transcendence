@@ -5,7 +5,9 @@ const App: React.FC = () => {
 
   return (
     <div className="app-container">
-      <Outlet />
+	  <main className="flex-grow">
+		<Outlet />
+	  </main>
     </div>
   );
 };
