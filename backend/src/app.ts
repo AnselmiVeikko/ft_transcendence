@@ -1,4 +1,5 @@
 import Fastify from "fastify";
+import multipart from "@fastify/multipart";
 import dotenv from "dotenv";
 import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import cors from "@fastify/cors";
@@ -12,6 +13,7 @@ import friendList from "./routes/FriendList";
 import matchmakingRequest from "./routes/Matchmaking";
 import matchStatus from "./routes/MatchStatus";
 import refreshAccess  from "./routes/RefreshAccess";
+import profileUpdateRoutes from "./routes/ProfileUpdate";
 import deleteMatch from "./routes/DeleteMatch";
 
 dotenv.config();
@@ -27,6 +29,12 @@ async function buildServer() {
 		credentials: true
 		methods: ['GET', 'POST', 'DELETE', 'OPTIONS']
 	});
+	// ENABLE multipart/form-data for file uploads
+	await app.register(multipart, {
+		limits: {
+			fileSize: 4 * 1024 * 1024,
+		},
+	});
 
 	app.get("/health", async () => ({ Hello: "Backend is running...." }));
 
@@ -34,6 +42,7 @@ async function buildServer() {
 	app.register(registrationRoutes);
 	app.register(loginRoutes);
 	app.register(profileRoutes);
+	app.register(profileUpdateRoutes);
 	app.register(friendList);
 	app.register(friendRequest);
 	app.register(logoutRoutes);

@@ -79,7 +79,7 @@ Success Response: 200 OK
 
 
 
-## USER PROFILE SELF
+## USER PROFILE VIEW (SELF)
 
 ### GET: /api/user/profile/self
 User self profile information view.
@@ -104,7 +104,7 @@ Success Response: 200 OK
 
 
 
-## USER PROFILE ALL
+## USER PROFILE VIEW (ALL)
 
 ### GET: /api/user/profile/all
 All user profile limited information view.
@@ -144,6 +144,32 @@ Success Response: 200 OK
 }
 ```
 
+
+## USER PROFILE UPDATE
+
+### PUT: /api/user/profile/update
+To update userName and email.
+
+Body:
+```json
+{
+	"userName": "newUsername",
+	"email": "newEmail"
+}
+```
+
+Success Response: 200 OK
+
+```json
+{
+	"message": "Profile information update successful",
+	"data": {
+		"userId": "cmkxup8dg0000yiy581237kt5",
+		"userName": "newUserName",
+		"email": "newEmail"
+	},
+}
+```
 
 ## FRIEND LIST
 

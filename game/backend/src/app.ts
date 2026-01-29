@@ -5,6 +5,7 @@ import cors from 'cors';
 import { GameManager } from './core/gameManager.js';
 import { verifyJWT, extractAuthParams } from './utils/jwt.js';
 import { matchManager } from './core/matchManager.js';
+import { getOrCreateSession } from './core/matchGameSession.js';
 import type { AuthenticatedWebSocket } from './types/gameState.js';
 
 const app = express();
@@ -33,7 +34,7 @@ app.get('/ws-test', (req: Request, res: Response) => {
   res.json({ 
     ok: true, 
     message: 'WebSocket server is running',
-    wsUrl: `ws://${req.headers.host}/game`
+    wsUrl: `ws://${req.headers.host}/ws`
   });
 });
 
@@ -102,17 +103,21 @@ wss.on('connection', (ws: WebSocket, request) => {
     }
   };
 
-  // Create game manager for this connection
-  const gameManager = new GameManager(authWs, matchId, userId, username);
+  const session = getOrCreateSession(matchId);
+  session.addSocket(userId, username, authWs);
+
+  ws.on('message', (data: Buffer) => {
+    session.handleMessage(userId, data);
+  });
 
   ws.on('close', (code, reason) => {
     console.log(`🔌 WebSocket connection closed. Code: ${code}, Reason: ${reason.toString()}`);
-    gameManager.cleanup();
+    session.removeSocket(userId);
   });
 
   ws.on('error', (error: Error) => {
     console.error('❌ WebSocket error:', error);
-    gameManager.cleanup();
+    session.removeSocket(userId);
   });
 });
 
@@ -124,7 +129,7 @@ server.on('upgrade', (request, socket, head) => {
 
 server.listen(port, '0.0.0.0', () => {
   console.log(`Server running on http://0.0.0.0:${port}`);
-  console.log(`WebSocket server available at ws://0.0.0.0:${port}/game`);
+  console.log(`WebSocket server available at ws://0.0.0.0:${port}/ws`);
 });
 
 export default app;

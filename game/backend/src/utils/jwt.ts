@@ -11,30 +11,21 @@ interface JWTPayload {
 }
 
 /**
- * Verify JWT token using RS256 public key
+ * Verify JWT token using HS256 secret
  * According to secure_game_flow.md:
- * - Signature must be valid (RS256)
+ * - Signature must be valid (HS256)
  * - exp must not be expired
  * - iss must be "main-be"
  * - aud must be "game-be"
  */
 export function verifyJWT(token: string): JWTPayload | null {
   try {
-    // Get public key path from environment or use default
-    const publicKeyPath = process.env.JWT_PUBLIC_KEY_PATH || 
-      join(process.cwd(), 'jwt_public.pem');
-    
-    let publicKey: string;
-    try {
-      publicKey = readFileSync(publicKeyPath, 'utf-8');
-    } catch (error) {
-      console.error(`Failed to read public key from ${publicKeyPath}:`, error);
-      // For development, allow missing key file (will fail verification)
-      return null;
-    }
+    // HS256 uses symmetric key (secret), not RSA public key
+    // Use the same secret that Main BE uses to sign tokens
+    const secret = process.env.GAME_TOKEN_SECRET || "game-secret-change-this";
 
-    const decoded = jwt.verify(token, publicKey, {
-      algorithms: ['RS256'],
+    const decoded = jwt.verify(token, secret, {
+      algorithms: ['HS256'],
       issuer: 'main-be',
       audience: 'game-be'
     }) as JWTPayload;
