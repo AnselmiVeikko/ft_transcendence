@@ -25,7 +25,7 @@ const port = process.env.BACKEND_PORT? Number(process.env.BACKEND_PORT) : 3000;
 async function buildServer() {
 	// Register CORS plugin
 	await app.register(cors, {
-		origin: "https://localhost",
+		origin: "https://localhost:8443",
 		credentials: true,
 		methods: ['GET', 'POST', 'DELETE', 'OPTIONS']
 	});
