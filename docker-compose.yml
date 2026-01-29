@@ -6,8 +6,8 @@ services:
     volumes:
       - ./nginx/ssl:/etc/nginx/ssl:ro
     ports:
-      - "443:443"
-      - "80:80"
+      - "8443:443"
+      - "8080:80"
     depends_on:
       - frontend
       - backend
