@@ -20,7 +20,7 @@ export const FLCurrentResponseSchema = Type.Object({
 			friendRId: Type.String(),
 			userId: Type.String(),
 			userName: Type.String(),
-			//avatar:
+			avatarUrl: Type.String(),
 		}),
 	),
 
@@ -57,7 +57,7 @@ export const FLSearchResponseSchema = Type.Object({
 			userId: Type.String(),
 			userName: Type.String(),
 			status: Type.String(),
-			//avatar:
+			avatarUrl: Type.String(),
 		}),
 	),
 
@@ -81,7 +81,7 @@ export const FLPendingResponseSchema = Type.Object({
 			friendRId: Type.String(),
 			userId: Type.String(),
 			userName: Type.String(),
-			//avatar:
+			avatarUrl: Type.String(),
 		}),
 	),
 })
@@ -96,7 +96,7 @@ export const FLSuggestionResponseSchema = Type.Object({
 		Type.Object({
 			userId: Type.String(),
 			userName: Type.String(),
-			//avatar:
+			avatarUrl: Type.String(),
 		}),
 	),
 })
