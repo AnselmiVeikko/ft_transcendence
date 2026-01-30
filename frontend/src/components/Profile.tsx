@@ -76,7 +76,7 @@ const ProfileSettings = () => {
 
       <div
         className={`${colorClasses.bgGlow} flex flex-col items-center justify-center p-4 w-full`}
-        style={{ height: 'calc(100vh)' }}
+        style={{ height: 'calc(100vh - 5rem)' }}
       >
         <div className="mb-4 p-6 text-center max-w-5xl w-full z-10">
           <h1 className="text-2xl font-extrabold tracking-tight sm:pb-2 bg-clip-text text-transparent bg-linear-to-r from-indigo-700 to-blue-200 sm:text-4xl lg:text-5xl">
@@ -85,23 +85,21 @@ const ProfileSettings = () => {
         </div>
 
         {/* User Card */}
-        <div className="mb-12 p-6 text-center max-w-5xl w-full z-10 flex justify-center">
+        <div className="mb-12 p-6 text-center max-w-5xl w-full z-10 flex items-center justify-center">
           <div
             className={`w-70 lg:w-90 h-80 md:h-90 lg:h-90 flex flex-col items-center justify-center p-8 bg-gradient-to-br from-indigo-100/10 via-blue-100/10 to-violet-100/10 hover:bg-gradient-to-t hover:from-blue-100/20 hover:via-indigo-100/20 hover:to-violet-100/30
 			backdrop-blur-md border dark:border-white/20 border-black/10 rounded-2xl shadow-2xl transition duration-300 transform hover:scale-[1.03]`}>
-            <div className="relative mb-4">
             <img 
 		   		src={avatarURL || '/avatars/default/default.webp'}
-				className="w-20 h-20 rounded-full border border-black/10 dark:border-white/50 shadow-lg object-cover"
+				className="w-20 h-20 rounded-full border border-black/10 dark:border-white/50 shadow-lg object-cover mb-8"
 				onClick={() => { setSelectedGridAvatar(avatarURL); setIsAvatarModalOpen(true); }}
                 alt="User Avatar"
 			/>
             <h2 className="text-2xl font-black text-white">{userName}</h2>
 		    <p className="text-xl font-medium bg-clip-text text-transparent bg-linear-to-r from-indigo-500 to-blue-400 hover:bg-linear-to-bl">{email}</p>
-              <div className="mt-3 px-4 py-1 bg-black/10 dark:bg-white/10 rounded-full text-xs font-bold uppercase tracking-widest border border-white/10">
+              <div className="mt-4 px-4 py-1 bg-black/10 dark:bg-white/10 rounded-full text-xs font-bold uppercase tracking-widest border border-white/10">
                 5 Friends
               </div>
-		</div>
 		</div>
 		</div>
 		<p className="mt-2 mb-12 text-xl font-bold text-indigo-300/80">
