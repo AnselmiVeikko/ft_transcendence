@@ -9,6 +9,17 @@ import SettingsMenu from './SettingsMenu';
 import ProfileCard from './ProfileCard';
 import ProfileModal from './ProfileModal';
 
+const colorClasses = {
+  userName:
+    'bg-gradient-to-b from-indigo-700 to-blue-300 hover:bg-gradient-to-r hover:to-indigo-200',
+  profileDetails:
+    'bg-gradient-to-b from-indigo-700 to-indigo-400 hover:bg-gradient-to-r hover:to-indigo-200',
+  avatar:
+    'bg-gradient-to-b from-violet-700 to-blue-300 hover:bg-gradient-to-r hover:to-violet-200',
+  bgGlow: 'bg-glow [animation:blob-drift_20s_ease-in-out_infinite]',
+  bgGlow2: 'bg-glow2 [animation:blob-drift_20s_ease-in-out_infinite]'
+};
+
 const ProfileSettings = () => {
   const { t } = useTranslation();
   const { userName, email, loading, avatarURL, refetch } = useUser();
@@ -60,36 +71,49 @@ const ProfileSettings = () => {
   if (loading) return null;
 
   return (
-    <div className="relative min-h-screen pt-28 pb-24 px-4 overflow-hidden bg-slate-950">
-      {/* Background Blobs */}
-      <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-blue-500/20 rounded-full blur-3xl" />
-
+    <div className="relative">
       <SettingsMenu />
 
-      <div className="max-w-5xl mx-auto flex flex-col items-center gap-12 z-10 relative">
-        <div className="text-center">
-          <h1 className="text-4xl lg:text-6xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-blue-400">
+      <div
+        className={`${colorClasses.bgGlow} flex flex-col items-center justify-center p-4 w-full`}
+        style={{ height: 'calc(100vh)' }}
+      >
+        <div className="mb-4 p-6 text-center max-w-5xl w-full z-10">
+          <h1 className="text-2xl font-extrabold tracking-tight sm:pb-2 bg-clip-text text-transparent bg-linear-to-r from-indigo-700 to-blue-200 sm:text-4xl lg:text-5xl">
             {t('profile_settings')}
           </h1>
-          <p className="mt-4 text-xl font-bold text-indigo-300/80">
-            {t(greetingKey)}?
-          </p>
         </div>
 
         {/* User Card */}
-        <div className="w-full max-w-md p-8 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-xl shadow-2xl flex flex-col items-center">
-           <img src={avatarURL || '/avatars/default/default.webp'} className="w-24 h-24 rounded-full border-4 border-indigo-500/30 mb-4 object-cover" />
-           <h2 className="text-2xl font-black text-white">{userName}</h2>
-           <p className="text-indigo-400 font-medium">{email}</p>
-        </div>
+        <div className="mb-12 p-6 text-center max-w-5xl w-full z-10 flex justify-center">
+          <div
+            className={`w-70 lg:w-90 h-80 md:h-90 lg:h-90 flex flex-col items-center justify-center p-8 bg-gradient-to-br from-indigo-100/10 via-blue-100/10 to-violet-100/10 hover:bg-gradient-to-t hover:from-blue-100/20 hover:via-indigo-100/20 hover:to-violet-100/30
+			backdrop-blur-md border dark:border-white/20 border-black/10 rounded-2xl shadow-2xl transition duration-300 transform hover:scale-[1.03]`}>
+            <div className="relative mb-4">
+            <img 
+		   		src={avatarURL || '/avatars/default/default.webp'}
+				className="w-20 h-20 rounded-full border border-black/10 dark:border-white/50 shadow-lg object-cover"
+				onClick={() => { setSelectedGridAvatar(avatarURL); setIsAvatarModalOpen(true); }}
+                alt="User Avatar"
+			/>
+            <h2 className="text-2xl font-black text-white">{userName}</h2>
+		    <p className="text-xl font-medium bg-clip-text text-transparent bg-linear-to-r from-indigo-500 to-blue-400 hover:bg-linear-to-bl">{email}</p>
+              <div className="mt-3 px-4 py-1 bg-black/10 dark:bg-white/10 rounded-full text-xs font-bold uppercase tracking-widest border border-white/10">
+                5 Friends
+              </div>
+		</div>
+		</div>
+		</div>
+		<p className="mt-2 mb-12 text-xl font-bold text-indigo-300/80">
+            {t(greetingKey)}?
+        </p>
 
         {/* Profile Action Cards */}
-        <div className="flex flex-col sm:flex-row gap-6">
+        <div className="flex flex-col sm:flex-row gap-8">
           <ProfileCard 
             title={t('change_username')} 
             icon={<FaUserEdit />} 
-            colorClass="bg-gradient-to-br from-indigo-600 to-blue-600"
+            colorClass={colorClasses.userName}
             onClick={() => {
                 setTempUsername(userName); // Initialize input with current name
                 setIsUsernameModalOpen(true);
@@ -98,7 +122,7 @@ const ProfileSettings = () => {
           <ProfileCard 
             title={t('change_avatar')} 
             icon={<FaCameraRetro />} 
-            colorClass="bg-gradient-to-br from-violet-600 to-indigo-600"
+            colorClass={colorClasses.avatar}
             onClick={() => setIsAvatarModalOpen(true)} 
           />
         </div>
