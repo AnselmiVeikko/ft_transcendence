@@ -14,6 +14,7 @@ import matchmakingRequest from "./routes/Matchmaking";
 import matchStatus from "./routes/MatchStatus";
 import refreshAccess  from "./routes/RefreshAccess";
 import profileUpdateRoutes from "./routes/ProfileUpdate";
+import avatarRoutes from "./routes/ProfileAvatar";
 import deleteMatch from "./routes/DeleteMatch";
 
 dotenv.config();
@@ -49,9 +50,9 @@ async function buildServer() {
 	app.register(matchmakingRequest);
 	app.register(matchStatus);
 	app.register(refreshAccess);
+	app.register(avatarRoutes);
 	app.register(deleteMatch);
 }
-
 
 const start = async () => {
 	try {

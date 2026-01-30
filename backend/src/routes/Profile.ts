@@ -3,7 +3,7 @@ import { prisma } from "../plugins/prisma";
 import { Static } from "@sinclair/typebox";
 import { ProfileSelfQuerySchema, ProfileSelfResponseSchema, ErrorResponseSchema } from "../schemas/UserSchema";
 import { ProfileAllfQuerySchema, ProfileAllResponseSchema } from "../schemas/UserSchema";
-import { profileSelf, profileAll, errorResponse } from "../utils/UserResponses";
+import { profileSelf, profileAll, getAvatarUrl, errorResponse } from "../utils/UserResponses";
 import { verifyAccess } from "../utils/auth";
 
 type ProfileSelfRequest = FastifyRequest<{ Querystring: Static<typeof ProfileSelfQuerySchema> }>;
@@ -33,7 +33,9 @@ export default async function profileRoutes(app: FastifyInstance) {
 			return reply.status(400).send(errorResponse(400, "User profile not found"));
 		}
 
-		return reply.status(200).send(profileSelf(userProfile));
+		const avatarUrl = getAvatarUrl(userProfile.avatarName);
+
+		return reply.status(200).send(profileSelf(userProfile, avatarUrl));
 	});
 
 	app.get(
@@ -60,9 +62,21 @@ export default async function profileRoutes(app: FastifyInstance) {
 					userId: true,
 					userName: true,
 					email: true,
+					avatarName: true,
 				},
 			});
-			return reply.status(200).send(profileAll(users, pageNo, limit, totalUser));
+
+			const usersWithAvatar = users.map(user => {
+				const avatarUrl = getAvatarUrl(user.avatarName);
+
+				return {
+					userId: user.userId,
+					userName: user.userName,
+					email: user.email,
+					avatarUrl,
+				};
+			});
+			return reply.status(200).send(profileAll(usersWithAvatar, pageNo, limit, totalUser));
 		}
 	);
 }

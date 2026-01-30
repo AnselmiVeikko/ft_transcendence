@@ -54,6 +54,7 @@ export const ProfileSelfResponseSchema = Type.Object({
         userId:     Type.String(),
         userName:   Type.String(),
         email:      Type.String(),
+        avatarUrl:  Type.String(),
     }),
 });
 
@@ -72,6 +73,7 @@ export const ProfileAllResponseSchema = Type.Object({
             userId:     Type.String(),
             userName:   Type.String(),
             email:      Type.String(),
+            avatarUrl:  Type.String(),
         }),
     ),
 
@@ -83,6 +85,22 @@ export const ProfileAllResponseSchema = Type.Object({
     })
 
 });
+
+// AVATAR SCHEMA
+
+//export const ProfileAvatarSchema = Type.Object({
+//    file: Type.String(),
+//});
+
+export const ProfileAvatarResponseSchema = Type.Object({
+    message: Type.String(),
+    data: Type.Object({
+        userId:     Type.String(),
+        userName:   Type.String(),
+        avatarName: Type.Union([Type.String(), Type.Null()]),
+    }),
+});
+
 
 // Error Response
 export const ErrorResponseSchema = Type.Object({
