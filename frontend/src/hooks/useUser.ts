@@ -11,15 +11,15 @@ export const useUser = () => {
   const fetchUser = async () => {
     try {
       const { data } = await apiClient.get('/api/user/profile/self');
-      const { userName, userId, email, avatarName } = data.data;
+      const { userName, userId, email, avatarName: avatarURL } = data.data;
       setUserName(userName);
       setUserId(userId);
       setEmail(email);
 
-	  const newURL = avatarName ? `/avatars/upload/${avatarName}?t=${Date.now()}` 
-        : '/avatars/default/default.webp';
+	 // const newURL = avatarName ? `/avatars/upload/${avatarName}?t=${Date.now()}` 
+       // : '/avatars/avatar20.png';
 
-	  setAvatar(newURL);
+	  setAvatar(avatarURL);
     } catch (e) {
       setUserName('');
       setUserId('');
