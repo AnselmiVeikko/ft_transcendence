@@ -23,6 +23,7 @@ export function searchList(list: any[], pageNo: number, limit: number,	totalFrie
 			friendRId: u.friendRId,
 			userId: u.userId,
 			userName: u.userName,
+			avatarUrl: u.avatarUrl,
 			status: u.status
 		})),
 		pagination: {

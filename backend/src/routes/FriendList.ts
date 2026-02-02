@@ -5,7 +5,7 @@ import { FLCurrentQuerySchema, FLSearchQuerySchema, FLPendingQuerySchema, FLSugg
 import { FLCurrentResponseSchema, FLSearchResponseSchema, FLPendingResponseSchema, FLSuggestionResponseSchema } from "../schemas/FriendSchema";
 import { currentList, searchList, pendingList, suggestionList } from "../utils/FriendResponses";
 import { ErrorResponseSchema } from "../schemas/UserSchema";
-import { errorResponse } from "../utils/UserResponses";
+import { getAvatarUrl, errorResponse } from "../utils/UserResponses";
 import { verifyAccess } from "../utils/auth";
 import prisma from "../plugins/prisma";
 
@@ -116,12 +116,13 @@ export default async function friendList(app: FastifyInstance) {
 
 			let friendsList = relationList.map(rel => {
 				const friend = rel.senderId === userId? rel.receiver : rel.sender;
-
+				const avatarUrl = getAvatarUrl(friend.avatarName);
 				return {
 					friendRId: rel.friendRId,
 					userId: friend.userId,
 					userName: friend.userName,
 					status: friend.status,
+					avatarUrl,
 				};
 			});
 
