@@ -1,30 +1,30 @@
+/* import apiClient from '../utils/apiClient';
 import { useState, useEffect } from 'react';
-import apiClient from '../utils/apiClient';
 
 export const useUser = () => {
   const [userName, setUserName] = useState('');
   const [userId, setUserId] = useState('');
   const [email, setEmail] = useState('');
-  const [avatarURL, setAvatar] = useState('');
+  const [avatarUrl, setAvatarUrl] = useState('');
   const [loading, setLoading] = useState(true);
 
   const fetchUser = async () => {
     try {
       const { data } = await apiClient.get('/api/user/profile/self');
-      const { userName, userId, email, avatarName: avatarURL } = data.data;
+      const { userName, userId, email, avatarUrl: rawAvatarUrl } = data.data;
+
       setUserName(userName);
       setUserId(userId);
       setEmail(email);
 
-	 // const newURL = avatarName ? `/avatars/upload/${avatarName}?t=${Date.now()}` 
-       // : '/avatars/avatar20.png';
-
-	  setAvatar(avatarURL);
+      const cleanUrl = rawAvatarUrl.replace('../frontend/public', '');
+      
+      setAvatarUrl(cleanUrl);
     } catch (e) {
       setUserName('');
       setUserId('');
       setEmail('');
-	  setAvatar('');
+      setAvatarUrl('');
     } finally {
       setLoading(false);
     }
@@ -34,5 +34,5 @@ export const useUser = () => {
     fetchUser();
   }, []);
 
-  return { userName, userId, loading, email, avatarURL, refetch: fetchUser };
-};
+  return { userName, userId, email, avatarUrl, loading, refetch: fetchUser };
+}; */
