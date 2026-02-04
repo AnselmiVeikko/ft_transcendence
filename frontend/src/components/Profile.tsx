@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaUserEdit, FaCameraRetro } from 'react-icons/fa';
-import { useUser } from '../hooks/useUser';
+import { useUser } from '../context/UserContext';
 import { useGreetings } from '../hooks/useGreetings';
 import { useProfileUpdate } from '../hooks/useProfileUpdate';
 import { useAvatarUpdate } from '../hooks/useAvatarUpdate';
@@ -22,7 +22,7 @@ const colorClasses = {
 
 const ProfileSettings = () => {
   const { t } = useTranslation();
-  const { userName, email, loading, avatarURL, refetch } = useUser();
+  const { userName, email, loading, avatarUrl, refetch } = useUser();
   const greetingKey = useGreetings();
 
   // modal states
@@ -84,15 +84,14 @@ const ProfileSettings = () => {
           </h1>
         </div>
 
-        {/* User Card */}
         <div className="mb-12 p-6 text-center max-w-5xl w-full z-10 flex items-center justify-center">
           <div
             className={`w-70 lg:w-90 h-80 md:h-90 lg:h-90 flex flex-col items-center justify-center p-8 bg-gradient-to-br from-indigo-100/10 via-blue-100/10 to-violet-100/10 hover:bg-gradient-to-t hover:from-blue-100/20 hover:via-indigo-100/20 hover:to-violet-100/30
 			backdrop-blur-md border dark:border-white/20 border-black/10 rounded-2xl shadow-2xl transition duration-300 transform hover:scale-[1.03]`}>
             <img 
-		   		src={avatarURL || '/avatars/default/default.webp'}
+		   		src={avatarUrl || '/avatars/default/default.webp'}
 				className="w-20 h-20 rounded-full border border-black/10 dark:border-white/50 shadow-lg object-cover mb-8"
-				onClick={() => { setSelectedGridAvatar(avatarURL); setIsAvatarModalOpen(true); }}
+				onClick={() => { setSelectedGridAvatar(avatarUrl); setIsAvatarModalOpen(true); }}
                 alt="User Avatar"
 			/>
             <h2 className="text-2xl font-black text-white">{userName}</h2>
@@ -106,7 +105,6 @@ const ProfileSettings = () => {
             {t(greetingKey)}?
         </p>
 
-        {/* Profile Action Cards */}
         <div className="flex flex-col sm:flex-row gap-8">
           <ProfileCard 
             title={t('change_username')} 
@@ -126,7 +124,6 @@ const ProfileSettings = () => {
         </div>
       </div>
 
-      {/* --- MODAL: CHANGE USERNAME --- */}
       <ProfileModal isOpen={isUsernameModalOpen} onClose={() => setIsUsernameModalOpen(false)}>
         <form onSubmit={handleUsernameSubmit} className="space-y-6">
           <div className="text-center">
@@ -153,12 +150,10 @@ const ProfileSettings = () => {
         </form>
       </ProfileModal>
 
-      {/* --- MODAL: CHANGE AVATAR --- */}
       <ProfileModal isOpen={isAvatarModalOpen} onClose={() => setIsAvatarModalOpen(false)}>
         <div className="space-y-6">
           <h3 className="text-xl font-bold text-white text-center">{t('change_avatar')}</h3>
           
-          {/* Avatar Grid */}
           <div className="grid grid-cols-5 gap-3 max-h-48 overflow-y-auto p-2 custom-scrollbar">
             {avatars.map(url => (
               <img
@@ -186,7 +181,6 @@ const ProfileSettings = () => {
             <div className="flex-grow border-t border-white/10"></div>
           </div>
 
-          {/* File Upload Section */}
           <input 
             type="file" 
             id="avatar-file" 
