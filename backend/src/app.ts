@@ -16,12 +16,13 @@ import refreshAccess  from "./routes/RefreshAccess";
 import profileUpdateRoutes from "./routes/ProfileUpdate";
 import avatarRoutes from "./routes/ProfileAvatar";
 import deleteMatch from "./routes/DeleteMatch";
+import path from "path";
+import fastifyStatic from "@fastify/static";
 
 dotenv.config();
 
 const app = Fastify({ logger: true }).withTypeProvider<TypeBoxTypeProvider>();
 const port = process.env.BACKEND_PORT? Number(process.env.BACKEND_PORT) : 3000;
-
 
 async function buildServer() {
 	// Register CORS plugin
@@ -32,10 +33,15 @@ async function buildServer() {
 	});
 	// ENABLE multipart/form-data for file uploads
 	await app.register(multipart, {
-		limits: {
-			fileSize: 4 * 1024 * 1024,
-		},
-	});
+        limits: {
+            fileSize: 4 * 1024 * 1024,
+        },
+    });
+    const UPLOADS_PATH = path.join(process.cwd(), "uploads");
+    await app.register(fastifyStatic, {
+        root: UPLOADS_PATH,
+        prefix: "/api/uploads/",
+    });
 
 	app.get("/health", async () => ({ Hello: "Backend is running...." }));
 
