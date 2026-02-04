@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next'
 import SettingsMenu from './SettingsMenu'
-import { FaPlay, FaUserEdit, FaChartBar, FaPlayCircle, FaCogs, FaCog, FaUserAstronaut, FaUserAlt, FaUserCog, FaRobot } from 'react-icons/fa'
+import { FaPlay, FaUserEdit, FaRobot } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
-import { FaCirclePlay } from 'react-icons/fa6';
-import { useUser } from '../hooks/useUser';
+import { useUser } from '../context/UserContext';
 
 interface MenuCardProps {
   title: string;
