@@ -99,7 +99,12 @@ export function profileAvatarSet(user: { userId: string, userName: string, avata
 }
 
 export function getAvatarUrl(filename: string | null) {
-	return filename?`../frontend/public/avatars/upload/${filename}`:`../frontend/public/avatars/default/default.webp`;
+    if (!filename) {
+        // This still points to the frontend's public folder
+        return "/avatars/default/default.webp";
+    }
+    // This points to the Fastify static route we just created
+    return `/api/uploads/avatars/${filename}`;
 }
 
 // export function ProfileAll(userProfile: {userId: number, userName: string, email: string}[])

@@ -1,25 +1,30 @@
+/* import apiClient from '../utils/apiClient';
 import { useState, useEffect } from 'react';
-import apiClient from '../utils/apiClient';
 
 export const useUser = () => {
   const [userName, setUserName] = useState('');
   const [userId, setUserId] = useState('');
   const [email, setEmail] = useState('');
+  const [avatarUrl, setAvatarUrl] = useState('');
   const [loading, setLoading] = useState(true);
-
 
   const fetchUser = async () => {
     try {
       const { data } = await apiClient.get('/api/user/profile/self');
-      const { userName, userId, email } = data.data;
+      const { userName, userId, email, avatarUrl: rawAvatarUrl } = data.data;
+
       setUserName(userName);
       setUserId(userId);
       setEmail(email);
+
+      const cleanUrl = rawAvatarUrl.replace('../frontend/public', '');
+      
+      setAvatarUrl(cleanUrl);
     } catch (e) {
-      //console.error('Failed to fetch user:', e);
       setUserName('');
       setUserId('');
       setEmail('');
+      setAvatarUrl('');
     } finally {
       setLoading(false);
     }
@@ -29,5 +34,5 @@ export const useUser = () => {
     fetchUser();
   }, []);
 
-  return { userName, userId, loading, email, refetch: fetchUser };
-};
+  return { userName, userId, email, avatarUrl, loading, refetch: fetchUser };
+}; */

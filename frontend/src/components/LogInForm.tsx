@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useTranslation, Trans } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import { useUser } from '../context/UserContext'
 
 const LogInForm = ()=> {
 
@@ -8,6 +9,7 @@ const LogInForm = ()=> {
 	const [error, setError] = useState('');
 	const [success, setSuccess] = useState('');
 	const LogInAPI = '/api/user/login';
+	const { refetch } = useUser();
 
 	const { t, i18n } = useTranslation();
 	const navigate = useNavigate();
@@ -52,6 +54,7 @@ const LogInForm = ()=> {
 			if (!response.ok) {
 				throw new Error(data.message || t('login_failed'));
 			}
+			await refetch();
 			setSuccess(t('login_success'));
 			navigate("/menu");
 		} catch (err: unknown) {

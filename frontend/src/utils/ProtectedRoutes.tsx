@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useUser } from "../hooks/useUser";
+import { useUser } from '../context/UserContext';
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 

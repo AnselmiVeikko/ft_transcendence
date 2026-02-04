@@ -6,13 +6,13 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { HandHelping } from 'lucide-react';
 import { useLogout } from '../hooks/useLogout';
-import { useUser } from '../hooks/useUser';
+import { useUser } from '../context/UserContext';
 
 const Header = () => {
   const { logout } = useLogout();
   const [showMenu, setShowMenu] = useState(false);
   const navigate = useNavigate();
-  const { userName, loading: userLoading } = useUser();
+  const { userName, avatarUrl, loading: userLoading } = useUser();
 
   const handlePongClick = () => {
     setShowMenu(false);
@@ -53,7 +53,7 @@ const Header = () => {
 			<button
 			  onClick={handleProfileClick}
 			  className="flex items-center gap-2 px-4 py-2 text-white hover:bg-white/10 rounded-lg transform hover:scale-[1.03] duration-300 cursor-pointer">
-              <img src='avatars/avatar01.png' className="w-7 h-7" />
+              <img src={avatarUrl} alt={userName} className="w-7 h-7" />
               <span className="font-semibold">{userName}</span>
 			</button>
           </div>
