@@ -1,14 +1,24 @@
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useUser } from '../context/UserContext';
+
+interface AvatarUpdateResponse {
+  message: string;
+  data: {
+    userId: string;
+    userName: string;
+    avatarName: string;
+  };
+}
 
 export const useAvatarUpdate = (onSuccess: (newUrl: string) => void) => {
   const [isSaving, setIsSaving] = useState(false);
-  const { t } = useTranslation();
+  const { refetch } = useUser();
 
   const updateAvatar = async (file: File) => {
     setIsSaving(true);
+    
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('avatar', file);
 
     try {
       const response = await fetch('/api/user/avatar/set', {
@@ -16,16 +26,21 @@ export const useAvatarUpdate = (onSuccess: (newUrl: string) => void) => {
         body: formData,
       });
 
-      const data = await response.json();
+      const result: AvatarUpdateResponse = await response.json();
 
-      if (!response.ok) throw new Error(data.message || 'Upload failed');
+      if (!response.ok) {
+        throw new Error(result.message || 'Upload failed');
+      }
 
-      const newAvatarUrl = `/avatars/upload/${data.data.avatarName}?t=${Date.now()}`;
+      const newAvatarUrl = `/avatars/upload/${result.data.avatarName}?t=${Date.now()}`;
+      
       onSuccess(newAvatarUrl);
-      return { success: true };
+	  await refetch();
+      return { success: true, url: newAvatarUrl };
+      
     } catch (err: any) {
-      alert(err.message);
-      return { success: false };
+      console.error("Avatar Upload Error:", err);
+      return { success: false, error: err.message };
     } finally {
       setIsSaving(false);
     }
