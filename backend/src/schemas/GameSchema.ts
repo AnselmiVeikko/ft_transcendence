@@ -1,4 +1,5 @@
 import { Type } from "@sinclair/typebox"
+import { genGameToken } from "../utils/auth";
 
 
 export const MatchmakingResponseSchema = Type.Object({
@@ -31,4 +32,12 @@ export const DeleteMatchBodySchema = Type.Object({
 
 export const DeleteMatchResponseSchema = Type.Object({
     message: Type.String(),
+})
+
+export const FinishMatchBodySchema = Type.Object({
+    matchId: Type.String(),
+    gameToken: Type.String(),
+})
+
+export const FinishMatchResponseSchema = Type.Object({
 })
