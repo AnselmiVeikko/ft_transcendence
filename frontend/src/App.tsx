@@ -1,22 +1,35 @@
 import React from "react";
-import { Outlet, useLocation } from "react-router-dom";
-import Header from "./components/Header";
+import { Outlet } from "react-router-dom";
+import { UserProvider, useUser } from "../src/context/UserContext";
+
 
 const App: React.FC = () => {
-  const location = useLocation();
-
-  const noHeaderRoutes = ["/", "/register"];
-  const validRoutes = ["/", "/register", "/menu", "/friends", "/singlematch", "/profile"];
-  const showHeader =
-    !noHeaderRoutes.includes(location.pathname) &&
-    validRoutes.includes(location.pathname);
-
   return (
-    <div className="app-container">
-      {showHeader && <Header />}
-      <Outlet />
-    </div>
+    <UserProvider>
+      <AppContent />
+    </UserProvider>
   );
 };
 
+const AppContent: React.FC = () => {
+  const { loading } = useUser();
+
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-white">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent"></div>
+      </div>
+    );
+  }
+
+  //if (!userName) return <Navigate to="/" replace />;
+
+  return (
+    <div className="app-container min-h-screen flex flex-col">
+      <main className="grow">
+        <Outlet />
+      </main>
+    </div>
+  );
+};
 export default App;

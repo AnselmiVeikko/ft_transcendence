@@ -11,25 +11,23 @@ import path from "path";
 import fs from "fs/promises";
 import sharp from "sharp";
 import { v4 as uuidv4 } from "uuid";
+import { cwd } from 'node:process';
 
 //type ProfileAvatarSet = FastifyRequest<{ Body: Static<typeof ProfileAvatarSchema>}>;
 
-const AVATAR_DIR = path.join(
-	process.cwd(),
-	"..",
-	"frontend",
-	"public",
-	"avatars",
-	"upload"
-);
+const AVATAR_DIR = path.resolve(process.cwd(), "uploads", "avatars");
 
 const ALLOWED_FORMATS = ["image/jpeg", "image/png", "image/webp"];
 const MAX_SIZE = 4 * 1024 * 1024;
 
-
 export default async function avatarRoutes(app: FastifyInstance) {
 	// Ensure avatar directory exists
-	await fs.mkdir(AVATAR_DIR, { recursive: true });
+	try {
+        await fs.mkdir(AVATAR_DIR, { recursive: true });
+        app.log.info(`Avatar storage initialized at: ${AVATAR_DIR}`);
+    } catch (err) {
+        app.log.error(err, "Failed to create avatar directory");
+    }
 
 	app.put("/api/user/avatar/set", {
 		schema: {
@@ -93,6 +91,7 @@ export default async function avatarRoutes(app: FastifyInstance) {
 
 			return reply.status(200).send(profileAvatarSet(userData));
 		} catch (err) {
+			console.log(err);
 			if (filepath) {
 				await fs.unlink(filepath).catch(() => {});
 			}
