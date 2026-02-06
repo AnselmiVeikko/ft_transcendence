@@ -1,12 +1,19 @@
 import { Game } from "./game.js";
-import type { GameState, InputMessage, StateUpdateMessage, GameOverMessage, MatchResult, AuthenticatedWebSocket } from "../types/gameState.js";
-import { WebSocket } from "ws";
+import type {
+  GameState,
+  InputMessage,
+  StateUpdateMessage,
+  GameOverMessage,
+  AuthenticatedWebSocket,
+} from "../types/gameState.js";
 import { matchManager } from "./matchManager.js";
-
-const CANVAS_WIDTH = 900;
-const CANVAS_HEIGHT = 600;
-const MAIN_BE_URL = process.env.MAIN_BE_URL || 'http://backend:3000';
-const GAME_SERVICE_TOKEN = process.env.GAME_SERVICE_TOKEN || '';
+import { CANVAS_WIDTH, CANVAS_HEIGHT } from "../utils/gameConfig.js";
+import {
+  getWinnerIdFromWinnerName,
+  buildScoreFromState,
+  reportResultToMainBE,
+} from "../utils/matchResult.js";
+import { applyInputToGame } from "../utils/gameInput.js";
 
 export class GameManager {
   private game: Game | null = null;
@@ -93,40 +100,16 @@ export class GameManager {
    * Game BE trusts only socket context (this.userId)
    */
   private handleInput(message: InputMessage) {
-    if (!this.game || !this.gameStarted) {
-      return;
-    }
+    if (!this.game || !this.gameStarted) return;
 
-    // Verify user is in match (security check)
     if (!matchManager.isUserInMatch(this.matchId, this.userId)) {
       console.warn(`User ${this.userId} not authorized for match ${this.matchId}`);
       return;
     }
 
-    // Determine which player this is based on userId
     const players = matchManager.getMatchPlayers(this.matchId);
     const isLeftPlayer = players[0]?.userId === this.userId;
-    
-    // Convert action to InputEvent format expected by Game
-    // Game expects: { type: 'keydown' | 'keyup', key: string }
-    if (message.action === 'MOVE_UP') {
-      const key = isLeftPlayer ? 'w' : 'ArrowUp';
-      this.game.handleInput({ type: 'keydown', key });
-    } else if (message.action === 'MOVE_DOWN') {
-      const key = isLeftPlayer ? 's' : 'ArrowDown';
-      this.game.handleInput({ type: 'keydown', key });
-    } else if (message.action === 'STOP') {
-      // Send keyup for both movement keys to stop movement
-      if (isLeftPlayer) {
-        this.game.handleInput({ type: 'keyup', key: 'w' });
-        this.game.handleInput({ type: 'keyup', key: 's' });
-      } else {
-        this.game.handleInput({ type: 'keyup', key: 'ArrowUp' });
-        this.game.handleInput({ type: 'keyup', key: 'ArrowDown' });
-      }
-    } else {
-      console.warn("Unknown action:", message.action);
-    }
+    applyInputToGame(message, isLeftPlayer, (ev) => this.game!.handleInput(ev));
   }
 
   /**
@@ -168,14 +151,11 @@ export class GameManager {
    * Handle game end by winner name
    */
   private handleGameEndByWinner(winnerName: string) {
-    if (this.lastWinner) {
-      // Already handled
-      return;
-    }
+    if (this.lastWinner) return;
 
     this.lastWinner = winnerName;
     this.gameStarted = false;
-    matchManager.updateMatchState(this.matchId, 'finished');
+    matchManager.updateMatchState(this.matchId, "finished");
 
     const players = matchManager.getMatchPlayers(this.matchId);
     const player1 = players[0];
@@ -186,64 +166,18 @@ export class GameManager {
       return;
     }
 
-    // Find winner userId
-    const winnerId = player1.username === winnerName ? player1.userId : 
-                     player2?.username === winnerName ? player2.userId : null;
-
+    const winnerId = getWinnerIdFromWinnerName(players, winnerName);
     if (!winnerId) {
       console.error(`Could not find winner userId for winner name: ${winnerName}`);
       return;
     }
 
-    // Calculate scores (remaining lives)
     const state = this.game?.getState();
     if (!state) return;
 
-    const score: Record<string, number> = {
-      [player1.userId]: state.leftPlayer.life
-    };
-    if (player2) {
-      score[player2.userId] = state.rightPlayer.life;
-    }
-
-    // Report result to Main BE
-    this.reportResultToMainBE(winnerId, score);
-
-    // Send GAME_OVER message to Game FE
+    const score = buildScoreFromState(state, player1, player2);
+    reportResultToMainBE(this.matchId, winnerId, score);
     this.sendGameOver(winnerId, score);
-  }
-
-  /**
-   * Report game result to Main BE
-   * POST /matches/{matchId}/result
-   */
-  private async reportResultToMainBE(winnerId: string, score: Record<string, number>) {
-    try {
-      const url = `${MAIN_BE_URL}/matches/${this.matchId}/result`;
-      const result: MatchResult = {
-        winnerId,
-        score
-      };
-
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(GAME_SERVICE_TOKEN && { 'Authorization': `Bearer ${GAME_SERVICE_TOKEN}` })
-        },
-        body: JSON.stringify(result)
-      });
-
-      if (!response.ok) {
-        console.error(`Failed to report result to Main BE: ${response.status} ${response.statusText}`);
-        const errorText = await response.text();
-        console.error('Error details:', errorText);
-      } else {
-        console.log(`✅ Successfully reported match result to Main BE for match ${this.matchId}`);
-      }
-    } catch (error) {
-      console.error('Error reporting result to Main BE:', error);
-    }
   }
 
   /**
