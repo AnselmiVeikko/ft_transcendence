@@ -154,7 +154,7 @@ const ProfileSettings = () => {
         <div className="space-y-6">
           <h3 className="text-xl font-bold text-white text-center">{t('change_avatar')}</h3>
           
-          <div className="grid grid-cols-5 gap-6 max-h-78 overflow-y-auto p-2 custom-scrollbar">
+          <div className="grid grid-cols-5 gap-6 max-h-80 overflow-y-auto p-2 custom-scrollbar">
             {avatars.map(url => (
               <img
                 key={url}
