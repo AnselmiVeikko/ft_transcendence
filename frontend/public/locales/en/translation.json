@@ -46,6 +46,7 @@
   "login_failed": "Login failed",
   "login_success": "Logged in succesfully",
   "not_registered_yet": "Not registered yet?",
+  "or_upload": "Or upload",
   "page_not_found": "Page not found",
   "password": "Password",
   "password_mismatch": "Passwords don't match",
@@ -57,6 +58,9 @@
   "registration_failed": "Registration failed",
   "registration_success": "Registration successful",
   "save": "Save",
+  "save_selected": "Save selected",
+  "saving": "Saving",
+  "select_file": "Select file",
   "settings": "Settings",
   "single_match": "Single match",
   "stats": "Stats",
@@ -68,6 +72,7 @@
   "theme.dark": "Dark",
   "theme.light": "Light",
   "theme.system": "System",
+  "upload_avatar": "Upload avatar",
   "username": "Username",
   "waiting_player": "Waiting for a player..."
 }
