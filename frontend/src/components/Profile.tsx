@@ -94,7 +94,7 @@ const ProfileSettings = () => {
 				onClick={() => { setSelectedGridAvatar(avatarUrl); setIsAvatarModalOpen(true); }}
                 alt="User Avatar"
 			/>
-            <h2 className="text-2xl font-black text-white">{userName}</h2>
+            <h2 className="text-2xl font-black text-slate-700 dark:text-white">{userName}</h2>
 		    <p className="text-xl font-medium bg-clip-text text-transparent bg-linear-to-r from-indigo-500 to-blue-400 hover:bg-linear-to-bl">{email}</p>
               <div className="mt-4 px-4 py-1 bg-black/10 dark:bg-white/10 rounded-full text-xs font-bold uppercase tracking-widest border border-white/10">
                 5 Friends
@@ -154,7 +154,7 @@ const ProfileSettings = () => {
         <div className="space-y-6">
           <h3 className="text-xl font-bold text-white text-center">{t('change_avatar')}</h3>
           
-          <div className="grid grid-cols-5 gap-3 max-h-48 overflow-y-auto p-2 custom-scrollbar">
+          <div className="grid grid-cols-5 gap-6 max-h-78 overflow-y-auto p-2 custom-scrollbar">
             {avatars.map(url => (
               <img
                 key={url}
