@@ -75,8 +75,13 @@ export class MatchGameSession {
     if (!this.game || !this.gameStarted) return;
     if (!matchManager.isUserInMatch(this.matchId, userId)) return;
 
+    // Use message.paddle when present (both browsers can control both paddles - local co-op).
+    // Fallback: derive from userId for older clients.
     const players = matchManager.getMatchPlayers(this.matchId);
-    const isLeftPlayer = players[0]?.userId === userId;
+    const isLeftPlayer =
+      message.paddle !== undefined
+        ? message.paddle === 'left'
+        : players[0]?.userId === userId;
     applyInputToGame(message, isLeftPlayer, (ev) => this.game!.handleInput(ev));
   }
 
