@@ -45,8 +45,8 @@ export function setCookies(reply: FastifyReply, userId: string) {
         .setCookie("refreshJWT", refreshJWT, {
             httpOnly: true,
             secure: true,
-            sameSite: "none",
-            path: "/api/user/refreshAccess",
+            sameSite: "strict",
+            path: "/",
             maxAge: 7 * 24 * 60 * 60 // 7 days
         });
 
