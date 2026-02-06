@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-	baseURL: '',
+	baseURL: 'https://localhost:8443',
 	withCredentials: true,
 	headers: {
 		'Content-Type': 'application/json',
@@ -29,14 +29,19 @@ apiClient.interceptors.response.use(
 	(response) => response,
 	async (error) => {
 		const originalRequest = error.config;
+		const public401Endpoints = ['/api/user/profile/self',];
 
+		if (error.response?.status === 401 && public401Endpoints.includes(originalRequest.url)) {
+  			// User is simply not logged in
+  			return Promise.reject(error);
+		}
 		if (error.response?.status === 401 && !originalRequest._retry) {
 
 			// Prevent refresh loop on the refresh endpoint itself
 			if (originalRequest.url === '/api/user/refreshAccess') {
 				isRefreshing = false;
 				processQueue(error);
-				window.location.href = '/';
+				if (window.location.href !== '/') window.location.href = '/';
 				return Promise.reject(error);
 			}
 
@@ -66,7 +71,7 @@ apiClient.interceptors.response.use(
 				isRefreshing = false;
 				processQueue(refreshError as Error);
 
-				window.location.href = '/';
+				if (window.location.pathname !== '/') window.location.href = '/';
 				return Promise.reject(refreshError);
 			}
 		}
