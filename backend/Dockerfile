@@ -9,5 +9,6 @@ RUN npm install
 
 COPY src ./src
 COPY prisma ./prisma
+COPY avadefault/ /app/avadefault/
 
 EXPOSE 3000
