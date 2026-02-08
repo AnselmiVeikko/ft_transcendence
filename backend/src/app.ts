@@ -33,15 +33,16 @@ async function buildServer() {
 	});
 	// ENABLE multipart/form-data for file uploads
 	await app.register(multipart, {
-        limits: {
-            fileSize: 4 * 1024 * 1024,
-        },
-    });
-    const UPLOADS_PATH = path.join(process.cwd(), "uploads");
-    await app.register(fastifyStatic, {
-        root: UPLOADS_PATH,
-        prefix: "/api/uploads/",
-    });
+		limits: {
+			fileSize: 4 * 1024 * 1024,
+		},
+	});
+
+	const UPLOAD_DIR = process.env.UPLOAD_DIR || path.join(process.cwd(), "uploads", "avatars");
+	await app.register(fastifyStatic, {
+		root: UPLOAD_DIR,
+		prefix: "/avatars/", // URL prefix
+	});
 
 	app.get("/health", async () => ({ Hello: "Backend is running...." }));
 
