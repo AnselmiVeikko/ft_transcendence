@@ -29,6 +29,11 @@ apiClient.interceptors.response.use(
 	(response) => response,
 	async (error) => {
 		const originalRequest = error.config;
+		const noRefreshEndpoints = ['/api/user/refreshAccess','/api/user/login'];
+
+		if (error.response?.status === 401 && noRefreshEndpoints.includes(originalRequest.url)) {
+  			return Promise.reject(error);
+		}
 
 		if (error.response?.status === 401 && !originalRequest._retry) {
 
@@ -36,7 +41,7 @@ apiClient.interceptors.response.use(
 			if (originalRequest.url === '/api/user/refreshAccess') {
 				isRefreshing = false;
 				processQueue(error);
-				window.location.href = '/';
+				if (window.location.pathname !== '/') window.location.href = '/';
 				return Promise.reject(error);
 			}
 
@@ -66,7 +71,7 @@ apiClient.interceptors.response.use(
 				isRefreshing = false;
 				processQueue(refreshError as Error);
 
-				window.location.href = '/';
+				if (window.location.pathname !== '/') window.location.href = '/';
 				return Promise.reject(refreshError);
 			}
 		}
