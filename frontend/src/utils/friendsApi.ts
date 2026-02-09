@@ -1,10 +1,8 @@
-const API_BASE_URL = '';
-
 export const friendsApi = {
 
 	async getCurrentFriends(pageNo = 1, limit = 5) {
 		const response = await fetch(
-			`${API_BASE_URL}/api/friendlist/current?pageNo=${pageNo}&limit=${limit}`,
+			`/api/friendlist/current?pageNo=${pageNo}&limit=${limit}`,
 			{ credentials: 'include' }
 		);
 		if (!response.ok)
@@ -12,14 +10,16 @@ export const friendsApi = {
 		return response.json();
 	},
 
-	async searchFriends(keyWord = '', onlineStatus = 'ALL') {
+	async searchFriends(keyWord = '', onlineStatus = 'ALL', pageNo = 1, limit = 10) {
 		const params = new URLSearchParams();
 		if (keyWord)
 			params.append('keyWord', keyWord);
 		params.append('onlineStatus', onlineStatus);
+		params.append('pageNo', pageNo.toString());
+		params.append('limit', limit.toString());
 
 		const response = await fetch(
-			`${API_BASE_URL}/api/friendlist/search?${params.toString()}`,
+			`/api/friendlist/search?${params.toString()}`,
 			{ credentials: 'include' }
 		);
 		if (!response.ok)
@@ -30,7 +30,7 @@ export const friendsApi = {
 	// friend requests
 	async getPendingRequests() {
 		const response = await fetch(
-			`${API_BASE_URL}/api/friendlist/pending`,
+			`/api/friendlist/pending`,
 			{ credentials: 'include' }
 		);
 		if (!response.ok)
@@ -40,7 +40,7 @@ export const friendsApi = {
 
 	async getSuggestions() {
 		const response = await fetch(
-			`${API_BASE_URL}/api/friendlist/suggestion`,
+			`/api/friendlist/suggestion`,
 			{ credentials: 'include' }
 		);
 		if (!response.ok)
@@ -50,7 +50,7 @@ export const friendsApi = {
 
 	async sendFriendRequest(receiverId: string) {
 		const response = await fetch(
-			`${API_BASE_URL}/api/friendrequest/send`,
+			`/api/friendrequest/send`,
 			{
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
@@ -65,7 +65,7 @@ export const friendsApi = {
 
 	async acceptFriendRequest(friendRId: string) {
 		const response = await fetch(
-			`${API_BASE_URL}/api/friendrequest/accept`,
+			`/api/friendrequest/accept`,
 			{
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
@@ -80,7 +80,7 @@ export const friendsApi = {
 
 	async declineFriendRequest(friendRId: string) {
 		const response = await fetch(
-			`${API_BASE_URL}/api/friendrequest/decline?friendRId=${friendRId}`,
+			`/api/friendrequest/decline?friendRId=${friendRId}`,
 			{
 				method: 'DELETE',
 				credentials: 'include'
@@ -93,7 +93,7 @@ export const friendsApi = {
 
 	async removeFriend(friendRId: string) {
 		const response = await fetch(
-			`${API_BASE_URL}/api/friendrequest/delete?friendRId=${friendRId}`,
+			`/api/friendrequest/delete?friendRId=${friendRId}`,
 			{
 				method: 'DELETE',
 				credentials: 'include'
@@ -104,4 +104,3 @@ export const friendsApi = {
 		return response.json();
 	}
 };
-
