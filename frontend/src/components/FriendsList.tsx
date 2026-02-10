@@ -10,6 +10,7 @@ interface Friend {
   userName: string;
   friendRId: string;
   status?: 'ONLINE' | 'OFFLINE';
+  avatarUrl: string;
 }
 
 interface FriendRequest {
@@ -280,8 +281,8 @@ const FriendsList = () => {
                   className="bg-white p-3 sm:p-4 rounded-lg border border-gray-200"
                 >
                   <Friend
-                    avatar={friend.userName.substring(0, 2).toUpperCase()}
                     name={friend.userName}
+                    avatarUrl={friend.avatarUrl}
                     onRemoveFriend={() => removeFriend(friend.friendRId)}
                     status={friend.status}
                   />

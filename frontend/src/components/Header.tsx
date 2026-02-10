@@ -53,7 +53,7 @@ const Header = () => {
 			<button
 			  onClick={handleProfileClick}
 			  className="flex items-center gap-2 px-4 py-2 text-white hover:bg-white/10 rounded-lg transform hover:scale-[1.03] duration-300 cursor-pointer">
-              <img src={avatarUrl} alt={userName} className="w-7 h-7" />
+              <img src={avatarUrl} alt={`${userName} avatar`} className="w-7 h-7" />
               <span className="font-semibold">{userName}</span>
 			</button>
           </div>
@@ -93,7 +93,7 @@ const Header = () => {
                 onClick={handleProfileClick}
                 className="flex items-center gap-2 px-4 py-3 hover:bg-white/10 text-white font-semibold border-b border-gray-500/30 w-full text-left cursor-pointer"
               >
-                <img src='avatars/avatar01.png' className="w-5 h-5" alt={`${userName} avatar`} />
+                <img src={avatarUrl} className="w-5 h-5" alt={`${userName} avatar`} />
                 <span>{userName}</span>
               </button>
 
