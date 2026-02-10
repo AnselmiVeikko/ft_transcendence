@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
 import apiClient from '../utils/apiClient';
+import axios from 'axios';
 
 interface UserData {
   userName: string;
@@ -43,8 +44,11 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         avatarUrl,
       });
     } catch (e) {
-      console.error("Failed to fetch user:", e);
-      setUser(initialState);
+		if (axios.isAxiosError(e) && e.response?.status === 401) {
+      	  setUser(initialState);
+		} else {
+		  console.error('Unexpected user fetch error:', e);
+		}
     } finally {
       setLoading(false);
     }
@@ -56,7 +60,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <UserContext.Provider value={{ ...user, loading, refetch: fetchUser, logout }}>
-	  <div className={`transition-opacity duration-300 ${loading ? 'opacity-50' : 'opacity-100'}`}>
+	  <div className={`transition-opacity duration-300 ${loading ? 'opacity-70' : 'opacity-100'}`}>
         {children}
 	  </div>
     </UserContext.Provider>

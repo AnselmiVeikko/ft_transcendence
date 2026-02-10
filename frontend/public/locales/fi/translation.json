@@ -46,6 +46,7 @@
   "login_fail": "Sisäänkirjautuminen epäonnistui",
   "login_success": "Sisäänkirjautuminen onnistui",
   "not_registered_yet": "Etkö ole vielä rekisteröitynyt?",
+  "or_upload": "Tai lataa omasi",
   "page_not_found": "Sivua ei löydy",
   "password": "Salasana",
   "password_mismatch": "Salasanat eivät täsmää",
@@ -57,6 +58,9 @@
   "registration_failed": "Rekisteröityminen epäonnistui",
   "registration_success": "Rekisteröityminen onnistui",
   "save": "Tallenna",
+  "save_selected": "Tallenna valittu",
+  "saving": "Tallennetaan",
+  "select_file": "Valitse kuvatiedosto",
   "settings": "Asetukset",
   "single_match": "Pelaa",
   "stats": "Tilastot",
@@ -68,6 +72,7 @@
   "theme.dark": "Tumma",
   "theme.light": "Vaalea",
   "theme.system": "Järjestelmä",
+  "upload_avatar": "Lataa avatarisi",
   "username": "Käyttäjänimi",
   "waiting_player": "Odotetaan toista pelaajaa..."
 }

@@ -28,7 +28,8 @@ let ws: WebSocket | null = null;
 let currentState: GameState | null = null;
 let isConnected = false;
 let gameInitData: GameInitData | null = null;
-let keysPressed: Set<string> = new Set();
+const leftKeys = new Set<string>();
+const rightKeys = new Set<string>();
 
 /**
  * Connect to Game BE WebSocket with matchId and token
@@ -106,50 +107,63 @@ function connectWebSocket(data: GameInitData) {
 
 /**
  * Send input to Game BE
- * Format: { type: "INPUT", action: "MOVE_UP" | "MOVE_DOWN" | "STOP" }
- * According to secure_game_flow.md: Do NOT send userId, username, or JWT
+ * Format: { type: "INPUT", action: "MOVE_UP" | "MOVE_DOWN" | "STOP", paddle?: "left" | "right" }
+ * paddle specifies which paddle - both browsers can control both paddles (local co-op on same computer)
  */
-function sendInput(action: 'MOVE_UP' | 'MOVE_DOWN' | 'STOP') {
+function sendInput(action: 'MOVE_UP' | 'MOVE_DOWN' | 'STOP', paddle: 'left' | 'right') {
   if (ws && ws.readyState === WebSocket.OPEN) {
-    ws.send(JSON.stringify({ type: "INPUT", action }));
+    ws.send(JSON.stringify({ type: "INPUT", action, paddle }));
   } else {
     console.warn("Cannot send input: WebSocket not connected");
   }
 }
 
 // Handle keyboard input
-// Map keys to actions based on which player this is
-// For simplicity, assume left player uses W/S, right player uses Arrow keys
-// In a real scenario, you'd determine this based on player position in match
+// Left paddle: W/S, Right paddle: ArrowUp/ArrowDown
+// Both browsers can control both paddles (local co-op on same computer)
 window.addEventListener("keydown", (e) => {
   const key = e.key.toLowerCase();
-  
+
   // Prevent default to avoid scrolling
   if (['w', 's', 'arrowup', 'arrowdown'].includes(key)) {
     e.preventDefault();
   }
-  
-  if (key === 'w' || key === 'arrowup') {
-    if (!keysPressed.has(key)) {
-      keysPressed.add(key);
-      sendInput('MOVE_UP');
+
+  if (key === 'w') {
+    if (!leftKeys.has(key)) {
+      leftKeys.add(key);
+      sendInput('MOVE_UP', 'left');
     }
-  } else if (key === 's' || key === 'arrowdown') {
-    if (!keysPressed.has(key)) {
-      keysPressed.add(key);
-      sendInput('MOVE_DOWN');
+  } else if (key === 's') {
+    if (!leftKeys.has(key)) {
+      leftKeys.add(key);
+      sendInput('MOVE_DOWN', 'left');
+    }
+  } else if (key === 'arrowup') {
+    if (!rightKeys.has(key)) {
+      rightKeys.add(key);
+      sendInput('MOVE_UP', 'right');
+    }
+  } else if (key === 'arrowdown') {
+    if (!rightKeys.has(key)) {
+      rightKeys.add(key);
+      sendInput('MOVE_DOWN', 'right');
     }
   }
 });
 
 window.addEventListener("keyup", (e) => {
   const key = e.key.toLowerCase();
-  
-  if (key === 'w' || key === 'arrowup' || key === 's' || key === 'arrowdown') {
-    keysPressed.delete(key);
-    // Send STOP when key is released (or continue based on other pressed keys)
-    if (keysPressed.size === 0) {
-      sendInput('STOP');
+
+  if (key === 'w' || key === 's') {
+    leftKeys.delete(key);
+    if (leftKeys.size === 0) {
+      sendInput('STOP', 'left');
+    }
+  } else if (key === 'arrowup' || key === 'arrowdown') {
+    rightKeys.delete(key);
+    if (rightKeys.size === 0) {
+      sendInput('STOP', 'right');
     }
   }
 });
