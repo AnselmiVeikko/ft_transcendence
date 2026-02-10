@@ -79,8 +79,9 @@ export const friendsApi = {
 	},
 
 	async declineFriendRequest(friendRId: string) {
+		const params = new URLSearchParams({ friendRId });
 		const response = await fetch(
-			`/api/friendrequest/decline?friendRId=${friendRId}`,
+			`/api/friendrequest/decline?${params.toString()}`,
 			{
 				method: 'DELETE',
 				credentials: 'include'
@@ -92,8 +93,10 @@ export const friendsApi = {
 	},
 
 	async removeFriend(friendRId: string) {
+		const params = new URLSearchParams({ friendRId });
+
 		const response = await fetch(
-			`/api/friendrequest/delete?friendRId=${friendRId}`,
+			`/api/friendrequest/delete?${params.toString()}`,
 			{
 				method: 'DELETE',
 				credentials: 'include'
