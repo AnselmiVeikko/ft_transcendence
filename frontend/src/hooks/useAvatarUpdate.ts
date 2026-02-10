@@ -16,7 +16,7 @@ export const useAvatarUpdate = (onSuccess: (newUrl: string) => void) => {
 
   const updateAvatar = async (file: File) => {
     setIsSaving(true);
-    
+
     const formData = new FormData();
     formData.append('avatar', file);
 
@@ -32,12 +32,12 @@ export const useAvatarUpdate = (onSuccess: (newUrl: string) => void) => {
         throw new Error(result.message || 'Upload failed');
       }
 
-      const newAvatarUrl = `/avatars/upload/${result.data.avatarName}?t=${Date.now()}`;
-      
+      const newAvatarUrl = `/avatars/${result.data.avatarName}?t=${Date.now()}`;
+
       onSuccess(newAvatarUrl);
 	  await refetch();
       return { success: true, url: newAvatarUrl };
-      
+
     } catch (err: any) {
       console.error("Avatar Upload Error:", err);
       return { success: false, error: err.message };
