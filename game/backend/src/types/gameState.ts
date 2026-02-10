@@ -53,7 +53,6 @@ export interface GameOverMessage {
 export interface MatchResult {
   matchId: string;
   winnerId: string;
-  score: Record<string, number>;
 }
 
 // Extended WebSocket with user context

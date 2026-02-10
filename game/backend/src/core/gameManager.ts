@@ -176,7 +176,7 @@ export class GameManager {
     if (!state) return;
 
     const score = buildScoreFromState(state, player1, player2);
-    reportResultToMainBE(this.matchId, winnerId, score);
+    reportResultToMainBE(this.matchId, winnerId);
     this.sendGameOver(winnerId, score);
   }
 
