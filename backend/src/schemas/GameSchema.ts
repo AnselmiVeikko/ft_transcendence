@@ -36,7 +36,7 @@ export const DeleteMatchResponseSchema = Type.Object({
 
 export const FinishMatchBodySchema = Type.Object({
     matchId: Type.String(),
-    gameToken: Type.String(),
+    winnerId: Type.String(),
 })
 
 export const FinishMatchResponseSchema = Type.Object({
