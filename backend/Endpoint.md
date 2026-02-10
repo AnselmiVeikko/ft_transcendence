@@ -86,7 +86,7 @@ User self profile information view.
 
 Query Parameter:
 ```json
-
+// No need to pass any data. Backend will retrieve userId from cookie
 ```
 
 Success Response: 200 OK
@@ -95,10 +95,11 @@ Success Response: 200 OK
 {
 	"message": "Profile retrieve successful",
 	"data": {
-		"userId": "ID as string(cuid)",
-		"userName": "username",
-		"email": "email"
-	},
+		"userId": "cml0xbgse0000yidszof47ngz",
+		"userName": "test1",
+		"email": "email11@test.com",
+		"avatarUrl": "../frontend/public/avatars/upload/a01a3dbf-39b6-4612-9894-0a6a4fbf1292.webp"
+	}
 }
 ```
 
@@ -124,16 +125,18 @@ Success Response: 200 OK
 {
   "message": "All profiles retrieve successful",
   "data": [
-    {
-      "userId": "cmj7cofp70000yiwd622qn61c",
-      "userName": "User 1",
-      "email": "user1@example.com"
-    },
-    {
-      "userId": "cmj7cofp70000yiwd622qn61s",
-      "userName": "User 2",
-      "email": "user2@example.com"
-    }
+	{
+		"userId": "cml0xbgse0000yidszof47ngz",
+		"userName": "test1",
+		"email": "email11@test.com",
+		"avatarUrl": "../frontend/public/avatars/upload/a01a3dbf-39b6-4612-9894-0a6a4fbf1292.webp"
+	},
+	{
+		"userId": "cml0xbgse0000yidszof47ngz",
+		"userName": "test1",
+		"email": "email11@test.com",
+		"avatarUrl": "../frontend/public/avatars/upload/a01a3dbf-39b6-4612-9894-0a6a4fbf1292.webp"
+	},
   ],
   "pagination": {
     "pageNo": 1,
@@ -168,6 +171,30 @@ Success Response: 200 OK
 		"userName": "newUserName",
 		"email": "newEmail"
 	},
+}
+```
+
+
+## USER PROFILE AVATAR UPDATE
+
+### PUT: /api/user/avatar/set
+To update profile avatar.
+
+Body:
+```json
+// No need to pass any data. Fastify multipart will recognise from file upload
+```
+
+Success Response: 200 OK
+
+```json
+{
+	"message": "Profile avatar change successful",
+	"data": {
+		"userId": "cml0xbgse0000yidszof47ngz",
+		"userName": "test1",
+		"avatarName": "a01a3dbf-39b6-4612-9894-0a6a4fbf1292.webp"
+	}
 }
 ```
 

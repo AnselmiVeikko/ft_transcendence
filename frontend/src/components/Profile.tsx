@@ -28,7 +28,7 @@ const ProfileSettings = () => {
   // modal states
   const [isUsernameModalOpen, setIsUsernameModalOpen] = useState(false);
   const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
-  
+
   // form states
   const [tempUsername, setTempUsername] = useState('');
   const [selectedGridAvatar, setSelectedGridAvatar] = useState('');
@@ -36,7 +36,7 @@ const ProfileSettings = () => {
 
   // logic hooks
   const { updateUsername, isSaving: isSavingName } = useProfileUpdate(async () => {
-    await refetch(); 
+    await refetch();
     setIsUsernameModalOpen(false);
   });
 
@@ -65,7 +65,7 @@ const ProfileSettings = () => {
   };
 
   const avatars = Array.from({ length: 20 }, (_, i) =>
-    `/avatars/avatar${String(i + 1).padStart(2, '0')}.png`
+    `/avatar_gallery/avatar${String(i + 1).padStart(2, '0')}.png`
   );
 
   if (loading) return null;
@@ -88,8 +88,8 @@ const ProfileSettings = () => {
           <div
             className={`w-70 lg:w-90 h-80 md:h-90 lg:h-90 flex flex-col items-center justify-center p-8 bg-gradient-to-br from-indigo-100/10 via-blue-100/10 to-violet-100/10 hover:bg-gradient-to-t hover:from-blue-100/20 hover:via-indigo-100/20 hover:to-violet-100/30
 			backdrop-blur-md border dark:border-white/20 border-black/10 rounded-2xl shadow-2xl transition duration-300 transform hover:scale-[1.03]`}>
-            <img 
-		   		src={avatarUrl || '/avatars/default/default.webp'}
+            <img
+		   		src={avatarUrl || '/avatar_gallery/default/default.webp'}
 				className="w-20 h-20 rounded-full border border-black/10 dark:border-white/50 shadow-lg object-cover mb-8"
 				onClick={() => { setSelectedGridAvatar(avatarUrl); setIsAvatarModalOpen(true); }}
                 alt="User Avatar"
@@ -106,20 +106,20 @@ const ProfileSettings = () => {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-8">
-          <ProfileCard 
-            title={t('change_username')} 
-            icon={<FaUserEdit />} 
+          <ProfileCard
+            title={t('change_username')}
+            icon={<FaUserEdit />}
             colorClass={colorClasses.userName}
             onClick={() => {
                 setTempUsername(userName); // Initialize input with current name
                 setIsUsernameModalOpen(true);
-            }} 
+            }}
           />
-          <ProfileCard 
-            title={t('change_avatar')} 
-            icon={<FaCameraRetro />} 
+          <ProfileCard
+            title={t('change_avatar')}
+            icon={<FaCameraRetro />}
             colorClass={colorClasses.avatar}
-            onClick={() => setIsAvatarModalOpen(true)} 
+            onClick={() => setIsAvatarModalOpen(true)}
           />
         </div>
       </div>
@@ -153,7 +153,7 @@ const ProfileSettings = () => {
       <ProfileModal isOpen={isAvatarModalOpen} onClose={() => setIsAvatarModalOpen(false)}>
         <div className="space-y-6">
           <h3 className="text-xl font-bold text-white text-center">{t('change_avatar')}</h3>
-          
+
           <div className="grid grid-cols-5 gap-3 max-h-48 overflow-y-auto p-2 custom-scrollbar">
             {avatars.map(url => (
               <img
@@ -181,19 +181,19 @@ const ProfileSettings = () => {
             <div className="flex-grow border-t border-white/10"></div>
           </div>
 
-          <input 
-            type="file" 
-            id="avatar-file" 
-            className="hidden" 
+          <input
+            type="file"
+            id="avatar-file"
+            className="hidden"
             onChange={(e) => e.target.files && setNewAvatarFile(e.target.files[0])}
           />
-          <label 
+          <label
             htmlFor="avatar-file"
             className="block w-full p-4 border-2 border-dashed border-white/10 rounded-xl text-center text-gray-400 hover:border-indigo-500 cursor-pointer transition-colors"
           >
             {newAvatarFile ? newAvatarFile.name : t('select_file')}
           </label>
-          
+
           <button
             onClick={() => newAvatarFile && updateAvatar(newAvatarFile)}
             disabled={isSavingAvatar || !newAvatarFile}

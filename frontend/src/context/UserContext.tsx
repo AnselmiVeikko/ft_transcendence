@@ -34,15 +34,13 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const fetchUser = useCallback(async () => {
     try {
       const { data } = await apiClient.get('/api/user/profile/self');
-      const { userName, userId, email, avatarUrl: rawAvatarUrl } = data.data;
+      const { userName, userId, email, avatarUrl } = data.data;
 
-      const cleanUrl = rawAvatarUrl.replace('../frontend/public', '');
-
-      setUser({
+       setUser({
         userName,
         userId,
         email,
-        avatarUrl: cleanUrl,
+        avatarUrl,
       });
     } catch (e) {
       console.error("Failed to fetch user:", e);
