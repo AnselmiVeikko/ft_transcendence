@@ -45,7 +45,7 @@ export async function reportResultToMainBE(
 ): Promise<void> {
   try {
     const url = `${getMainBeUrl()}/matches/${matchId}/result`;
-    const body: MatchResult = { winnerId, score };
+    const body: MatchResult = { matchId, winnerId, score };
     const token = getGameServiceToken();
     const res = await fetch(url, {
       method: "POST",
