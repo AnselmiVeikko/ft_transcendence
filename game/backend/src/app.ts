@@ -10,8 +10,6 @@ import type { AuthenticatedWebSocket } from './types/gameState.js';
 
 const app = express();
 const port = Number(process.env.PORT) || 4000;
-const MAIN_BE_URL = process.env.MAIN_BE_URL || 'http://backend:3000';
-const GAME_SERVICE_TOKEN = process.env.GAME_SERVICE_TOKEN || '';
 
 // Enable CORS for all routes
 app.use(cors({

@@ -36,26 +36,26 @@ const Footer = () => {
 
   return (
 	<>
-    <footer className="w-full py-2 absolute bottom-6 left-1/2 -translate-x-1/2 z-50 
+    <footer className="w-full py-2 absolute bottom-6 left-1/2 -translate-x-1/2 z-10 
                    w-[90%] max-w-fit px-8 py-3 
                    rounded-full border border-indigo-200/20 dark:border-indigo-900/30 
                    bg-white/80 dark:bg-gray-900/80 backdrop-blur-md 
                    shadow-lg shadow-indigo-500/10 transition-all transform hover:border-indigo-500/40 hover:shadow-indigo-500/20 hover:duration-300">
-      <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-center items-center gap-8">
-        <p className="text-sm bg-clip-text text-transparent bg-linear-to-r from-indigo-500 dark:from-indigo-400 to-blue-400 hover:bg-linear-to-bl active:scale-95">
+      <div className="max-w-7xl mx-auto px-4 flex md:flex-row justify-center items-center gap-8">
+        <p className="text-xs md:text-sm bg-clip-text text-transparent bg-linear-to-r from-indigo-500 dark:from-indigo-400 to-blue-400 hover:bg-linear-to-bl active:scale-95">
           © {new Date().getFullYear()} PONG
         </p>
 
         <div className="flex space-x-6">
           <button
             onClick={() => fetchAndOpenModal('tos')}
-            className="text-sm bg-clip-text text-transparent bg-linear-to-r from-indigo-500 dark:from-indigo-400 to-blue-400 hover:bg-linear-to-bl transition-colors active:scale-95"
+            className="text-xs md:text-sm bg-clip-text text-transparent bg-linear-to-r from-indigo-500 dark:from-indigo-400 to-blue-400 hover:bg-linear-to-bl transition-colors active:scale-95"
           >
             {t('terms')}
           </button>
           <button
             onClick={() => fetchAndOpenModal('privacy')}
-            className="text-sm bg-clip-text text-transparent bg-linear-to-r from-indigo-500 dark:from-indigo-400 to-blue-400 hover:bg-linear-to-bl transition-colors active:scale-95"
+            className="text-xs md:text-sm bg-clip-text text-transparent bg-linear-to-r from-indigo-500 dark:from-indigo-400 to-blue-400 hover:bg-linear-to-bl transition-colors active:scale-95"
           >
             {t('privacy_policy')}
           </button>
