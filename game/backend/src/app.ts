@@ -2,7 +2,6 @@ import express, { type Request, type Response } from 'express';
 import { createServer } from 'http';
 import { WebSocketServer, WebSocket } from 'ws';
 import cors from 'cors';
-import { GameManager } from './core/gameManager.js';
 import { verifyJWT, extractAuthParams } from './utils/jwt.js';
 import { matchManager } from './core/matchManager.js';
 import { getOrCreateSession } from './core/matchGameSession.js';
