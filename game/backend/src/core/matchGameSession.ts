@@ -10,10 +10,10 @@ import type {
   InputMessage,
   StateUpdateMessage,
   GameOverMessage,
-  MatchResult,
   AuthenticatedWebSocket,
 } from "../types/gameState.js";
 import { matchManager } from "./matchManager.js";
+import { reportResultToMainBE } from "../utils/matchResult.js";
 
 const CANVAS_WIDTH = 900;
 const CANVAS_HEIGHT = 600;
@@ -155,7 +155,7 @@ export class MatchGameSession {
     const score: Record<string, number> = { [player1.userId]: state.leftPlayer.life };
     if (player2) score[player2.userId] = state.rightPlayer.life;
 
-    this.reportResultToMainBE(winnerId, score);
+    reportResultToMainBE(this.matchId, winnerId);
     this.sendGameOverToAll(winnerId, score);
 
     if (this.game) {
@@ -164,33 +164,33 @@ export class MatchGameSession {
     }
   }
 
-  private async reportResultToMainBE(
-    winnerId: string,
-    score: Record<string, number>
-  ): Promise<void> {
-    try {
-      const url = `${MAIN_BE_URL}/matches/${this.matchId}/result`;
-      const body: MatchResult = { winnerId, score };
-      const res = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(GAME_SERVICE_TOKEN && {
-            Authorization: `Bearer ${GAME_SERVICE_TOKEN}`,
-          }),
-        },
-        body: JSON.stringify(body),
-      });
-      if (!res.ok) {
-        const text = await res.text();
-        console.error(`Failed to report result: ${res.status} ${res.statusText}`, text);
-      } else {
-        console.log(`Reported match result to Main BE for match ${this.matchId}`);
-      }
-    } catch (e) {
-      console.error("Error reporting result to Main BE:", e);
-    }
-  }
+  //private async reportResultToMainBE(
+  //  winnerId: string,
+  //  score: Record<string, number>
+  //): Promise<void> {
+  //  try {
+  //    const url = `${MAIN_BE_URL}/matches/${this.matchId}/result`;
+  //    const body: MatchResult = { winnerId, score };
+  //    const res = await fetch(url, {
+  //      method: "POST",
+  //      headers: {
+  //        "Content-Type": "application/json",
+  //        ...(GAME_SERVICE_TOKEN && {
+  //          Authorization: `Bearer ${GAME_SERVICE_TOKEN}`,
+  //        }),
+  //      },
+  //      body: JSON.stringify(body),
+  //    });
+  //    if (!res.ok) {
+  //      const text = await res.text();
+  //      console.error(`Failed to report result: ${res.status} ${res.statusText}`, text);
+  //    } else {
+  //      console.log(`Reported match result to Main BE for match ${this.matchId}`);
+  //    }
+  //  } catch (e) {
+  //    console.error("Error reporting result to Main BE:", e);
+  //  }
+  //}
 
   private sendGameOverToAll(
     winnerId: string,
