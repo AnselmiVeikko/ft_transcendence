@@ -16,6 +16,7 @@ type FriendPendingList = FastifyRequest<{ Querystring: Static<typeof FLPendingQu
 type FriendSuggestion = FastifyRequest<{ Querystring: Static<typeof FLSuggestionQuerySchema>}>;
 
 export default async function friendList(app: FastifyInstance) {
+	/*
 	app.get( "/api/friendlist/current", {
 		schema: {
 			querystring: FLCurrentQuerySchema,
@@ -77,6 +78,7 @@ export default async function friendList(app: FastifyInstance) {
 			return reply.status(500).send(errorResponse(500, "Internal server error"));
 		}
 	});
+	*/
 
 	app.get( "/api/friendlist/search", {
 		schema: {
@@ -171,7 +173,13 @@ export default async function friendList(app: FastifyInstance) {
 					receiverId: userId,
 				},
 				include: {
-					sender: true,
+					sender: {
+						select: {
+							userId: true,
+							userName: true,
+							avatarName: true,
+						},
+					  },
 				}
 			});
 
@@ -179,6 +187,7 @@ export default async function friendList(app: FastifyInstance) {
 				friendRId: rel.friendRId,
 				userId: rel.sender.userId,
 				userName: rel.sender.userName,
+				avatarUrl: getAvatarUrl(rel.sender.avatarName),
 			}));
 
 			return reply.status(200).send(pendingList(pendingRequests));
@@ -229,10 +238,17 @@ export default async function friendList(app: FastifyInstance) {
 				select: {
 					userId: true,
 					userName: true,
+					avatarName: true,
 				},
 			});
 
-			return reply.status(200).send(suggestionList(suggestions));
+			const suggestionsWithAvatar = suggestions.map(user => ({
+				userId: user.userId,
+				userName: user.userName,
+				avatarUrl: getAvatarUrl(user.avatarName),
+			  }));
+
+			return reply.status(200).send(suggestionList(suggestionsWithAvatar));
 
 		} catch(error) {
 			return reply.status(500).send(errorResponse(500, "Internal server error"));
