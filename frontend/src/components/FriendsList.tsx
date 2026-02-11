@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import Friend from "./Friend";
-import FriendRequest from "./FriendRequest";
-import FriendSuggestion from "./FriendSuggestion";
-import { friendsApi } from "../utils/friendsApi";
-import { FaSortAlphaDown, FaSortAlphaDownAlt } from "react-icons/fa";
+import { useEffect, useState } from 'react';
+import Friend from './Friend';
+import FriendRequest from './FriendRequest';
+import FriendSuggestion from './FriendSuggestion';
+import { friendsApi } from '../utils/friendsApi';
+import { FaSortAlphaDown, FaSortAlphaDownAlt } from 'react-icons/fa';
 
 interface Friend {
   userId: string;
@@ -54,10 +54,8 @@ const FriendsList = () => {
       const [friendsData, requestsData, suggestionsData] = await Promise.all([
         friendsApi.searchFriends('', 'ALL', 1, PAGE_SIZE),
         friendsApi.getPendingRequests(),
-        friendsApi.getSuggestions()
+        friendsApi.getSuggestions(),
       ]);
-      console.log('friendsData at first___', friendsData);
-      console.log('friendRequestdata______', requestsData.data );
 
       setFriends(friendsData.data || []);
       setTotalFriends(friendsData.pagination?.totalFriend || 0);
@@ -72,8 +70,6 @@ const FriendsList = () => {
     }
   };
 
-  
-  console.log('Suggestions______', friendSuggestions );
   const searchFriends = async (page = currentPage) => {
     try {
       setSearchLoading(true);
@@ -81,10 +77,9 @@ const FriendsList = () => {
         searchQuery,
         statusFilter,
         page,
-        PAGE_SIZE
+        PAGE_SIZE,
       );
 
-      console.log('SearchData___', searchData);
       setFriends(searchData.data || []);
       setTotalFriends(searchData.pagination?.totalFriend || 0);
       setTotalPages(searchData.pagination?.totalPage || 0);
@@ -123,8 +118,8 @@ const FriendsList = () => {
     try {
       await friendsApi.acceptFriendRequest(friendRId);
 
-      setFriendRequests(prevRequests =>
-        prevRequests.filter((r) => r.friendRId !== friendRId)
+      setFriendRequests((prevRequests) =>
+        prevRequests.filter((r) => r.friendRId !== friendRId),
       );
       searchFriends();
     } catch (error) {
@@ -135,8 +130,8 @@ const FriendsList = () => {
   const declineFriendRequest = async (friendRId: string) => {
     try {
       await friendsApi.declineFriendRequest(friendRId);
-      setFriendRequests(prevRequests =>
-        prevRequests.filter((r) => r.friendRId !== friendRId)
+      setFriendRequests((prevRequests) =>
+        prevRequests.filter((r) => r.friendRId !== friendRId),
       );
     } catch (error) {
       console.error('Error declining friend request:', error);
@@ -148,7 +143,7 @@ const FriendsList = () => {
       await friendsApi.removeFriend(friendRId);
 
       if (friends.length === 1 && currentPage > 1) {
-        setCurrentPage(prev => prev - 1);
+        setCurrentPage((prev) => prev - 1);
       } else {
         searchFriends();
       }
@@ -160,8 +155,8 @@ const FriendsList = () => {
   const addFriend = async (userId: string) => {
     try {
       await friendsApi.sendFriendRequest(userId);
-      setFriendSuggestions(prevSuggestions =>
-        prevSuggestions.filter((s) => s.userId !== userId)
+      setFriendSuggestions((prevSuggestions) =>
+        prevSuggestions.filter((s) => s.userId !== userId),
       );
     } catch (error) {
       console.error('Error sending friend request:', error);
@@ -208,7 +203,9 @@ const FriendsList = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
       <div className="max-w-2xl mx-auto">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6 sm:mb-8">Friends</h1>
+        <h1 className="text-2xl font-bold text-gray-900 mb-6 sm:mb-8">
+          Friends
+        </h1>
 
         {/* Search Bar */}
         <div className="mb-4 sm:mb-6 relative">
@@ -231,29 +228,32 @@ const FriendsList = () => {
         <div className="mb-6 flex flex-wrap gap-2">
           <button
             onClick={() => setStatusFilter('ALL')}
-            className={`px-3 sm:px-4 py-2 rounded-lg font-medium cursor-pointer text-sm sm:text-base ${statusFilter === 'ALL'
-              ? 'bg-blue-600 text-white'
-              : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
-              }`}
+            className={`px-3 sm:px-4 py-2 rounded-lg font-medium cursor-pointer text-sm sm:text-base ${
+              statusFilter === 'ALL'
+                ? 'bg-blue-600 text-white'
+                : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+            }`}
           >
             All
           </button>
           <button
             onClick={() => setStatusFilter('ONLINE')}
-            className={`px-3 sm:px-4 py-2 rounded-lg font-medium cursor-pointer text-sm sm:text-base ${statusFilter === 'ONLINE'
-              ? 'bg-green-600 text-white'
-              : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 '
-              }`}
+            className={`px-3 sm:px-4 py-2 rounded-lg font-medium cursor-pointer text-sm sm:text-base ${
+              statusFilter === 'ONLINE'
+                ? 'bg-green-600 text-white'
+                : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 '
+            }`}
           >
             <span className="inline-block w-2 h-2 bg-green-500 rounded-full mr-2"></span>
             Online
           </button>
           <button
             onClick={() => setStatusFilter('OFFLINE')}
-            className={`px-3 sm:px-4 py-2 rounded-lg font-medium cursor-pointer text-sm sm:text-base ${statusFilter === 'OFFLINE'
-              ? 'bg-gray-600 text-white'
-              : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 '
-              }`}
+            className={`px-3 sm:px-4 py-2 rounded-lg font-medium cursor-pointer text-sm sm:text-base ${
+              statusFilter === 'OFFLINE'
+                ? 'bg-gray-600 text-white'
+                : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 '
+            }`}
           >
             <span className="inline-block w-2 h-2 bg-gray-400 rounded-full mr-2"></span>
             Offline
@@ -304,7 +304,6 @@ const FriendsList = () => {
                   className="px-3 py-1.5 rounded border text-sm cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed
                    disabled:bg-gray-100 disabled:text-gray-500 disabled:border-gray-300 bg-white border-gray-300
                    text-gray-700 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-600"
-
                 >
                   Prev
                 </button>
