@@ -75,9 +75,8 @@ clean:
 	@echo "Stopping and removing all containers, networks, and volumes..."
 	@docker stop $$(docker ps -aq) 2>/dev/null || true
 	@echo "Stopped all containers"
-	@docker rm $$(docker ps -aq) 2>/dev/null || true
-	@docker network prune -f
-	@docker volume prune -f
+	@docker compose down --volumes --rmi all --remove-orphans
+	@docker builder prune -f
 	@echo "Removed all containers, networks, and volumes..."
 
 # -----------------------
