@@ -7,9 +7,9 @@ interface FriendProps {
 
 const Friend = ({ name, avatar, onRemoveFriend, status }: FriendProps) => {
   return (
-    <>
-      <div className="flex items-center gap-3">
-        <div className="relative">
+    <div className="flex items-center justify-between gap-3">
+      <div className="flex items-center gap-3 min-w-0 flex-1">
+        <div className="relative shrink-0">
           <div className="w-12 h-12 bg-gray-500 rounded-full flex items-center justify-center text-white font-medium">
             {avatar}
           </div>
@@ -22,15 +22,16 @@ const Friend = ({ name, avatar, onRemoveFriend, status }: FriendProps) => {
             />
           )}
         </div>
-        <span className="font-medium text-gray-900">{name}</span>
+        <span className="font-medium text-gray-900 truncate">{name}</span>
       </div>
+
       <button
         onClick={onRemoveFriend}
-        className="px-4 py-2 bg-red-50 text-red-600 rounded-md text-sm hover:bg-red-100 cursor-pointer"
+        className="px-4 py-2 bg-red-50 text-red-600 rounded-md text-sm hover:bg-red-100 cursor-pointer shrink-0"
       >
         Remove
       </button>
-    </>
+    </div>
   );
 };
 

@@ -27,9 +27,11 @@ export interface GameState {
 
 // Input message format (Game FE → Game BE)
 // According to secure_game_flow.md: Do NOT send userId, username, or JWT
+// paddle: which paddle to control - enables both browsers to control both paddles (local co-op)
 export interface InputMessage {
   type: 'INPUT';
   action: 'MOVE_UP' | 'MOVE_DOWN' | 'STOP';
+  paddle?: 'left' | 'right';
 }
 
 // State update message format (Game BE → Game FE)
