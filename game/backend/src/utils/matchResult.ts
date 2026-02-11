@@ -41,16 +41,16 @@ export function buildScoreFromState(
 export async function reportResultToMainBE(
   matchId: string,
   winnerId: string,
-  gameToken: string | null,
   ){
   try {
-    const url = "http://backend:3000/api/game/finish";
+    const url = "http://backend:3000/api/game/matchResult";
     const body: MatchResult = { matchId, winnerId };
+    const token = getGameServiceToken()
     const res = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        ...(gameToken && { Authorization: `Bearer ${gameToken}` }),
+        ...(token && { Authorization: `Bearer ${token}` }),
       },
       body: JSON.stringify(body),
     });
