@@ -17,11 +17,13 @@ interface FriendRequest {
   userId: string;
   userName: string;
   friendRId: string;
+  avatarUrl: string;
 }
 
 interface FriendSuggestion {
   userId: string;
   userName: string;
+  avatarUrl: string;
 }
 
 type OnlineStatus = 'ALL' | 'ONLINE' | 'OFFLINE';
@@ -55,6 +57,7 @@ const FriendsList = () => {
         friendsApi.getSuggestions()
       ]);
       console.log('friendsData at first___', friendsData);
+      console.log('friendRequestdata______', requestsData.data );
 
       setFriends(friendsData.data || []);
       setTotalFriends(friendsData.pagination?.totalFriend || 0);
@@ -69,6 +72,8 @@ const FriendsList = () => {
     }
   };
 
+  
+  console.log('Suggestions______', friendSuggestions );
   const searchFriends = async (page = currentPage) => {
     try {
       setSearchLoading(true);
@@ -330,7 +335,7 @@ const FriendsList = () => {
                   className="bg-white p-3 sm:p-4 rounded-lg border border-gray-200"
                 >
                   <FriendRequest
-                    avatar={request.userName.substring(0, 2).toUpperCase()}
+                    avatarUrl={request.avatarUrl}
                     name={request.userName}
                     onAccept={() => acceptFriendRequest(request.friendRId)}
                     onDecline={() => declineFriendRequest(request.friendRId)}
@@ -354,7 +359,7 @@ const FriendsList = () => {
                   className="bg-white p-3 sm:p-4 rounded-lg border border-gray-200"
                 >
                   <FriendSuggestion
-                    avatar={suggestion.userName.substring(0, 2).toUpperCase()}
+                    avatarUrl={suggestion.avatarUrl}
                     name={suggestion.userName}
                     onAddFriend={() => addFriend(suggestion.userId)}
                   />

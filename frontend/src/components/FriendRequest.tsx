@@ -1,12 +1,12 @@
 interface FriendRequestProps {
   name: string;
-  avatar: string;
+  avatarUrl: string;
   onAccept: () => void;
   onDecline: () => void;
 }
 
 const FriendRequest = ({
-  avatar,
+  avatarUrl,
   name,
   onAccept,
   onDecline,
@@ -15,7 +15,7 @@ const FriendRequest = ({
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
       <div className="flex items-center gap-3 min-w-0 flex-1">
         <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-medium shrink-0">
-          {avatar}
+          <img src={avatarUrl} alt={`${name} avatar`} />
         </div>
         <span className="font-medium text-gray-900 truncate">{name}</span>
       </div>
