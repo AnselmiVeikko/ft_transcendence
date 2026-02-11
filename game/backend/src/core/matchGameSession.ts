@@ -13,12 +13,13 @@ import type {
   AuthenticatedWebSocket,
 } from "../types/gameState.js";
 import { matchManager } from "./matchManager.js";
-import { reportResultToMainBE } from "../utils/matchResult.js";
-
-const CANVAS_WIDTH = 900;
-const CANVAS_HEIGHT = 600;
-const MAIN_BE_URL = process.env.MAIN_BE_URL || "http://backend:3000";
-const GAME_SERVICE_TOKEN = process.env.GAME_SERVICE_TOKEN || "";
+import { CANVAS_WIDTH, CANVAS_HEIGHT } from "../utils/gameConfig.js";
+import {
+  getWinnerIdFromWinnerName,
+  buildScoreFromState,
+  reportResultToMainBE,
+} from "../utils/matchResult.js";
+import { applyInputToGame } from "../utils/gameInput.js";
 
 export class MatchGameSession {
   private matchId: string;
@@ -26,6 +27,7 @@ export class MatchGameSession {
   private sockets = new Map<string, AuthenticatedWebSocket>();
   private gameStarted = false;
   private lastWinner: string | null = null;
+
 
   constructor(matchId: string) {
     this.matchId = matchId;
@@ -74,24 +76,14 @@ export class MatchGameSession {
     if (!this.game || !this.gameStarted) return;
     if (!matchManager.isUserInMatch(this.matchId, userId)) return;
 
+    // Use message.paddle when present (both browsers can control both paddles - local co-op).
+    // Fallback: derive from userId for older clients.
     const players = matchManager.getMatchPlayers(this.matchId);
-    const isLeftPlayer = players[0]?.userId === userId;
-
-    if (message.action === "MOVE_UP") {
-      const key = isLeftPlayer ? "w" : "ArrowUp";
-      this.game.handleInput({ type: "keydown", key });
-    } else if (message.action === "MOVE_DOWN") {
-      const key = isLeftPlayer ? "s" : "ArrowDown";
-      this.game.handleInput({ type: "keydown", key });
-    } else if (message.action === "STOP") {
-      if (isLeftPlayer) {
-        this.game.handleInput({ type: "keyup", key: "w" });
-        this.game.handleInput({ type: "keyup", key: "s" });
-      } else {
-        this.game.handleInput({ type: "keyup", key: "ArrowUp" });
-        this.game.handleInput({ type: "keyup", key: "ArrowDown" });
-      }
-    }
+    const isLeftPlayer =
+      message.paddle !== undefined
+        ? message.paddle === 'left'
+        : players[0]?.userId === userId;
+    applyInputToGame(message, isLeftPlayer, (ev) => this.game!.handleInput(ev));
   }
 
   private startGame(): void {
@@ -141,20 +133,13 @@ export class MatchGameSession {
     const player2 = players[1];
     if (!player1) return;
 
-    const winnerId =
-      player1.username === winnerName
-        ? player1.userId
-        : player2?.username === winnerName
-          ? player2.userId
-          : null;
+    const winnerId = getWinnerIdFromWinnerName(players, winnerName);
     if (!winnerId) return;
 
     const state = this.game?.getState();
     if (!state) return;
 
-    const score: Record<string, number> = { [player1.userId]: state.leftPlayer.life };
-    if (player2) score[player2.userId] = state.rightPlayer.life;
-
+    const score = buildScoreFromState(state, player1, player2);
     reportResultToMainBE(this.matchId, winnerId);
     this.sendGameOverToAll(winnerId, score);
 
