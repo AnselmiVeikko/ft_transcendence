@@ -9,8 +9,8 @@ import { error } from "node:console";
 type FinishMatchRequest = FastifyRequest<{ Body: { matchId: string; winnerId: string; score: Record<string, number>; } }>;
 
 
-export default async function finishMatchRoute(app: FastifyInstance) {
-    app.post("/api/game/finish", {
+export default async function matchResult(app: FastifyInstance) {
+    app.post("/api/game/matchResult", {
         schema: {
             body: FinishMatchBodySchema,
             response: {
@@ -24,7 +24,7 @@ export default async function finishMatchRoute(app: FastifyInstance) {
             return reply.status(500).send(errorResponse(400, "No authentication provided"));
         }
         const token = authHeader.slice(7);
-        const secret = process.env.GAME_TOKEN_SECRET || "game-secret-change-this";
+        const secret = process.env.GAME_TOKEN_SECRET || "";
         if (!secret) {
             app.log.error("GAME_TOKEN_SECRET not set in environment ");
             return reply.status(500).send(errorResponse(500, "Server misconfiguration"));
