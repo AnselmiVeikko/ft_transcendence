@@ -41,7 +41,8 @@ export function pendingList(list: any[]) {
 		data: list.map(u => ({
 			friendRId: u.friendRId,
 			userId: u.userId,
-			userName: u.userName
+			userName: u.userName,
+			avatarUrl: u.avatarUrl
 		})),
 	};
 }
@@ -51,7 +52,8 @@ export function suggestionList(list: any[]) {
 		message: "Friends Suggestion List",
 		data: list.map(u => ({
 			userId: u.userId,
-			userName: u.userName
+			userName: u.userName,
+			avatarUrl: u.avatarUrl
 		})),
 	};
 }

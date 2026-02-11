@@ -31,7 +31,7 @@ services:
 
   game_be:
     container_name: game_be
-    build: 
+    build:
       context: ./game/backend
       dockerfile: Dockerfile
     ports:
@@ -59,6 +59,7 @@ services:
     restart: unless-stopped
     environment:
       - DATABASE_URL=${DATABASE_URL}
+      - AVATARS_DIR=/app/uploads/avatars
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -73,8 +74,14 @@ services:
       "
     networks:
       - transcendence
+    volumes:
+      - avatars:/app/uploads/avatars
+      #- ./data/uploads/avatars:/app/uploads/avatars/upload    // for local dev to see uploads
 
 networks:
   transcendence:
     name: transcendence
     driver: bridge
+
+volumes:
+  avatars:
