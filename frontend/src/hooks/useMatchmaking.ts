@@ -8,12 +8,14 @@ interface Player {
 export const useMatchmaking = () => {
   const [isWaiting, setIsWaiting] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
+  const [isGameFinished, setIsGameFinished] = useState(false);
+  const [isAbandoned, setIsAbandoned] = useState(false);
   const [matchId, setMatchId] = useState('');
   const [gameToken, setGameToken] = useState('');
   const [player, setPlayer] = useState<Player | null>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const matchmakingStarted = useRef(false);
-  const latestStatus = useRef({ isWaiting, gameStarted, matchId });
+  const latestStatus = useRef({ isWaiting, gameStarted, matchId, isGameFinished, isAbandoned });
 
   const MATCHMAKING_API = '/api/game/matchmaking';
   const STATUS_API = '/api/game/matchstatus';
@@ -21,15 +23,24 @@ export const useMatchmaking = () => {
 
   //ref to track latest states
   useEffect(() => {
-    latestStatus.current = { isWaiting, gameStarted, matchId };
+    latestStatus.current = { isWaiting, gameStarted, matchId, isGameFinished, isAbandoned };
   }, [isWaiting, gameStarted, matchId]);
 
   //game ready to start
   const gameReady = async () => {
     setGameStarted(true);
     setIsWaiting(false);
-    stopPolling();
+	setIsGameFinished(false);
+    //stopPolling();
     console.log('GAME STARTED');
+  };
+
+  const gameFinished = async () => {
+    setGameStarted(false);
+    setIsWaiting(false);
+	setIsGameFinished(true);
+    stopPolling();
+    console.log('GAME FINISHED');
   };
 
   const startMatchmaking = async () => {
@@ -39,6 +50,7 @@ export const useMatchmaking = () => {
         credentials: 'include',
       });
       if (response.status === 409) {
+		setIsAbandoned(true);
         setIsWaiting(true);
         return;
       }
@@ -72,6 +84,7 @@ export const useMatchmaking = () => {
       ) {
         return gameReady();
       }
+	  else if (result.data?.matchStatus === 'FINISHED') return gameFinished();
     } catch (e) {
       console.error('Status check error:', e);
     }
@@ -87,9 +100,9 @@ export const useMatchmaking = () => {
   // delete match if user abandons queue/page
   useEffect(() => {
     const cleanUpMatch = () => {
-      const { isWaiting: waiting, gameStarted: started, matchId: id } = latestStatus.current; //make sure we have up-to-date states using ref
+      const { isWaiting: waiting, gameStarted: started, matchId: id, isAbandoned: abandoned } = latestStatus.current; //make sure we have up-to-date states using ref
 
-      if (waiting && !started && id) {
+      if (abandoned || (waiting && !started && id)) {
         const data = JSON.stringify({ matchId: id });
 		console.log('Deleting match: ', id);
         const blob = new Blob([data], { type: 'application/json' });
@@ -118,11 +131,11 @@ export const useMatchmaking = () => {
 
   // polling
   useEffect(() => {
-    if (isWaiting && matchId && !gameStarted) {
+    if (matchId && !isGameFinished) {
       intervalRef.current = setInterval(checkStatus, 3000);
     }
     return () => stopPolling();
-  }, [isWaiting, matchId, gameStarted]);
+  }, [isWaiting, matchId, gameStarted, isGameFinished],);
 
-  return { isWaiting, gameStarted, matchId, gameToken, player };
+  return { isWaiting, gameStarted, matchId, isGameFinished, gameToken, player };
 };
