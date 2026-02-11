@@ -90,7 +90,7 @@ const ProfileSettings = () => {
 			backdrop-blur-md border dark:border-white/20 border-black/10 rounded-2xl shadow-2xl transition duration-300 transform hover:scale-[1.03]`}>
             <img 
 		   		src={avatarUrl || '/avatars/default/default.webp'}
-				className="w-20 h-20 rounded-full border border-black/10 dark:border-white/50 shadow-lg object-cover mb-8"
+				className="w-20 h-20 rounded-xl border border-black/10 dark:border-white/50 shadow-lg object-cover mb-8"
 				onClick={() => { setSelectedGridAvatar(avatarUrl); setIsAvatarModalOpen(true); }}
                 alt="User Avatar"
 			/>
@@ -160,7 +160,7 @@ const ProfileSettings = () => {
                 key={url}
                 src={url}
                 onClick={() => setSelectedGridAvatar(url)}
-                className={`w-full aspect-square rounded-full cursor-pointer border-2 transition-transform hover:scale-110 ${
+                className={`w-full aspect-square rounded-xl cursor-pointer border-2 transition-transform hover:scale-110 ${
                     selectedGridAvatar === url ? 'border-indigo-500 scale-105' : 'border-transparent'
                 }`}
               />
