@@ -16,6 +16,7 @@ import refreshAccess  from "./routes/RefreshAccess";
 import profileUpdateRoutes from "./routes/ProfileUpdate";
 import avatarRoutes from "./routes/ProfileAvatar";
 import deleteMatch from "./routes/DeleteMatch";
+import matchResult from "./routes/MatchResult";
 import path from "path";
 import fastifyStatic from "@fastify/static";
 
@@ -62,6 +63,7 @@ async function buildServer() {
 	app.register(refreshAccess);
 	app.register(avatarRoutes);
 	app.register(deleteMatch);
+	app.register(matchResult);
 }
 
 const start = async () => {

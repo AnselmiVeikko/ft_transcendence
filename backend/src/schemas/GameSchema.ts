@@ -31,4 +31,17 @@ export const DeleteMatchBodySchema = Type.Object({
 
 export const DeleteMatchResponseSchema = Type.Object({
     message: Type.String(),
-})
+});
+
+export const MatchResultParamsSchema = Type.Object({
+    matchId: Type.String(),
+});
+
+export const MatchResultBodySchema = Type.Object({
+    winnerId: Type.String(),
+    score: Type.Record(Type.String(), Type.Number()),
+});
+
+export const MatchResultResponseSchema = Type.Object({
+    message: Type.String(),
+});
