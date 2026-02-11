@@ -19,28 +19,12 @@ export default async function matchResult(app: FastifyInstance) {
             },
         },
     }, async (request: FinishMatchRequest, reply: FastifyReply) => {
-        const authHeader = request.headers['authorization'];
-        if (!authHeader || !authHeader.startsWith('Bearer ')) {
-            return reply.status(500).send(errorResponse(400, "No authentication provided"));
-        }
-        const token = authHeader.slice(7);
-        const secret = process.env.GAME_TOKEN_SECRET || "";
-        if (!secret) {
-            app.log.error("GAME_TOKEN_SECRET not set in environment ");
-            return reply.status(500).send(errorResponse(500, "Server misconfiguration"));
-        }
 
         const { matchId, winnerId } = request.body;
         if (!matchId)
             return reply.status(400).send(errorResponse(400, "No match id provided"));
         if (!winnerId)
             return reply.status(400).send(errorResponse(400, "No winner id provided"));
-        
-        try {
-            jwt.verify(token, secret);
-        } catch (err) {
-            return reply.status(401).send(errorResponse(401, "Invalid or expired gameToken"));
-        }
 
         const match = await prisma.game_match.findFirst({ where: { matchId } });
         if (!match)
