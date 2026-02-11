@@ -41,12 +41,11 @@ export function buildScoreFromState(
 export async function reportResultToMainBE(
   matchId: string,
   winnerId: string,
-  score: Record<string, number>
-): Promise<void> {
+  ){
   try {
-    const url = `${getMainBeUrl()}/matches/${matchId}/result`;
-    const body: MatchResult = { winnerId, score };
-    const token = getGameServiceToken();
+    const url = "http://backend:3000/api/game/matchResult";
+    const body: MatchResult = { matchId, winnerId };
+    const token = getGameServiceToken()
     const res = await fetch(url, {
       method: "POST",
       headers: {

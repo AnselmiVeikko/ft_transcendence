@@ -28,6 +28,7 @@ export class MatchGameSession {
   private gameStarted = false;
   private lastWinner: string | null = null;
 
+
   constructor(matchId: string) {
     this.matchId = matchId;
   }
@@ -139,7 +140,7 @@ export class MatchGameSession {
     if (!state) return;
 
     const score = buildScoreFromState(state, player1, player2);
-    reportResultToMainBE(this.matchId, winnerId, score);
+    reportResultToMainBE(this.matchId, winnerId);
     this.sendGameOverToAll(winnerId, score);
 
     if (this.game) {
@@ -147,6 +148,34 @@ export class MatchGameSession {
       this.game = null;
     }
   }
+
+  //private async reportResultToMainBE(
+  //  winnerId: string,
+  //  score: Record<string, number>
+  //): Promise<void> {
+  //  try {
+  //    const url = `${MAIN_BE_URL}/matches/${this.matchId}/result`;
+  //    const body: MatchResult = { winnerId, score };
+  //    const res = await fetch(url, {
+  //      method: "POST",
+  //      headers: {
+  //        "Content-Type": "application/json",
+  //        ...(GAME_SERVICE_TOKEN && {
+  //          Authorization: `Bearer ${GAME_SERVICE_TOKEN}`,
+  //        }),
+  //      },
+  //      body: JSON.stringify(body),
+  //    });
+  //    if (!res.ok) {
+  //      const text = await res.text();
+  //      console.error(`Failed to report result: ${res.status} ${res.statusText}`, text);
+  //    } else {
+  //      console.log(`Reported match result to Main BE for match ${this.matchId}`);
+  //    }
+  //  } catch (e) {
+  //    console.error("Error reporting result to Main BE:", e);
+  //  }
+  //}
 
   private sendGameOverToAll(
     winnerId: string,
