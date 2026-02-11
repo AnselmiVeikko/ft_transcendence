@@ -51,8 +51,8 @@ export interface GameOverMessage {
 
 // Match result to send to Main BE
 export interface MatchResult {
+  matchId: string;
   winnerId: string;
-  score: Record<string, number>;
 }
 
 // Extended WebSocket with user context

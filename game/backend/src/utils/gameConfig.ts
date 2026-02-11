@@ -11,5 +11,5 @@ export function getMainBeUrl(): string {
 }
 
 export function getGameServiceToken(): string {
-  return process.env.GAME_SERVICE_TOKEN || "";
+  return process.env.GAME_SERVICE_TOKEN || "default";
 }
