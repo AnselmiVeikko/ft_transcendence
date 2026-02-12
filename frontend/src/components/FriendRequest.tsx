@@ -17,7 +17,7 @@ const FriendRequest = ({
         <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-medium shrink-0">
           <img src={avatarUrl} alt={`${name} avatar`} />
         </div>
-        <span className="font-medium text-gray-900 truncate">{name}</span>
+        <span className="font-medium text-gray-900 dark:text-white truncate">{name}</span>
       </div>
 
       <div className="flex gap-2 shrink-0 sm:ml-0 ml-[60px]">
