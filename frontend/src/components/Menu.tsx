@@ -57,8 +57,8 @@ const Menu = () => {
     <div className="relative">
       <SettingsMenu />
       <div
-        className={`${colorClasses.bgGlow} flex flex-col items-center justify-center p-4 w-full`}
-        style={{ height: 'calc(100vh)' }} // make sure content fits below header
+        className={`flex flex-col items-center justify-center p-4 w-full`}
+        style={{ height: 'calc(100vh - 80px)' }} // make sure content fits below header
       >
         <div className="mb-4 sm:mb-12 p-6 text-center max-w-5xl w-full z-10">
           <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight sm:pb-2 bg-clip-text text-transparent bg-linear-to-r from-indigo-700 to-blue-200">

@@ -1,35 +1,38 @@
+import { useTranslation } from 'react-i18next';
 interface FriendProps {
   name: string;
-  avatar: string;
+  avatarUrl: string;
   onRemoveFriend: () => void;
   status?: 'ONLINE' | 'OFFLINE';
 }
 
-const Friend = ({ name, avatar, onRemoveFriend, status }: FriendProps) => {
+const Friend = ({ name, avatarUrl, onRemoveFriend, status }: FriendProps) => {
+  const {t} = useTranslation();
+
   return (
     <div className="flex items-center justify-between gap-3">
       <div className="flex items-center gap-3 min-w-0 flex-1">
         <div className="relative shrink-0">
-          <div className="w-12 h-12 bg-gray-500 rounded-full flex items-center justify-center text-white font-medium">
-            {avatar}
+          <div className="w-11 h-11 bg-gray-500 rounded-full flex items-center justify-center text-white font-medium">
+            <img src={avatarUrl} alt={`${name} avatar`} />
           </div>
           {status && (
             <div
-              className={`absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full border-2 border-white ${status === 'ONLINE' ? 'bg-green-500' : 'bg-gray-400'
+              className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-white ${status === 'ONLINE' ? 'bg-green-500' : 'bg-gray-400'
                 }`}
               role="status"
               aria-label={status === 'ONLINE' ? 'Online' : 'Offline'}
             />
           )}
         </div>
-        <span className="font-medium text-gray-900 truncate">{name}</span>
+        <span className="font-medium text-gray-900 dark:text-white truncate">{name}</span>
       </div>
 
       <button
         onClick={onRemoveFriend}
         className="px-4 py-2 bg-red-50 text-red-600 rounded-md text-sm hover:bg-red-100 cursor-pointer shrink-0"
       >
-        Remove
+        {t('remove')}
       </button>
     </div>
   );
