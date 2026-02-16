@@ -36,8 +36,7 @@ const Footer = () => {
 
   return (
 	<>
-    <footer className="w-full py-2 absolute bottom-6 left-1/2 -translate-x-1/2 z-10 
-                   w-[90%] max-w-fit px-8 py-3 
+    <footer className="w-full py-3 relative mt-12 left-1/2 -translate-x-1/2 z-10 max-w-fit px-8 
                    rounded-full border border-indigo-200/20 dark:border-indigo-900/30 
                    bg-white/80 dark:bg-gray-900/80 backdrop-blur-md 
                    shadow-lg shadow-indigo-500/10 transition-all transform hover:border-indigo-500/40 hover:shadow-indigo-500/20 hover:duration-300">
