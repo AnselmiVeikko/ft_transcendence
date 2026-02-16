@@ -74,5 +74,19 @@
   "theme.system": "System",
   "upload_avatar": "Ladda upp din avatar",
   "username": "Användarnamn",
-  "waiting_player": "Väntar på en spelare..."
+  "waiting_player": "Väntar på en spelare...",
+  "my_friends": "Vänner",
+  "friend_requests": "Vänförfrågningar",
+  "suggestions": "Förslag",
+  "search_friends": "Sök vänner...",
+  "all": "Alla",
+  "online": "Online",
+  "offline": "Offline",
+  "sort": "Sortera",
+  "remove": "Ta bort",
+  "accept": "Acceptera",
+  "decline": "Avböj",
+  "add": "Lägg till",
+  "prev": "Föreg",
+  "next": "Nästa"
 }
