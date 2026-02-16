@@ -74,5 +74,19 @@
   "theme.system": "Järjestelmä",
   "upload_avatar": "Lataa avatarisi",
   "username": "Käyttäjänimi",
-  "waiting_player": "Odotetaan toista pelaajaa..."
+  "waiting_player": "Odotetaan toista pelaajaa...",
+  "my_friends": "Kaverit",
+  "friend_requests": "Kaveripyynnöt",
+  "suggestions": "Ehdotukset",
+  "search_friends": "Hae kavereita...",
+  "all": "Kaikki",
+  "online": "Paikalla",
+  "offline": "Poissa",
+  "sort": "Järjestä",
+  "remove": "Poista",
+  "accept": "Hyväksy",
+  "decline": "Hylkää",
+  "add": "Lisää",
+  "prev": "Edellinen",
+  "next": "Seuraava"
 }

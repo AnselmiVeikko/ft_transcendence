@@ -36,7 +36,7 @@ const Footer = () => {
 
   return (
 	<>
-    <footer className="w-full py-2 absolute bottom-6 left-1/2 -translate-x-1/2 z-10 
+    <footer className="w-full py-2 relative bottom-6 mt-12 left-1/2 -translate-x-1/2 z-10 
                    w-[90%] max-w-fit px-8 py-3 
                    rounded-full border border-indigo-200/20 dark:border-indigo-900/30 
                    bg-white/80 dark:bg-gray-900/80 backdrop-blur-md 

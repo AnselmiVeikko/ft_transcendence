@@ -75,8 +75,8 @@ const ProfileSettings = () => {
       <SettingsMenu />
 
       <div
-        className={`${colorClasses.bgGlow} flex flex-col items-center justify-center p-4 w-full`}
-        style={{ height: 'calc(100vh - 5rem)' }}
+        className={`flex flex-col items-center justify-center p-4 w-full`}
+        /* style={{ height: 'calc(100vh - 5rem)' }} */
       >
         <div className="mb-4 p-6 text-center max-w-5xl w-full z-10">
           <h1 className="text-2xl font-extrabold tracking-tight sm:pb-2 bg-clip-text text-transparent bg-linear-to-r from-indigo-700 to-blue-200 sm:text-4xl lg:text-5xl">

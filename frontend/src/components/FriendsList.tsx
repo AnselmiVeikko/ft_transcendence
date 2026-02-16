@@ -4,7 +4,7 @@ import FriendRequest from './FriendRequest';
 import FriendSuggestion from './FriendSuggestion';
 import { friendsApi } from '../utils/friendsApi';
 import { FaSortAlphaDown, FaSortAlphaDownAlt } from 'react-icons/fa';
-
+import { useTranslation } from 'react-i18next';
 interface Friend {
   userId: string;
   userName: string;
@@ -41,10 +41,12 @@ const FriendsList = () => {
   const [searchLoading, setSearchLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const PAGE_SIZE = 3;
+  const PAGE_SIZE = 1;
   const [currentPage, setCurrentPage] = useState(1);
   const [totalFriends, setTotalFriends] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+
+  const { t } = useTranslation();
 
   const fetchAllData = async () => {
     try {
@@ -69,6 +71,9 @@ const FriendsList = () => {
       setInitialLoading(false);
     }
   };
+ /*  console.log("friends", friends);
+  console.log("friendSuggestions", friendSuggestions);
+  console.log("friendRequests", friendRequests); */
 
   const searchFriends = async (page = currentPage) => {
     try {
@@ -165,20 +170,20 @@ const FriendsList = () => {
 
   if (initialLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-lg text-gray-600">Loading friends...</div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-lg text-gray-600 dark:text-gray-300">Loading friends...</div>
       </div>
     );
   }
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <p className="text-lg text-red-600 mb-2">Oops!</p>
-          <p className="text-lg text-red-600 mb-4">{error}</p>
+          <p className="text-lg text-red-600 dark:text-red-400 mb-2">Oops!</p>
+          <p className="text-lg text-red-600 dark:text-red-400 mb-4">{error}</p>
           <button
             onClick={fetchAllData}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 cursor-pointer"
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 cursor-pointer dark:bg-indigo-600 dark:hover:bg-indigo-500"
           >
             Retry
           </button>
@@ -201,21 +206,23 @@ const FriendsList = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
+    <div className="min-h-screen p-4 sm:p-6">
       <div className="max-w-2xl mx-auto">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6 sm:mb-8">
-          Friends
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 sm:mb-8">
+          {t('friends')}
         </h1>
 
         {/* Search Bar */}
         <div className="mb-4 sm:mb-6 relative">
           <input
             type="text"
-            placeholder="Search friends..."
+            placeholder={t('search_friends')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             maxLength={20}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500
+             focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-white/10 dark:border-white/20
+           dark:text-white dark:placeholder-gray-400 dark:focus:ring-indigo-500"
           />
           {searchLoading && (
             <div className="absolute right-3 top-2.5">
@@ -228,43 +235,40 @@ const FriendsList = () => {
         <div className="mb-6 flex flex-wrap gap-2">
           <button
             onClick={() => setStatusFilter('ALL')}
-            className={`px-3 sm:px-4 py-2 rounded-lg font-medium cursor-pointer text-sm sm:text-base ${
-              statusFilter === 'ALL'
-                ? 'bg-blue-600 text-white'
-                : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
-            }`}
+            className={`px-3 sm:px-4 py-2 rounded-lg font-medium cursor-pointer text-sm sm:text-base ${statusFilter === 'ALL'
+              ? 'bg-blue-600 text-white dark:bg-indigo-600'
+              : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 dark:bg-white/10 dark:text-white dark:border-white/20 dark:hover:bg-white/20'
+              }`}
           >
-            All
+            {t('all')}
           </button>
           <button
             onClick={() => setStatusFilter('ONLINE')}
-            className={`px-3 sm:px-4 py-2 rounded-lg font-medium cursor-pointer text-sm sm:text-base ${
-              statusFilter === 'ONLINE'
-                ? 'bg-green-600 text-white'
-                : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 '
-            }`}
+            className={`px-3 sm:px-4 py-2 rounded-lg font-medium cursor-pointer text-sm sm:text-base ${statusFilter === 'ONLINE'
+              ? 'bg-green-600 text-white'
+              : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 dark:bg-white/10 dark:text-white dark:border-white/20 dark:hover:bg-white/20'
+              }`}
           >
             <span className="inline-block w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-            Online
+            {t('online')}
           </button>
           <button
             onClick={() => setStatusFilter('OFFLINE')}
-            className={`px-3 sm:px-4 py-2 rounded-lg font-medium cursor-pointer text-sm sm:text-base ${
-              statusFilter === 'OFFLINE'
-                ? 'bg-gray-600 text-white'
-                : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 '
-            }`}
+            className={`px-3 sm:px-4 py-2 rounded-lg font-medium cursor-pointer text-sm sm:text-base ${statusFilter === 'OFFLINE'
+              ? 'bg-gray-600 text-white'
+              : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 dark:bg-white/10 dark:text-white dark:border-white/20 dark:hover:bg-white/20'
+              }`}
           >
             <span className="inline-block w-2 h-2 bg-gray-400 rounded-full mr-2"></span>
-            Offline
+            {t('offline')}
           </button>
 
           {/* Sort */}
           <button
             onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-            className="px-3 sm:px-4 py-2 rounded-lg bg-white border border-gray-300 text-sm sm:text-base hover:bg-gray-50 cursor-pointer flex items-center gap-1.5 font-medium text-gray-700"
+            className="px-3 sm:px-4 py-2 rounded-lg bg-white border border-gray-300 text-sm sm:text-base hover:bg-gray-50 cursor-pointer flex items-center gap-1.5 font-medium text-gray-700 dark:bg-white/10 dark:border-white/20 dark:text-white dark:hover:bg-white/20"
           >
-            <span>Sort</span>
+            <span>{t('sort')}</span>
             {sortOrder === 'asc' ? (
               <FaSortAlphaDown className="w-4 h-4" />
             ) : (
@@ -276,14 +280,14 @@ const FriendsList = () => {
         {/* Friends List */}
         {friends.length > 0 && (
           <div className="mb-8">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
-              My Friends ({totalFriends})
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              {t('my_friends')}({totalFriends})
             </h2>
             <div className="space-y-3">
               {sortedFriends.map((friend) => (
                 <div
                   key={friend.userId}
-                  className="bg-white p-3 sm:p-4 rounded-lg border border-gray-200"
+                  className="bg-white p-3 sm:p-4 rounded-lg border border-gray-200 dark:bg-white/5 dark:border-white/10 dark:backdrop-blur-sm"
                 >
                   <Friend
                     name={friend.userName}
@@ -303,18 +307,20 @@ const FriendsList = () => {
                   onClick={() => setCurrentPage((p) => p - 1)}
                   className="px-3 py-1.5 rounded border text-sm cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed
                    disabled:bg-gray-100 disabled:text-gray-500 disabled:border-gray-300 bg-white border-gray-300
-                   text-gray-700 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-600"
+                   text-gray-700 hover:bg-blue-50 hover:border-blue-300 dark:bg-white/10 dark:border-white/20
+                   dark:text-white dark:hover:bg-white/20 dark:disabled:bg-white/5 dark:disabled:text-gray-500"
                 >
-                  Prev
+                  {t('prev')}
                 </button>
                 <button
                   disabled={currentPage >= totalPages}
                   onClick={() => setCurrentPage((p) => p + 1)}
                   className="px-3 py-1.5 rounded border text-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed
                    disabled:bg-gray-100 disabled:text-gray-500 disabled:border-gray-300 bg-white border-gray-300
-                   text-gray-700 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-600"
+                   text-gray-700 hover:bg-blue-50 hover:border-blue-300 dark:bg-white/10 dark:border-white/20
+                   dark:text-white dark:hover:bg-white/20 dark:disabled:bg-white/5 dark:disabled:text-gray-500"
                 >
-                  Next
+                  {t('next')}
                 </button>
               </div>
             )}
@@ -324,14 +330,14 @@ const FriendsList = () => {
         {/* Friend Requests */}
         {friendRequests.length > 0 && (
           <div className="mb-8">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
               Friend Requests
             </h2>
             <div className="space-y-3">
               {friendRequests.map((request: FriendRequest) => (
                 <div
                   key={request.userId}
-                  className="bg-white p-3 sm:p-4 rounded-lg border border-gray-200"
+                  className="bg-white p-3 sm:p-4 rounded-lg border border-gray-200 dark:bg-white/5 dark:border-white/10 dark:backdrop-blur-sm"
                 >
                   <FriendRequest
                     avatarUrl={request.avatarUrl}
@@ -348,14 +354,14 @@ const FriendsList = () => {
         {/* Suggestions */}
         {friendSuggestions.length > 0 && (
           <div>
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
               Suggestions
             </h2>
             <div className="space-y-3">
               {friendSuggestions.map((suggestion) => (
                 <div
                   key={suggestion.userId}
-                  className="bg-white p-3 sm:p-4 rounded-lg border border-gray-200"
+                  className="bg-white p-3 sm:p-4 rounded-lg border border-gray-200 dark:bg-white/5 dark:border-white/10 dark:backdrop-blur-sm"
                 >
                   <FriendSuggestion
                     avatarUrl={suggestion.avatarUrl}
