@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 interface FriendRequestProps {
   name: string;
   avatarUrl: string;
@@ -11,6 +12,7 @@ const FriendRequest = ({
   onAccept,
   onDecline,
 }: FriendRequestProps) => {
+  const {t} = useTranslation();
   return (
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
       <div className="flex items-center gap-3 min-w-0 flex-1">
@@ -25,13 +27,13 @@ const FriendRequest = ({
           onClick={onAccept}
           className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700 cursor-pointer whitespace-nowrap"
         >
-          Accept
+          {t('accept')}
         </button>
         <button
           onClick={onDecline}
           className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md text-sm hover:bg-gray-300 cursor-pointer whitespace-nowrap"
         >
-          Decline
+          {t('decline')}
         </button>
       </div>
     </div>

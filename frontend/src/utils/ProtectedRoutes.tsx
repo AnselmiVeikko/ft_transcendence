@@ -22,7 +22,7 @@ const ProtectedRoutes = () => {
     <>
       <Header />
       <Outlet />
-	  <Footer />
+	    <Footer />
     </>
   );
 };

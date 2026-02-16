@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 interface FriendProps {
   name: string;
   avatarUrl: string;
@@ -6,6 +7,8 @@ interface FriendProps {
 }
 
 const Friend = ({ name, avatarUrl, onRemoveFriend, status }: FriendProps) => {
+  const {t} = useTranslation();
+
   return (
     <div className="flex items-center justify-between gap-3">
       <div className="flex items-center gap-3 min-w-0 flex-1">
@@ -29,7 +32,7 @@ const Friend = ({ name, avatarUrl, onRemoveFriend, status }: FriendProps) => {
         onClick={onRemoveFriend}
         className="px-4 py-2 bg-red-50 text-red-600 rounded-md text-sm hover:bg-red-100 cursor-pointer shrink-0"
       >
-        Remove
+        {t('remove')}
       </button>
     </div>
   );

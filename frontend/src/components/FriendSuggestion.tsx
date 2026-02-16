@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 interface FriendSuggestionProps {
   avatarUrl: string;
   name: string;
@@ -9,6 +10,7 @@ const FriendSuggestion = ({
   name,
   onAddFriend,
 }: FriendSuggestionProps) => {
+  const {t} = useTranslation();
   return (
     <div className="flex items-center justify-between gap-3">
       <div className="flex items-center gap-3 min-w-0 flex-1">
@@ -21,7 +23,7 @@ const FriendSuggestion = ({
         onClick={onAddFriend}
         className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700 cursor-pointer shrink-0"
       >
-        Add
+        {t('add')}
       </button>
     </div>
   );

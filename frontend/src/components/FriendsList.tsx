@@ -4,7 +4,7 @@ import FriendRequest from './FriendRequest';
 import FriendSuggestion from './FriendSuggestion';
 import { friendsApi } from '../utils/friendsApi';
 import { FaSortAlphaDown, FaSortAlphaDownAlt } from 'react-icons/fa';
-
+import { useTranslation } from 'react-i18next';
 interface Friend {
   userId: string;
   userName: string;
@@ -41,10 +41,12 @@ const FriendsList = () => {
   const [searchLoading, setSearchLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const PAGE_SIZE = 3;
+  const PAGE_SIZE = 1;
   const [currentPage, setCurrentPage] = useState(1);
   const [totalFriends, setTotalFriends] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+
+  const { t } = useTranslation();
 
   const fetchAllData = async () => {
     try {
@@ -207,14 +209,14 @@ const FriendsList = () => {
     <div className="min-h-screen p-4 sm:p-6">
       <div className="max-w-2xl mx-auto">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 sm:mb-8">
-          Friends
+          {t('friends')}
         </h1>
 
         {/* Search Bar */}
         <div className="mb-4 sm:mb-6 relative">
           <input
             type="text"
-            placeholder="Search friends..."
+            placeholder={t('search_friends')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             maxLength={20}
@@ -238,7 +240,7 @@ const FriendsList = () => {
               : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 dark:bg-white/10 dark:text-white dark:border-white/20 dark:hover:bg-white/20'
               }`}
           >
-            All
+            {t('all')}
           </button>
           <button
             onClick={() => setStatusFilter('ONLINE')}
@@ -248,7 +250,7 @@ const FriendsList = () => {
               }`}
           >
             <span className="inline-block w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-            Online
+            {t('online')}
           </button>
           <button
             onClick={() => setStatusFilter('OFFLINE')}
@@ -258,7 +260,7 @@ const FriendsList = () => {
               }`}
           >
             <span className="inline-block w-2 h-2 bg-gray-400 rounded-full mr-2"></span>
-            Offline
+            {t('offline')}
           </button>
 
           {/* Sort */}
@@ -266,7 +268,7 @@ const FriendsList = () => {
             onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
             className="px-3 sm:px-4 py-2 rounded-lg bg-white border border-gray-300 text-sm sm:text-base hover:bg-gray-50 cursor-pointer flex items-center gap-1.5 font-medium text-gray-700 dark:bg-white/10 dark:border-white/20 dark:text-white dark:hover:bg-white/20"
           >
-            <span>Sort</span>
+            <span>{t('sort')}</span>
             {sortOrder === 'asc' ? (
               <FaSortAlphaDown className="w-4 h-4" />
             ) : (
@@ -279,7 +281,7 @@ const FriendsList = () => {
         {friends.length > 0 && (
           <div className="mb-8">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              My Friends ({totalFriends})
+              {t('my_friends')}({totalFriends})
             </h2>
             <div className="space-y-3">
               {sortedFriends.map((friend) => (
@@ -308,7 +310,7 @@ const FriendsList = () => {
                    text-gray-700 hover:bg-blue-50 hover:border-blue-300 dark:bg-white/10 dark:border-white/20
                    dark:text-white dark:hover:bg-white/20 dark:disabled:bg-white/5 dark:disabled:text-gray-500"
                 >
-                  Prev
+                  {t('prev')}
                 </button>
                 <button
                   disabled={currentPage >= totalPages}
@@ -318,7 +320,7 @@ const FriendsList = () => {
                    text-gray-700 hover:bg-blue-50 hover:border-blue-300 dark:bg-white/10 dark:border-white/20
                    dark:text-white dark:hover:bg-white/20 dark:disabled:bg-white/5 dark:disabled:text-gray-500"
                 >
-                  Next
+                  {t('next')}
                 </button>
               </div>
             )}
