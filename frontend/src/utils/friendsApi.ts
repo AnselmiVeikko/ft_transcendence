@@ -1,106 +1,62 @@
+import apiClient from './apiClient';
+
 export const friendsApi = {
 
 	async getCurrentFriends(pageNo = 1, limit = 5) {
-		const response = await fetch(
-			`/api/friendlist/current?pageNo=${pageNo}&limit=${limit}`,
-			{ credentials: 'include' }
-		);
-		if (!response.ok)
-			throw new Error('Failed to fetch friends');
-		return response.json();
+		const response = await apiClient.get('/api/friendlist/current', {
+			params: { pageNo, limit }
+		});
+		return response.data;
 	},
 
 	async searchFriends(keyWord = '', onlineStatus = 'ALL', pageNo = 1, limit = 10) {
-		const params = new URLSearchParams();
-		if (keyWord)
-			params.append('keyWord', keyWord);
-		params.append('onlineStatus', onlineStatus);
-		params.append('pageNo', pageNo.toString());
-		params.append('limit', limit.toString());
-
-		const response = await fetch(
-			`/api/friendlist/search?${params.toString()}`,
-			{ credentials: 'include' }
-		);
-		if (!response.ok)
-			throw new Error('Failed to search friends');
-		return response.json();
+		const response = await apiClient.get('/api/friendlist/search', {
+			params: {
+				...(keyWord && { keyWord }),
+				onlineStatus,
+				pageNo,
+				limit
+			}
+		});
+		return response.data;
 	},
 
 	// friend requests
 	async getPendingRequests() {
-		const response = await fetch(
-			`/api/friendlist/pending`,
-			{ credentials: 'include' }
-		);
-		if (!response.ok)
-			throw new Error('Failed to fetch pending requests');
-		return response.json();
+		const response = await apiClient.get('/api/friendlist/pending');
+		return response.data;
 	},
 
 	async getSuggestions() {
-		const response = await fetch(
-			`/api/friendlist/suggestion`,
-			{ credentials: 'include' }
-		);
-		if (!response.ok)
-			throw new Error('Failed to fetch suggestions');
-		return response.json();
+		const response = await apiClient.get('/api/friendlist/suggestion');
+		return response.data;
 	},
 
 	async sendFriendRequest(receiverId: string) {
-		const response = await fetch(
-			`/api/friendrequest/send`,
-			{
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				credentials: 'include',
-				body: JSON.stringify({ receiverId })
-			}
-		);
-		if (!response.ok)
-			throw new Error('Failed to send friend request');
-		return response.json();
+		const response = await apiClient.post('/api/friendrequest/send', {
+			receiverId
+		});
+		return response.data;
 	},
 
 	async acceptFriendRequest(friendRId: string) {
-		const response = await fetch(
-			`/api/friendrequest/accept`,
-			{
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				credentials: 'include',
-				body: JSON.stringify({ friendRId })
-			}
-		);
-		if (!response.ok)
-			throw new Error('Failed to accept friend request');
-		return response.json();
+		const response = await apiClient.post('/api/friendrequest/accept', {
+			friendRId
+		});
+		return response.data;
 	},
 
 	async declineFriendRequest(friendRId: string) {
-		const response = await fetch(
-			`/api/friendrequest/decline?friendRId=${friendRId}`,
-			{
-				method: 'DELETE',
-				credentials: 'include'
-			}
-		);
-		if (!response.ok)
-			throw new Error('Failed to decline friend request');
-		return response.json();
+		const response = await apiClient.delete('/api/friendrequest/decline', {
+			params: { friendRId }
+		});
+		return response.data;
 	},
 
 	async removeFriend(friendRId: string) {
-		const response = await fetch(
-			`/api/friendrequest/delete?friendRId=${friendRId}`,
-			{
-				method: 'DELETE',
-				credentials: 'include'
-			}
-		);
-		if (!response.ok)
-			throw new Error('Failed to remove friend');
-		return response.json();
+		const response = await apiClient.delete('/api/friendrequest/delete', {
+			params: { friendRId }
+		});
+		return response.data;
 	}
 };

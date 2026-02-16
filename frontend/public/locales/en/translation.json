@@ -74,5 +74,19 @@
   "theme.system": "System",
   "upload_avatar": "Upload avatar",
   "username": "Username",
-  "waiting_player": "Waiting for a player..."
+  "waiting_player": "Waiting for a player...",
+  "my_friends": "My Friends",
+  "friend_requests": "Friend Requests",
+  "suggestions": "Suggestions",
+  "search_friends": "Search friends...",
+  "all": "All",
+  "online": "Online",
+  "offline": "Offline",
+  "sort": "Sort",
+  "remove": "Remove",
+  "accept": "Accept",
+  "decline": "Decline",
+  "add": "Add",
+  "prev": "Prev",
+  "next": "Next"
 }
