@@ -43,7 +43,8 @@ export async function reportResultToMainBE(
   winnerId: string,
   ){
   try {
-    const url = "http://backend:3000/api/game/matchResult";
+    const baseUrl = getMainBeUrl();
+    const url = `${baseUrl}/api/game/matchResult`;
     const body: MatchResult = { matchId, winnerId };
     const token = getGameServiceToken()
     const res = await fetch(url, {
