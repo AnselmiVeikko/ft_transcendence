@@ -69,6 +69,13 @@ export class MatchManager {
   }
 
   /**
+   * Remove match from memory (cleanup)
+   */
+  removeMatch(matchId: string): void {
+    this.matches.delete(matchId);
+  }
+
+  /**
    * Get all players in match
    */
   getMatchPlayers(matchId: string): Array<{ userId: string; username: string }> {

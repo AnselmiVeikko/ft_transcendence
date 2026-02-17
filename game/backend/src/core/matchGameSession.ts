@@ -26,7 +26,8 @@ export class MatchGameSession {
   private game: Game | null = null;
   private sockets = new Map<string, AuthenticatedWebSocket>();
   private gameStarted = false;
-  private lastWinner: string | null = null;
+  private finalizedWinnerId: string | null = null;
+  private playerIds: [string, string] | null = null;
 
 
   constructor(matchId: string) {
@@ -51,17 +52,34 @@ export class MatchGameSession {
 
   removeSocket(userId: string): void {
     this.sockets.delete(userId);
-    if (this.game) {
-      this.game.stop();
-      this.game = null;
+
+    // If the match is already running and not finalized yet, disconnect = forfeit (opponent wins).
+    // IMPORTANT: If the game never started (e.g., only 1 player connected), do NOT finalize as a "win"
+    // because that would be abusable and can incorrectly unblock matchmaking with a fake winner.
+    if (!this.finalizedWinnerId && this.gameStarted) {
+      const remainingSocketUserId = this.sockets.keys().next().value as string | undefined;
+      const fallbackOpponentId =
+        this.playerIds?.find((id) => id !== userId) ?? undefined;
+      const winnerId = remainingSocketUserId ?? fallbackOpponentId;
+
+      if (winnerId) {
+        const state = this.game?.getState();
+        const players = matchManager.getMatchPlayers(this.matchId);
+        const score =
+          state && players[0]
+            ? buildScoreFromState(state, players[0], players[1])
+            : { [winnerId]: 0 };
+
+        this.finalizeMatch(winnerId, score, "disconnect");
+      }
     }
-    this.gameStarted = false;
+
     if (this.sockets.size === 0) {
-      removeSession(this.matchId);
+      this.cleanup();
     }
   }
 
-  handleMessage(userId: string, data: Buffer): void {
+  handleMessage(userId: string, data: any): void {
     try {
       const message = JSON.parse(data.toString()) as InputMessage;
       if (message.type === "INPUT") {
@@ -94,6 +112,11 @@ export class MatchGameSession {
     const players = matchManager.getMatchPlayers(this.matchId);
     const player1 = players[0]?.username ?? "Player1";
     const player2 = players[1]?.username ?? "Player2";
+    const player1Id = players[0]?.userId;
+    const player2Id = players[1]?.userId;
+    if (player1Id && player2Id) {
+      this.playerIds = [player1Id, player2Id];
+    }
 
     this.game = new Game(CANVAS_WIDTH, CANVAS_HEIGHT);
     this.game.setOnStateUpdate((state: GameState) => this.broadcastState(state));
@@ -122,12 +145,42 @@ export class MatchGameSession {
     }
   }
 
-  private handleGameEndByWinner(winnerName: string): void {
-    if (this.lastWinner) return;
-    this.lastWinner = winnerName;
+  private finalizeMatch(
+    winnerId: string,
+    score: Record<string, number>,
+    reason: "normal" | "disconnect"
+  ): void {
+    if (this.finalizedWinnerId) return;
+    this.finalizedWinnerId = winnerId;
+
     this.gameStarted = false;
     matchManager.updateMatchState(this.matchId, "finished");
 
+    // Notify Main BE so the match is no longer stuck "PLAYING"
+    reportResultToMainBE(this.matchId, winnerId);
+
+    // Notify any remaining Game FE clients
+    this.sendGameOverToAll(winnerId, score);
+
+    // Stop the game loop
+    if (this.game) {
+      this.game.stop();
+      this.game = null;
+    }
+
+    // Close all remaining sockets (helps FE redirect / cleanup)
+    for (const [, ws] of this.sockets) {
+      if (ws.readyState === 1) {
+        try {
+          ws.close(1000, `Match finished (${reason})`);
+        } catch (e) {
+          console.error("Error closing websocket:", e);
+        }
+      }
+    }
+  }
+
+  private handleGameEndByWinner(winnerName: string): void {
     const players = matchManager.getMatchPlayers(this.matchId);
     const player1 = players[0];
     const player2 = players[1];
@@ -140,13 +193,7 @@ export class MatchGameSession {
     if (!state) return;
 
     const score = buildScoreFromState(state, player1, player2);
-    reportResultToMainBE(this.matchId, winnerId);
-    this.sendGameOverToAll(winnerId, score);
-
-    if (this.game) {
-      this.game.stop();
-      this.game = null;
-    }
+    this.finalizeMatch(winnerId, score, "normal");
   }
 
   private sendGameOverToAll(
@@ -167,6 +214,11 @@ export class MatchGameSession {
         }
       }
     }
+  }
+
+  private cleanup(): void {
+    removeSession(this.matchId);
+    matchManager.removeMatch(this.matchId);
   }
 }
 
