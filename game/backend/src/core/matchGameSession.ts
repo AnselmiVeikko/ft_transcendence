@@ -44,8 +44,13 @@ export class MatchGameSession {
     const match = matchManager.getMatch(this.matchId);
     const players = matchManager.getMatchPlayers(this.matchId);
     const isPvP = match?.gameMode === "PVP";
+    const isAI = match?.gameMode === "AI";
 
-    if (isPvP && players.length >= 2 && this.sockets.size === 2 && !this.game) {
+    // For PVP: start when both players connect
+    // For AI: start immediately when player connects
+    if (isAI && this.sockets.size === 1 && !this.game) {
+      this.startGame();
+    } else if (isPvP && players.length >= 2 && this.sockets.size === 2 && !this.game) {
       this.startGame();
     }
   }
@@ -156,8 +161,11 @@ export class MatchGameSession {
     this.gameStarted = false;
     matchManager.updateMatchState(this.matchId, "finished");
 
-    // Notify Main BE so the match is no longer stuck "PLAYING"
-    reportResultToMainBE(this.matchId, winnerId);
+    // Notify Main BE only for PVP matches (AI matches are not tracked in Main BE)
+    const match = matchManager.getMatch(this.matchId);
+    if (match?.gameMode === "PVP") {
+      reportResultToMainBE(this.matchId, winnerId);
+    }
 
     // Notify any remaining Game FE clients
     this.sendGameOverToAll(winnerId, score);
