@@ -69,20 +69,10 @@ export class MatchManager {
   }
 
   /**
-   * Remove match
+   * Remove match from memory (cleanup)
    */
   removeMatch(matchId: string): void {
     this.matches.delete(matchId);
-  }
-
-  /**
-   * Get player info from match
-   */
-  getPlayerInfo(matchId: string, userId: string): { userId: string; username: string } | null {
-    const match = this.getMatch(matchId);
-    if (!match) return null;
-    const player = match.players.find(p => p.userId === userId);
-    return player ? { userId: player.userId, username: player.username } : null;
   }
 
   /**

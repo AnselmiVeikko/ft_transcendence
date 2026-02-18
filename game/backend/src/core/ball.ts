@@ -24,11 +24,4 @@ export class Ball {
       this.speedY *= -1;
     }
   }
-
-  reset(canvasWidth: number, canvasHeight: number) {
-    this.x = canvasWidth;
-    this.y = canvasHeight;
-    this.speedX *= -1;
-    this.speedY *= -1;
-  }
 }

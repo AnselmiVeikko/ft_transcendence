@@ -35,6 +35,10 @@
   "greeting_settings_updates": "Päivityksiä",
   "greeting_settings_want": "Hienosäätöä",
   "landing_welcome_message": "Tervetuloa Pongiin!",
+  "game_over_template": "{{winner}} voitti!",
+  "you_won": "Voitit!",
+  "you_lost": "Hävisit!",
+  "opponent": "Vastustaja",
   "language": "Kieli",
   "language_en": "English",
   "language_fi": "Suomi",
@@ -88,5 +92,11 @@
   "decline": "Hylkää",
   "add": "Lisää",
   "prev": "Edellinen",
-  "next": "Seuraava"
+  "next": "Seuraava",
+  "game_connected": "Yhdistetty",
+  "game_disconnected": "Yhteys katkennut",
+  "game_waiting": "Odotetaan pelidataa...",
+  "game_controls": "Ohjaimet",
+  "game_move_left": "Liikuta vasenta mailaa",
+  "game_move_right": "Liikuta oikeaa mailaa"
 }

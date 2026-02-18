@@ -3,7 +3,8 @@
  */
 
 import type { GameState, MatchResult } from "../types/gameState.js";
-import { getMainBeUrl, getGameServiceToken } from "./gameConfig.js";
+import { getMainBeUrl } from "./gameConfig.js";
+import { signServiceJWT } from "./jwt.js";
 
 export type MatchPlayer = { userId: string; username: string };
 
@@ -43,14 +44,15 @@ export async function reportResultToMainBE(
   winnerId: string,
   ){
   try {
-    const url = "http://backend:3000/api/game/matchResult";
+    const baseUrl = getMainBeUrl();
+    const url = `${baseUrl}/api/game/matchResult`;
     const body: MatchResult = { matchId, winnerId };
-    const token = getGameServiceToken()
+    const token = signServiceJWT();
     const res = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(body),
     });
