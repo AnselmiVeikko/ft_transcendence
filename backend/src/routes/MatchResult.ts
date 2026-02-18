@@ -1,10 +1,9 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import prisma from "../plugins/prisma";
-import jwt from "jsonwebtoken";
 import { errorResponse } from "../utils/UserResponses";
 import { ErrorResponseSchema } from "../schemas/UserSchema";
 import { FinishMatchBodySchema, FinishMatchResponseSchema } from "../schemas/GameSchema";
-import { error } from "node:console";
+import { verifyGameServiceToken } from "../utils/auth";
 
 type FinishMatchRequest = FastifyRequest<{ Body: { matchId: string; winnerId: string; score: Record<string, number>; } }>;
 
@@ -19,6 +18,16 @@ export default async function matchResult(app: FastifyInstance) {
             },
         },
     }, async (request: FinishMatchRequest, reply: FastifyReply) => {
+        // Verify JWT authentication from Game BE
+        const authHeader = request.headers.authorization;
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            return reply.status(401).send(errorResponse(401, "Missing or invalid authorization header"));
+        }
+        
+        const token = authHeader.substring(7); // Remove 'Bearer ' prefix
+        if (!verifyGameServiceToken(token)) {
+            return reply.status(403).send(errorResponse(403, "Invalid or expired service token"));
+        }
 
         const { matchId, winnerId } = request.body;
         if (!matchId)
