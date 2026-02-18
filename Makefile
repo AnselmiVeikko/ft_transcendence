@@ -77,6 +77,7 @@ clean:
 	@echo "Stopped all containers"
 	@docker compose down --volumes --rmi all --remove-orphans
 	@docker builder prune -f
+	@docker volume prune -f
 	@echo "Removed all containers, networks, and volumes..."
 
 # -----------------------
