@@ -87,6 +87,17 @@ logs:
 	$(DC) --env-file $(ENV_FILE) -f $(COMPOSE_FILE) logs -f
 
 # -----------------------
+# Build and start all services
+# Usage:
+# - make run
+# -----------------------
+run:
+	@echo "Building all services..."
+	$(MAKE) build
+	@echo "Starting all services..."
+	$(MAKE) up
+
+# -----------------------
 # Clean, build and restart
 # -----------------------
 re:
