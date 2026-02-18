@@ -42,7 +42,8 @@ export function pendingList(list: any[]) {
 			friendRId: u.friendRId,
 			userId: u.userId,
 			userName: u.userName,
-			avatarUrl: u.avatarUrl
+			avatarUrl: u.avatarUrl,
+			status: u.status
 		})),
 	};
 }
@@ -53,7 +54,8 @@ export function suggestionList(list: any[]) {
 		data: list.map(u => ({
 			userId: u.userId,
 			userName: u.userName,
-			avatarUrl: u.avatarUrl
+			avatarUrl: u.avatarUrl,
+			status: u.status
 		})),
 	};
 }
