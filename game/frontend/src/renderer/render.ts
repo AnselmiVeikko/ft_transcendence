@@ -22,7 +22,7 @@ const drawRoundedRect = (
   ctx.closePath();
 };
 
-export function render(ctx: CanvasRenderingContext2D, state: GameState | null) {
+export function render(ctx: CanvasRenderingContext2D, state: GameState | null, welcomeText?: string) {
   const { width, height } = ctx.canvas;
   ctx.clearRect(0, 0, width, height);
 
@@ -36,11 +36,11 @@ export function render(ctx: CanvasRenderingContext2D, state: GameState | null) {
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, width, height);
 
-    // Welcome message
+    // Welcome message (translated when provided by main FE)
     ctx.fillStyle = "#ffebf7";
     ctx.font = "600 34px 'Space Grotesk', sans-serif";
     ctx.textAlign = "center";
-    ctx.fillText("Welcome to Pong!", width / 2, height / 2 - 20);
+    ctx.fillText(welcomeText ?? "Welcome to Pong!", width / 2, height / 2 - 20);
     return;
   }
 
