@@ -35,6 +35,10 @@
   "greeting_settings_updates": "Uppdateringar krävs",
   "greeting_settings_want": "Vill du justera något",
   "landing_welcome_message": "Välkommen till Pong!",
+  "game_over_template": "{{winner}} vann!",
+  "you_won": "Du vann!",
+  "you_lost": "Du förlorade!",
+  "opponent": "Motståndare",
   "language": "Språk",
   "language_en": "English",
   "language_fi": "Suomi",
@@ -88,5 +92,11 @@
   "decline": "Avböj",
   "add": "Lägg till",
   "prev": "Föreg",
-  "next": "Nästa"
+  "next": "Nästa",
+  "game_connected": "Ansluten",
+  "game_disconnected": "Frånkopplad",
+  "game_waiting": "Väntar på speldatan...",
+  "game_controls": "Kontroller",
+  "game_move_left": "Flytta vänster paddel",
+  "game_move_right": "Flytta höger paddel"
 }

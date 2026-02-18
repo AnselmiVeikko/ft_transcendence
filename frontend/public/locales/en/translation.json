@@ -35,6 +35,10 @@
   "greeting_settings_updates": "Updates needed",
   "greeting_settings_want": "Want to tweak something",
   "landing_welcome_message": "Welcome to Pong!",
+  "game_over_template": "{{winner}} won!",
+  "you_won": "You won!",
+  "you_lost": "You lost!",
+  "opponent": "Opponent",
   "language": "Language",
   "language_en": "English",
   "language_fi": "Suomi",
@@ -88,5 +92,11 @@
   "decline": "Decline",
   "add": "Add",
   "prev": "Prev",
-  "next": "Next"
+  "next": "Next",
+  "game_connected": "Connected",
+  "game_disconnected": "Disconnected",
+  "game_waiting": "Waiting for game data...",
+  "game_controls": "Controls",
+  "game_move_left": "Move left paddle",
+  "game_move_right": "Move right paddle"
 }

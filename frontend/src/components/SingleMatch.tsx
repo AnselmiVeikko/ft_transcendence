@@ -10,11 +10,42 @@ const colorClasses = {
   bgGlow: 'bg-glow [animation:blob-drift_20s_ease-in-out_infinite]',
 };
 
+const GAME_ORIGIN = "http://localhost:5174";
+
+const getGameStrings = (t: (key: string) => string) => ({
+  welcome: t('landing_welcome_message'),
+  gameOverTemplate: t('game_over_template'),
+  youWon: t('you_won'),
+  youLost: t('you_lost'),
+  opponent: t('opponent'),
+  connected: t('game_connected'),
+  disconnected: t('game_disconnected'),
+  waiting: t('game_waiting'),
+  controls: t('game_controls'),
+  moveLeft: t('game_move_left'),
+  moveRight: t('game_move_right'),
+});
+
 const SingleMatch = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { isWaiting, gameStarted, matchId, gameToken, player } =
     useMatchmaking();
   const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  const sendStringsToGame = () => {
+    if (iframeRef.current?.contentWindow) {
+      iframeRef.current.contentWindow.postMessage(
+        { type: 'STRINGS_UPDATE', strings: getGameStrings(t) },
+        GAME_ORIGIN
+      );
+    }
+  };
+
+  // When language changes, push updated strings to the game iframe so it stays in sync
+  useEffect(() => {
+    if (!gameStarted) return;
+    sendStringsToGame();
+  }, [i18n.language, gameStarted]);
 
   const handleIframeLoad = () => {
     if (iframeRef.current && gameStarted && player) {
@@ -26,9 +57,12 @@ const SingleMatch = () => {
         },
         gameWsUrl: 'ws://localhost:4000/ws',
         accessToken: gameToken,
+        strings: getGameStrings(t),
       };
-      iframeRef.current.contentWindow?.postMessage(message, "http://localhost:5174");
-	  console.log("INITIALIZING GAME WITH ", matchId, player.userId, player.username, gameToken);
+      iframeRef.current.contentWindow?.postMessage(message, GAME_ORIGIN);
+      console.log("INITIALIZING GAME WITH ", matchId, player.userId, player.username, gameToken);
+      // Resend strings after a short delay so game gets correct locale if translations loaded async (e.g. Swedish)
+      setTimeout(sendStringsToGame, 150);
     }
   };
 
@@ -59,7 +93,7 @@ const SingleMatch = () => {
               width="2400"
               height="1200"
               onLoad={handleIframeLoad}
-              src="http://localhost:5174"
+              src={GAME_ORIGIN}
             />
           )}
         </div>

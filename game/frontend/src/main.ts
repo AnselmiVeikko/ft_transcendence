@@ -13,7 +13,7 @@ if (!ctx) {
   throw new Error("Cannot get canvas context");
 }
 
-// Data received from Main FE via postMessage
+// Data received from Main FE via postMessage (strings = i18n for selected language)
 interface GameInitData {
   matchId: string;
   player: {
@@ -22,12 +22,26 @@ interface GameInitData {
   };
   gameWsUrl: string;
   accessToken: string;
+  strings?: {
+    welcome: string;
+    gameOverTemplate: string;
+    youWon: string;
+    youLost: string;
+    opponent: string;
+    connected: string;
+    disconnected: string;
+    waiting: string;
+    controls: string;
+    moveLeft: string;
+    moveRight: string;
+  };
 }
 
 let ws: WebSocket | null = null;
 let currentState: GameState | null = null;
 let isConnected = false;
 let gameInitData: GameInitData | null = null;
+let gameStrings: GameInitData["strings"] = undefined;
 const leftKeys = new Set<string>();
 const rightKeys = new Set<string>();
 
@@ -64,14 +78,19 @@ function connectWebSocket(data: GameInitData) {
         
         if (message.type === "STATE_UPDATE" && ctx) {
           currentState = message.state as GameState;
-          // Trigger render
-          if (currentState) {
-            render(ctx, currentState);
-          }
+          // Trigger render (always pass welcome text even if state exists, for consistency)
+          render(ctx, currentState, gameStrings?.welcome);
         } else if (message.type === "GAME_OVER") {
           console.log("🎮 Game Over!", message.result);
-          // Display game over message
-          displayGameOver(message.result);
+          const result = message.result as { winnerId: string; score: Record<string, number> };
+          const isWinner = result.winnerId === gameInitData?.player.id;
+          const translatedMessage = isWinner
+            ? (gameStrings?.youWon ?? "You won!")
+            : (gameStrings?.youLost ?? "You lost!");
+          if (currentState) {
+            currentState = { ...currentState, gameMessage: translatedMessage };
+          }
+          if (ctx) render(ctx, currentState, gameStrings?.welcome);
         } else {
           console.log("📨 Received message:", message.type);
         }
@@ -170,72 +189,71 @@ window.addEventListener("keyup", (e) => {
 
 /**
  * Listen for postMessage from Main FE
- * Expected data: { matchId, player: { id, username }, gameWsUrl, accessToken }
+ * - Init: { matchId, player, gameWsUrl, accessToken, strings? }
+ * - STRINGS_UPDATE: { type: 'STRINGS_UPDATE', strings } when main FE language changes
  */
 window.addEventListener("message", (event) => {
-  // Security: Always validate origin
-  // In production, validate against known Main FE origin
-  console.log("📨 Received postMessage from:", event.origin);
-  
   try {
-    const data = event.data as GameInitData;
-    
-    // Validate required fields
-    if (!data.matchId || !data.player || !data.gameWsUrl || !data.accessToken) {
-      console.error("❌ Invalid game init data:", data);
+    const data = event.data as GameInitData & { type?: string; strings?: GameInitData["strings"] };
+
+    if (data.type === "STRINGS_UPDATE" && data.strings) {
+      gameStrings = data.strings;
+      // Update connection status and controls with new strings
+      updateConnectionStatus();
+      updateControlsText();
+      // Re-render to update welcome message if we're on welcome screen
+      if (ctx && !currentState) {
+        render(ctx, null, gameStrings.welcome);
+      }
       return;
     }
-    
+
+    // Security: Always validate origin
+    if (!data.matchId || !data.player || !data.gameWsUrl || !data.accessToken) {
+      return;
+    }
+
     console.log("✅ Received game init data:", {
       matchId: data.matchId,
       player: data.player.username,
       gameWsUrl: data.gameWsUrl
     });
-    
+
     gameInitData = data;
+    gameStrings = data.strings;
     
-    // Connect to WebSocket
+    // Update UI with translated strings
+    updateConnectionStatus();
+    updateControlsText();
+
     connectWebSocket(data);
   } catch (error) {
     console.error("Error handling postMessage:", error);
   }
 });
 
-function displayGameOver(result: { winnerId: string; score: Record<string, number> }) {
-  // Create or update game over message
-  let gameOverEl = document.getElementById('game-over-message');
-  if (!gameOverEl) {
-    gameOverEl = document.createElement('div');
-    gameOverEl.id = 'game-over-message';
-    gameOverEl.style.position = 'fixed';
-    gameOverEl.style.top = '50%';
-    gameOverEl.style.left = '50%';
-    gameOverEl.style.transform = 'translate(-50%, -50%)';
-    gameOverEl.style.backgroundColor = 'rgba(0,0,0,0.9)';
-    gameOverEl.style.color = '#fff';
-    gameOverEl.style.padding = '2rem';
-    gameOverEl.style.borderRadius = '8px';
-    gameOverEl.style.zIndex = '2000';
-    gameOverEl.style.textAlign = 'center';
-    document.body.appendChild(gameOverEl);
-  }
-  
-  const winnerName = gameInitData?.player.username === result.winnerId ? 
-    gameInitData.player.username : 'Opponent';
-  
-  gameOverEl.innerHTML = `
-    <h2>Game Over!</h2>
-    <p>Winner: ${winnerName}</p>
-    <p>Scores: ${JSON.stringify(result.score)}</p>
-  `;
-}
-
 // Start render loop
 function renderLoop() {
   if (ctx) {
-    render(ctx, currentState);
+    render(ctx, currentState, gameStrings?.welcome);
   }
   requestAnimationFrame(renderLoop);
+}
+
+// Update controls text with translations
+function updateControlsText() {
+  const controlsTitle = document.querySelector('.tips-title');
+  const controlsList = document.querySelector('.tips-card ul');
+  if (controlsTitle && gameStrings?.controls) {
+    controlsTitle.textContent = gameStrings.controls;
+  }
+  if (controlsList && gameStrings?.moveLeft && gameStrings?.moveRight) {
+    const items = controlsList.querySelectorAll('li');
+    if (items.length >= 2) {
+      items[0].textContent = `W / S ${gameStrings.moveLeft}`;
+      items[1].textContent = `↑ / ↓ ${gameStrings.moveRight}`;
+    }
+  }
 }
 
 // Connection status indicator
@@ -243,10 +261,10 @@ function updateConnectionStatus() {
   const statusEl = document.getElementById('connection-status');
   if (statusEl) {
     if (isConnected) {
-      statusEl.textContent = '🟢 Connected';
+      statusEl.textContent = `🟢 ${gameStrings?.connected ?? 'Connected'}`;
       statusEl.style.color = '#4ade80';
     } else {
-      statusEl.textContent = '🔴 Disconnected';
+      statusEl.textContent = `🔴 ${gameStrings?.disconnected ?? 'Disconnected'}`;
       statusEl.style.color = '#ef4444';
     }
   }
@@ -265,8 +283,23 @@ if (!document.getElementById('connection-status')) {
   statusEl.style.borderRadius = '4px';
   statusEl.style.fontSize = '14px';
   statusEl.style.zIndex = '1000';
-  statusEl.textContent = '🔴 Waiting for game data...';
+  statusEl.textContent = `🔴 ${gameStrings?.waiting ?? 'Waiting for game data...'}`;
   document.body.appendChild(statusEl);
+  // Update initial status text when strings are received
+  const updateInitialStatus = () => {
+    const waiting = gameStrings?.waiting;
+    if (waiting && statusEl.textContent?.includes('Waiting')) {
+      statusEl.textContent = `🔴 ${waiting}`;
+    }
+  };
+  // Check periodically until strings are loaded
+  const checkInterval = setInterval(() => {
+    if (gameStrings?.waiting) {
+      updateInitialStatus();
+      clearInterval(checkInterval);
+    }
+  }, 100);
+  setTimeout(() => clearInterval(checkInterval), 5000);
 }
 
 // Initialize render loop (will wait for postMessage to connect)

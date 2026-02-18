@@ -25,15 +25,3 @@ export interface GameState {
   canvasHeight: number;
 }
 
-export interface InputEvent {
-  type: 'keydown' | 'keyup';
-  key: string;
-}
-
-export interface GameStartEvent {
-  gameMode: '2P' | 'AI';
-  player1: string;
-  player2?: string;
-  matchId?: string;
-}
-

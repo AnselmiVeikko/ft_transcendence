@@ -38,6 +38,29 @@ export function verifyJWT(token: string): JWTPayload | null {
 }
 
 /**
+ * Sign JWT token for Game BE to authenticate to Main BE
+ * Uses the same secret as verifyJWT (HS256 symmetric)
+ * - issuer: 'game-be'
+ * - audience: 'main-be'
+ * - sub: 'game-service'
+ * - exp: 5 minutes
+ */
+export function signServiceJWT(): string {
+  const secret = process.env.GAME_TOKEN_SECRET || "game-secret-change-this";
+  
+  const payload = {
+    sub: 'game-service',
+    iss: 'game-be',
+    aud: 'main-be',
+    exp: Math.floor(Date.now() / 1000) + (5 * 60), // 5 minutes
+  };
+
+  return jwt.sign(payload, secret, {
+    algorithm: 'HS256',
+  });
+}
+
+/**
  * Extract matchId and token from WebSocket URL query params
  * Expected format: ws://host/ws?matchId=m456&token=JWT_TOKEN
  */

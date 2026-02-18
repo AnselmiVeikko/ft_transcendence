@@ -82,3 +82,23 @@ export function genGameToken(matchId: string, userId: string, username: string) 
 
     return gameToken;
 }
+
+/**
+ * Verify JWT token from Game BE for service-to-service authentication
+ * Verifies tokens signed by Game BE (iss: 'game-be', aud: 'main-be')
+ * Uses the same GAME_TOKEN_SECRET as genGameToken (HS256 symmetric)
+ */
+export function verifyGameServiceToken(token: string): boolean {
+    try {
+        const secret = process.env.GAME_TOKEN_SECRET || "game-secret-change-this";
+        jwt.verify(token, secret, {
+            algorithms: ['HS256'],
+            issuer: 'game-be',
+            audience: 'main-be'
+        });
+        return true;
+    } catch (error) {
+        console.error('Game service token verification failed:', error);
+        return false;
+    }
+}
