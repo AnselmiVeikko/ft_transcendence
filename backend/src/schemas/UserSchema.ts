@@ -2,7 +2,7 @@ import { Type, Static } from "@sinclair/typebox";
 
 //login and logout schemas
 export const LoginBodySchema = Type.Object({
-    userName: Type.String(),
+    email: Type.String(),
     password: Type.String(),
 });
 
