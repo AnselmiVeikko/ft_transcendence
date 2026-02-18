@@ -22,11 +22,11 @@ const colorClasses = {
 const MenuCard = ({ title, colorClass, icon, to }: MenuCardProps) => (
     <Link
         to={to}
-        className={`w-full lg:w-60 lg:h-90 flex flex-col items-center justify-center p-6 
+        className={`w-full sm:h-60 lg:w-60 lg:h-90 flex flex-col items-center justify-center p-4 sm:p-6 
                     text-white rounded-xl shadow-lg transition duration-300 
                     transform hover:scale-[1.07] hover:shadow-xl ${colorClass}`}>
-        <div className="text-4xl mb-3">{icon}</div>
-        <span className="text-xl font-bold uppercase tracking-wider">{title}</span>
+        <div className="text-xl md:text-4xl mb-3">{icon}</div>
+        <span className="text-sm md:text-xl font-bold uppercase tracking-wider">{title}</span>
     </Link>
 );
 // ---------------------------------------
@@ -60,12 +60,12 @@ const Menu = () => {
         className={`flex flex-col items-center justify-center p-4 w-full`}
         style={{ height: 'calc(100vh - 80px)' }} // make sure content fits below header
       >
-        <div className="mb-12 p-6 text-center max-w-5xl w-full z-10">
-          <h1 className="text-2xl font-extrabold tracking-tight sm:pb-2 bg-clip-text text-transparent bg-linear-to-r from-indigo-700 to-blue-200 sm:text-4xl lg:text-5xl">
+        <div className="mb-4 sm:mb-12 p-6 text-center max-w-5xl w-full z-10">
+          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight sm:pb-2 bg-clip-text text-transparent bg-linear-to-r from-indigo-700 to-blue-200">
             {t(randomGreetingKey)}, {userName}!
           </h1>
         </div>
-        <div className="flex flex-col lg:flex-row items-center gap-12 max-w-7xl mx-auto z-10">
+        <div className="flex flex-col lg:flex-row items-center gap-6 md:gap-12 max-w-7xl mx-auto z-10">
           <MenuCard
             title={t('single_match')}
             colorClass={colorClasses.start}

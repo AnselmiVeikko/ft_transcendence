@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import SettingsMenu from './SettingsMenu';
 import { useMatchmaking } from '../hooks/useMatchmaking';
-import { useRef, useEffect } from 'react';
-import { PlaySquare } from 'lucide-react';
+import { useRef, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const colorClasses = {
   start:
@@ -28,9 +28,27 @@ const getGameStrings = (t: (key: string) => string) => ({
 
 const SingleMatch = () => {
   const { t, i18n } = useTranslation();
-  const { isWaiting, gameStarted, matchId, gameToken, player } =
+  const navigate = useNavigate();
+  const { isWaiting, gameStarted, matchId, gameToken, player, isGameFinished } =
     useMatchmaking();
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const [countdown, setCountdown] = useState(5);
+
+  useEffect(() => {
+	if (isGameFinished) {
+		const timer = setInterval(() => {
+			setCountdown((prev) => Math.max(0, prev - 1));
+		}, 1000);
+		const redirect = setTimeout(() => {
+			navigate('/menu');
+		}, 5000);
+		return () => {
+			clearInterval(timer);
+			clearTimeout(redirect);
+		};
+	}	
+  }, [isGameFinished, navigate]);
+
 
   const sendStringsToGame = () => {
     if (iframeRef.current?.contentWindow) {
@@ -69,6 +87,21 @@ const SingleMatch = () => {
   return (
     <div className="relative">
       <SettingsMenu />
+
+	 {isGameFinished && (
+        <div className="absolute top-20 left-1/2 -translate-x-1/2 z-50 animate-fade-in">
+          <div className="bg-indigo-600 text-white px-6 py-3 rounded-full shadow-xl flex items-center gap-4 border border-indigo-400">
+            <span className="font-bold uppercase tracking-wider">
+              {t('game_finished')}
+            </span>
+            <div className="h-6 w-px bg-indigo-400" />
+            <span>
+              {t('returning_in')} <strong className="text-lg">{countdown}s</strong>
+            </span>
+          </div>
+        </div>
+      )}
+
       <div
         className={`${colorClasses.bgGlow} flex items-center justify-center p-4`}
         style={{ height: 'calc(100vh - 80px)' }}

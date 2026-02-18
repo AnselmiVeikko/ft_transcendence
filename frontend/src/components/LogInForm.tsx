@@ -21,16 +21,14 @@ const LogInForm = ()=> {
 		setLoading(loading);
 
 		const target = e.target as typeof e.target & {
-			username: { value: string };
-			//email: { value: string };
+			email: { value: string };
 			password: { value: string };
 		};
 
-		const userName = target.username.value;
-		//const email = target.email.value;
+		const email = target.email.value;
 		const password = target.password.value;
 
-		if (!userName || !password) {
+		if (!email || !password) {
             setError(t('all_fields_required'));
             setLoading(false);
             return;
@@ -44,8 +42,7 @@ const LogInForm = ()=> {
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify({
-					userName,
-					//email,
+					email,
 					password,
 				}),
 			});
@@ -81,16 +78,16 @@ const LogInForm = ()=> {
 			)} */}
 			<div className="space-y-4">
 				<div>
-					<label htmlFor="username" className={`${formStyle}`}>
-						{t('username')}
+					<label htmlFor="email" className={`${formStyle}`}>
+						{t('email')}
 					</label>
 					<input
-						type="text"
-						id="username"
-						name="username"
-						autoComplete="username"
+						type="email"
+						id="email"
+						name="email"
+						autoComplete="email"
 						className={`${formFieldStyle}`}
-						placeholder={t('enter-username')}
+						placeholder={t('enter-email')}
 						/>
 				</div>
 				<div>
