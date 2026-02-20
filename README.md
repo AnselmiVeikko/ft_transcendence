@@ -5,14 +5,13 @@ The project focuses on modern web development practices, security, scalability, 
 
 # Project Feature
 
+- Manage profiles and avatars
+- Secure authentication
 - Play real-time Pong matches with AI
 - Play real-time Pong matches with friends
-- Manage profiles and avatars
 - Add friends and manage friend requests
 - See online/offline status
 - Search friends
-- View match history
-- Authenticate securely
 
 # Tech Stack
 ### Frontend
@@ -32,6 +31,43 @@ The project focuses on modern web development practices, security, scalability, 
  ![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)
  ![Docker Compose](https://img.shields.io/badge/Docker_Compose-2496ED?logo=docker&logoColor=white)
 
+
+# Installation and Usage
+
+### Prerequisites
+1. Docker ([install](https://docs.docker.com/get-started/))
+2. Docker Compose ([install](https://docs.docker.com/compose/))
+3. Make tool ([install](https://sp21.datastructur.es/materials/guides/make-install.html))
+4. Make sure port 3000 and 8443 are not in use
+
+### Installation
+1. Clone git repository in your local directory
+```bash
+	git clone git@github.com:AnselmiVeikko/ft_transcendence.git
+```
+
+2. Build and start all the docker containers
+
+```bash
+	cd ft_transcendence
+
+	make run
+```
+
+### Usage
+
+Navigate (Note: You may receive a security warning because the site uses a self-signed TLS certificate. Click “Advanced” and then “Proceed to localhost (unsafe)” to continue browsing)
+```
+	https://localhost:8443
+```
+
+
+### Clean
+To stop and remove all the containers and volumes run
+
+```
+	make clean
+```
 
  # Team
 
