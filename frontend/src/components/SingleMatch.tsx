@@ -10,7 +10,7 @@ const colorClasses = {
   bgGlow: 'bg-glow [animation:blob-drift_20s_ease-in-out_infinite]',
 };
 
-const GAME_ORIGIN = "http://localhost:5174";
+const GAME_ORIGIN = "https://localhost:8443/game/";
 
 const getGameStrings = (t: (key: string) => string) => ({
   welcome: t('landing_welcome_message'),
@@ -73,7 +73,7 @@ const SingleMatch = () => {
           id: player.userId,
           username: player.username,
         },
-        gameWsUrl: 'ws://localhost:4000/ws',
+        gameWsUrl: 'wss://localhost:8443/game-ws/ws',
         accessToken: gameToken,
         strings: getGameStrings(t),
       };
