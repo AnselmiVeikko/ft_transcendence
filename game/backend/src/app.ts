@@ -69,10 +69,13 @@ wss.on('connection', (ws: WebSocket, request) => {
   const userId = payload.sub;
   const username = payload.username;
 
-  console.log(`✅ Authenticated user: ${username} (${userId}) for match: ${matchId}`);
+  // Detect AI match from matchId pattern (starts with "ai-")
+  const gameMode: 'PVP' | 'AI' = matchId.startsWith('ai-') ? 'AI' : 'PVP';
+
+  console.log(`✅ Authenticated user: ${username} (${userId}) for match: ${matchId} (mode: ${gameMode})`);
 
   // Create or get match and verify user belongs to it
-  const match = matchManager.createOrGetMatch(matchId, userId, username);
+  const match = matchManager.createOrGetMatch(matchId, userId, username, gameMode);
   
   if (!matchManager.isUserInMatch(matchId, userId)) {
     console.error(`❌ User ${userId} not authorized for match ${matchId}`);

@@ -41,3 +41,10 @@ export const FinishMatchBodySchema = Type.Object({
 
 export const FinishMatchResponseSchema = Type.Object({
 })
+
+export const AITokenResponseSchema = Type.Object({
+    message: Type.String(),
+    data: Type.Object({
+        gameToken: Type.String(),
+    }),
+})

@@ -76,7 +76,7 @@ const Menu = () => {
             title={t('ai_match')}
             colorClass={colorClasses.ai_match}
             icon={<FaRobot />}
-            to="/"
+            to="/aimatch"
           />
           <MenuCard
             title={t('profile')}

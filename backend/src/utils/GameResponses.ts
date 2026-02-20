@@ -1,3 +1,11 @@
+export function aiTokenResponse(gameToken: string) {
+    return {
+        message: "AI game token issued",
+        data: {
+            gameToken,
+        },
+    };
+}
 export function matchFound(
     matchId: string,
     gameToken: string,
