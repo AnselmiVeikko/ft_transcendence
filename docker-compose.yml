@@ -1,7 +1,9 @@
 services:
 
   nginx:
-    build: ./nginx
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
     container_name: nginx
     volumes:
       - ./nginx/ssl:/etc/nginx/ssl:ro
