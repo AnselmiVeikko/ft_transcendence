@@ -3,7 +3,7 @@
  */
 
 import type { GameState, MatchResult } from "../types/gameState.js";
-import { getMainBeUrl } from "./gameConfig.js";
+import { getNginxUrl } from "./gameConfig.js";
 import { signServiceJWT } from "./jwt.js";
 
 export type MatchPlayer = { userId: string; username: string };
@@ -44,7 +44,7 @@ export async function reportResultToMainBE(
   winnerId: string,
   ){
   try {
-    const baseUrl = getMainBeUrl();
+    const baseUrl = getNginxUrl();
     const url = `${baseUrl}/api/game/matchResult`;
     const body: MatchResult = { matchId, winnerId };
     const token = signServiceJWT();

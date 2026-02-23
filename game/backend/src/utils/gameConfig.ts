@@ -6,8 +6,8 @@
 export const CANVAS_WIDTH = 900;
 export const CANVAS_HEIGHT = 600;
 
-export function getMainBeUrl(): string {
-  return process.env.MAIN_BE_URL || "http://backend:3000";
+export function getNginxUrl(): string {
+  return process.env.NGINX_URL || "https://nginx";
 }
 
 export function getGameServiceToken(): string {

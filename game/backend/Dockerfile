@@ -28,6 +28,9 @@ WORKDIR /app
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 
+COPY cert/internal-ca.crt /app/cert/internal-ca.crt
+ENV NODE_EXTRA_CA_CERTS=/app/cert/internal-ca.crt
+
 EXPOSE 4000
 
 # Run the server
