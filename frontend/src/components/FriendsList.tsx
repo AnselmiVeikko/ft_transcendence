@@ -204,6 +204,14 @@ const FriendsList = () => {
     }
   });
 
+  const filteredRequests = statusFilter === 'ALL'
+    ? friendRequests
+    : friendRequests.filter((r) => r.status === statusFilter);
+
+  const filteredSuggestions = statusFilter === 'ALL'
+    ? friendSuggestions
+    : friendSuggestions.filter((s) => s.status === statusFilter);
+
   return (
     <div className="min-h-screen p-4 sm:p-6">
       <div className="max-w-2xl mx-auto">
@@ -327,13 +335,13 @@ const FriendsList = () => {
         )}
 
         {/* Friend Requests */}
-        {friendRequests.length > 0 && (
+        {filteredRequests.length > 0 && (
           <div className="mb-8">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
               Friend Requests
             </h2>
             <div className="space-y-3">
-              {friendRequests.map((request: FriendRequest) => (
+              {filteredRequests.map((request: FriendRequest) => (
                 <div
                   key={request.userId}
                   className="bg-white p-3 sm:p-4 rounded-lg border border-gray-200 dark:bg-white/5 dark:border-white/10 dark:backdrop-blur-sm"
@@ -352,13 +360,13 @@ const FriendsList = () => {
         )}
 
         {/* Suggestions */}
-        {friendSuggestions.length > 0 && (
+        {filteredSuggestions.length > 0 && (
           <div>
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
               Suggestions
             </h2>
             <div className="space-y-3">
-              {friendSuggestions.map((suggestion) => (
+              {filteredSuggestions.map((suggestion) => (
                 <div
                   key={suggestion.userId}
                   className="bg-white p-3 sm:p-4 rounded-lg border border-gray-200 dark:bg-white/5 dark:border-white/10 dark:backdrop-blur-sm"
