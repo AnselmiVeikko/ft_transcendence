@@ -4,15 +4,15 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import App from "./App.tsx";
 import "./i18n.ts";
-import LogIn from "./components/LogIn.tsx";
-import Menu from "./components/Menu.tsx";
-import Register from "./components/Register.tsx";
+import LogIn from "./pages/LogIn.tsx";
+import Menu from "./pages/Menu.tsx";
+import Register from "./pages/Register.tsx";
 import ProtectedRoutes from "./utils/ProtectedRoutes.tsx";
-import PageNotFound from "./components/PageNotFound.tsx";
-import FriendsList from "./components/FriendsList.tsx";
-import SingleMatch from './components/SingleMatch.tsx';
-import AIMatch from './components/AIMatch.tsx';
-import Profile from "./components/Profile.tsx"
+import PageNotFound from "./pages/PageNotFound.tsx";
+import FriendsList from "./pages/FriendsList.tsx";
+import SingleMatch from './pages/SingleMatch.tsx';
+import AIMatch from './pages/AIMatch.tsx';
+import Profile from "./pages/Profile.tsx"
 
 const router = createBrowserRouter([
   {
