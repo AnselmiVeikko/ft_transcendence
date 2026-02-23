@@ -18,12 +18,14 @@ interface FriendRequest {
   userName: string;
   friendRId: string;
   avatarUrl: string;
+  status?: 'ONLINE' | 'OFFLINE';
 }
 
 interface FriendSuggestion {
   userId: string;
   userName: string;
   avatarUrl: string;
+  status?: 'ONLINE' | 'OFFLINE';
 }
 
 type OnlineStatus = 'ALL' | 'ONLINE' | 'OFFLINE';
@@ -41,7 +43,7 @@ const FriendsList = () => {
   const [searchLoading, setSearchLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const PAGE_SIZE = 1;
+  const PAGE_SIZE = 3;
   const [currentPage, setCurrentPage] = useState(1);
   const [totalFriends, setTotalFriends] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -71,9 +73,6 @@ const FriendsList = () => {
       setInitialLoading(false);
     }
   };
- /*  console.log("friends", friends);
-  console.log("friendSuggestions", friendSuggestions);
-  console.log("friendRequests", friendRequests); */
 
   const searchFriends = async (page = currentPage) => {
     try {
@@ -344,6 +343,7 @@ const FriendsList = () => {
                     name={request.userName}
                     onAccept={() => acceptFriendRequest(request.friendRId)}
                     onDecline={() => declineFriendRequest(request.friendRId)}
+                    status={request.status}
                   />
                 </div>
               ))}
@@ -367,6 +367,7 @@ const FriendsList = () => {
                     avatarUrl={suggestion.avatarUrl}
                     name={suggestion.userName}
                     onAddFriend={() => addFriend(suggestion.userId)}
+                    status={suggestion.status}
                   />
                 </div>
               ))}
