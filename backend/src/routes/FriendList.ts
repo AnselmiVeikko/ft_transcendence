@@ -83,6 +83,7 @@ export default async function friendList(app: FastifyInstance) {
 
 			return reply.status(200).send(searchList(pagedFriends, pageNo, limit, totalFriend, totalPage));
 		} catch(error) {
+			app.log.error(error);
 			return reply.status(500).send(errorResponse(500, "Internal server error"));
 		}
 	});
@@ -129,6 +130,7 @@ export default async function friendList(app: FastifyInstance) {
 			return reply.status(200).send(pendingList(pendingRequests));
 
 		} catch(error) {
+			app.log.error(error);
 			return reply.status(500).send(errorResponse(500, "Internal server error"));
 		}
 	});
@@ -187,6 +189,7 @@ export default async function friendList(app: FastifyInstance) {
 			return reply.status(200).send(suggestionList(suggestionsWithAvatar));
 
 		} catch(error) {
+			app.log.error(error);
 			return reply.status(500).send(errorResponse(500, "Internal server error"));
 		}
 	});
