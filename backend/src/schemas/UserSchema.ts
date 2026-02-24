@@ -45,6 +45,11 @@ export const ProfileSelfResponseSchema = Type.Object({
 
 export const ProfileAvatarResponseSchema = Type.Object({
     message: Type.String(),
+    data: Type.Object({
+        userId:     Type.String(),
+        userName:   Type.String(),
+        avatarName: Type.Union([Type.String(), Type.Null()]),
+    }),
 });
 
 // Error Response
