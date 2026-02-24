@@ -10,7 +10,9 @@ const colorClasses = {
   bgGlow: 'bg-glow [animation:blob-drift_20s_ease-in-out_infinite]',
 };
 
-const GAME_ORIGIN = "https://localhost:8443/game/";
+const CURRENT_HOST = window.location.hostname;
+
+const GAME_ORIGIN = `https://${CURRENT_HOST}:8443/game/`;
 
 const getGameStrings = (t: (key: string) => string) => ({
   welcome: t('landing_welcome_message'),
@@ -73,7 +75,7 @@ const SingleMatch = () => {
           id: player.userId,
           username: player.username,
         },
-        gameWsUrl: 'wss://localhost:8443/game-ws/ws',
+        gameWsUrl: `wss://${CURRENT_HOST}:8443/game-ws/ws`,
         accessToken: gameToken,
         strings: getGameStrings(t),
       };
@@ -103,8 +105,8 @@ const SingleMatch = () => {
       )}
 
       <div
-        className={`${colorClasses.bgGlow} flex items-center justify-center p-4`}
-        style={{ height: 'calc(100vh - 80px)' }}
+        className="flex items-center justify-center p-4"
+        style={{ height: 'calc(100vh - 11rem)' }}
       >
         {isWaiting && (
           <div className="absolute inset-0 flex items-center justify-center bg-gray-900/10 backdrop-blur-sm z-10">
