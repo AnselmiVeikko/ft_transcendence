@@ -52,12 +52,14 @@ export default async function registrationRoutes(app: FastifyInstance) {
 			};
 
 			return reply.status(201).send(registrationSuccess(responseUser));
+
 		} catch(error) {
 			if (error instanceof Prisma.PrismaClientKnownRequestError) {
 				if (error.code === "P2002") {
 					return reply.status(400).send({ message: "Username or email already exists." });
 				}
 			}
+			app.log.error(error);
 			return reply.status(500).send(errorResponse(500, "Internal server error"));
 		}
 	});
