@@ -22,10 +22,11 @@ export function accessRefreshed() {
 	};
 }
 
-export function profileSelf(userProfile: {userName: string, email: string}, avatarUrl: string) {
+export function profileSelf(userProfile: {userId: string, userName: string, email: string}, avatarUrl: string) {
 	return {
 		message: "Profile retrieve successful",
 		data: {
+			userId: userProfile.userId,
 			userName: userProfile.userName,
 			email: userProfile.email,
 			avatarUrl: avatarUrl,
