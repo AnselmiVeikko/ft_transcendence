@@ -58,8 +58,8 @@ To stop and remove all the containers and volumes run
 
 **AI usage:**  
 
-	- Learning standard practices in API building
-	- Learning typescipt syntax
+  -  Learning standard practices in API building
+  - Learning typescipt syntax
 	- Learning trade-offs between different practices
 	- Seeking optimized solutions accomodating modern standards
 	- Repetitive tasks, like writing simple schemas etc.
@@ -70,9 +70,9 @@ To stop and remove all the containers and volumes run
 FILL FRONTEND REFERENCES HERE
 
 ### Game
-- [Websockets] (https://datatracker.ietf.org/doc/html/rfc6455)
-- [Express] (https://expressjs.com/)
-- [Canvas] (https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
+- [Websockets](https://datatracker.ietf.org/doc/html/rfc6455)
+- [Express](https://expressjs.com/)
+- [Canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
 
 # Technical Stack
 ## Frontend
