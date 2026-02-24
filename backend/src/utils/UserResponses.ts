@@ -10,13 +10,9 @@ export function logoutSuccess() {
 	};
 }
 
-export function registrationSuccess(user: { userId: string, userName: string }) {
+export function registrationSuccess() {
 	return {
 		message: "Registration successful",
-		data: {
-			userId: user.userId,
-			userName: user.userName
-		},
 	};
 }
 
