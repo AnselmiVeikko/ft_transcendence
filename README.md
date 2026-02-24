@@ -245,7 +245,15 @@ fsolomon, eelaine, shachowd, ahentton
 Prerequisite for remote players & more durable game logic.
 
 ### Implementation
-TRUNG WRITE HERE
+Real-time communication was implemented using the ws WebSocket library on the game server.
+
+- Established persistent WebSocket connections between clients and the game backend.
+
+- Implemented authoritative server logic for updating ball physics and validating player inputs. Clients only send input events and render the received game state.
+
+- Ensured synchronization between Game frontend, Game backend and Main backend
+
+This architecture prevents cheating and keeps the gameplay consistent across different machines.
 
 ### Contributors
 hitran
@@ -338,13 +346,18 @@ WRITE HERE
 ## AI opponent in game
 
 ### Justification
-Allows single-player gameplay and improves overall game experience.
+The AI opponent enables single-player gameplay and enhances user experience by allowing players to practice without requiring another online player.
 
 ### Implementation
-Server-side game logic with AI movement algorithm.
+The AI logic is implemented on the server-side within the game backend.
+
+- The AI paddle movement is calculated based on reading the current ball position
+and predicting the ball’s future trajectory
+
+- To maintain fairness and allow human players to win, the AI refreshes its decision logic only once per second.
 
 ### Contributors
-WRITE HERE
+hitran
 
 ### Points
 +2
@@ -354,13 +367,25 @@ WRITE HERE
 ## Game
 
 ### Justification
-Core feature of the project enabling interactive Pong gameplay.
+The game is the core feature of the project, providing interactive real-time Pong gameplay between users or against AI.
 
 ### Implementation
-Frontend rendering with backend game state synchronization.
+The game architecture is separated into Frontend (FE) and Backend (BE) services.
+
+- Frontend (Game Client): Built using React + TypeScript, uses Canvas for rendering ball movement, paddle positions, score updates. 
+
+- Backend (Game Server): Built using Express. It handles the ball physics, collision detection, score tracking, match state transitions. It communicates with the main backend to verify authenticated users, send final match results.
+
+This separation ensures:
+
+- Clear division of responsibility
+
+- Secure, server-authoritative gameplay
+
+- Scalable and modular architecture
 
 ### Contributors
-WRITE HERE
+hitran
 
 ### Points
 +2
