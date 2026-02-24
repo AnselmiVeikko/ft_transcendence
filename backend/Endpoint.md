@@ -8,6 +8,7 @@ All failure responses follow same format. Below is the table of all failure stat
 | 401             | Unauthorized              |
 | 403             | Forbidden                 |
 | 404             | Not Found                 |
+| 409             | Conflict                  |
 | 500             | Internal Server Error     |
 | 501             | Not Implemented           |
 | 503             | Service Unavailable       |
@@ -70,10 +71,24 @@ Success Response: 200 OK
 ```json
 {
 	"message": "Login succesful",
-	"data": {
-		"userId": "ID as string(cuid)",
-		"userName": "username",
-	},
+}
+```
+
+## USER LOGOUT
+
+### POST: /api/user/logout
+To login in to the system.
+
+Body:
+```json
+// No need to pass any data. Backend will retrieve userId from cookie
+```
+
+Success Response: 200 OK
+
+```json
+{
+	"message": "Login succesful",
 }
 ```
 
@@ -100,50 +115,6 @@ Success Response: 200 OK
 		"email": "email11@test.com",
 		"avatarUrl": "../frontend/public/avatars/upload/a01a3dbf-39b6-4612-9894-0a6a4fbf1292.webp"
 	}
-}
-```
-
-
-
-## USER PROFILE VIEW (ALL)
-
-### GET: /api/user/profile/all
-All user profile limited information view.
-
-Query Parameter:
-```json
-
-//	/api/user/profile/all?pageNo=1&limit=10
-		// pageNo: Page number (total page = total user/ limit)
-		// limit: User data liimit per page
-
-```
-
-Success Response: 200 OK
-
-```json
-{
-  "message": "All profiles retrieve successful",
-  "data": [
-	{
-		"userId": "cml0xbgse0000yidszof47ngz",
-		"userName": "test1",
-		"email": "email11@test.com",
-		"avatarUrl": "../frontend/public/avatars/upload/a01a3dbf-39b6-4612-9894-0a6a4fbf1292.webp"
-	},
-	{
-		"userId": "cml0xbgse0000yidszof47ngz",
-		"userName": "test1",
-		"email": "email11@test.com",
-		"avatarUrl": "../frontend/public/avatars/upload/a01a3dbf-39b6-4612-9894-0a6a4fbf1292.webp"
-	},
-  ],
-  "pagination": {
-    "pageNo": 1,
-    "limit": 10,
-    "totalUser": 2,
-    "totalPage": 1
-  }
 }
 ```
 
