@@ -8,6 +8,7 @@ import { Static } from "@fastify/type-provider-typebox";
 import prisma from "../plugins/prisma";
 
 import { verifyAccess } from "../utils/auth";
+import { Prisma } from ".prisma/client/default";
 
 type FriendRequestSend = FastifyRequest<{ Body: Static<typeof FRSendBodySchema> }>;
 type FriendRequestAccept = FastifyRequest<{ Body: Static<typeof FRAcceptBodySchema> }>;
@@ -72,6 +73,11 @@ export default async function friendRequest(app: FastifyInstance) {
 			return reply.status(201).send(frSendSuccess(sendRequest));
 
 		} catch (error) {
+			if (error instanceof Prisma.PrismaClientKnownRequestError) {
+				if (error.code === "P2002") {
+					return reply.status(400).send({ message: "Friend request already exists." });
+				}
+			}
 			app.log.error(error);
 			return reply.status(500).send(errorResponse(500, "Internal server error"));
 		}
