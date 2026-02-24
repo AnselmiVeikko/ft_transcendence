@@ -196,21 +196,36 @@ const FriendsList = () => {
   const sortedFriends = [...friends].sort((a, b) => {
     const nameA = a.userName.toLowerCase();
     const nameB = b.userName.toLowerCase();
-
-    if (sortOrder === 'asc') {
-      return nameA.localeCompare(nameB);
-    } else {
-      return nameB.localeCompare(nameA);
-    }
+    return sortOrder === 'asc'
+      ? nameA.localeCompare(nameB)
+      : nameB.localeCompare(nameA);
   });
 
-  const filteredRequests = statusFilter === 'ALL'
-    ? friendRequests
-    : friendRequests.filter((r) => r.status === statusFilter);
+  const filteredRequests =
+    statusFilter === 'ALL'
+      ? friendRequests
+      : friendRequests.filter((r) => r.status === statusFilter);
 
-  const filteredSuggestions = statusFilter === 'ALL'
-    ? friendSuggestions
-    : friendSuggestions.filter((s) => s.status === statusFilter);
+  const filteredSuggestions =
+    statusFilter === 'ALL'
+      ? friendSuggestions
+      : friendSuggestions.filter((s) => s.status === statusFilter);
+
+  const sortedFilteredRequests = [...filteredRequests].sort((a, b) => {
+    const nameA = a.userName.toLowerCase();
+    const nameB = b.userName.toLowerCase();
+    return sortOrder === 'asc'
+      ? nameA.localeCompare(nameB)
+      : nameB.localeCompare(nameA);
+  });
+
+  const sortedFilteredSuggestions = [...filteredSuggestions].sort((a, b) => {
+    const nameA = a.userName.toLowerCase();
+    const nameB = b.userName.toLowerCase();
+    return sortOrder === 'asc'
+      ? nameA.localeCompare(nameB)
+      : nameB.localeCompare(nameA);
+  });
 
   return (
     <div className="min-h-screen p-4 sm:p-6">
@@ -242,29 +257,32 @@ const FriendsList = () => {
         <div className="mb-6 flex flex-wrap gap-2">
           <button
             onClick={() => setStatusFilter('ALL')}
-            className={`px-3 sm:px-4 py-2 rounded-lg font-medium cursor-pointer text-sm sm:text-base ${statusFilter === 'ALL'
-              ? 'bg-blue-600 text-white dark:bg-indigo-600'
-              : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 dark:bg-white/10 dark:text-white dark:border-white/20 dark:hover:bg-white/20'
-              }`}
+            className={`px-3 sm:px-4 py-2 rounded-lg font-medium cursor-pointer text-sm sm:text-base ${
+              statusFilter === 'ALL'
+                ? 'bg-blue-600 text-white dark:bg-indigo-600'
+                : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 dark:bg-white/10 dark:text-white dark:border-white/20 dark:hover:bg-white/20'
+            }`}
           >
             {t('all')}
           </button>
           <button
             onClick={() => setStatusFilter('ONLINE')}
-            className={`px-3 sm:px-4 py-2 rounded-lg font-medium cursor-pointer text-sm sm:text-base ${statusFilter === 'ONLINE'
-              ? 'bg-green-600 text-white'
-              : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 dark:bg-white/10 dark:text-white dark:border-white/20 dark:hover:bg-white/20'
-              }`}
+            className={`px-3 sm:px-4 py-2 rounded-lg font-medium cursor-pointer text-sm sm:text-base ${
+              statusFilter === 'ONLINE'
+                ? 'bg-green-600 text-white'
+                : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 dark:bg-white/10 dark:text-white dark:border-white/20 dark:hover:bg-white/20'
+            }`}
           >
             <span className="inline-block w-2 h-2 bg-green-500 rounded-full mr-2"></span>
             {t('online')}
           </button>
           <button
             onClick={() => setStatusFilter('OFFLINE')}
-            className={`px-3 sm:px-4 py-2 rounded-lg font-medium cursor-pointer text-sm sm:text-base ${statusFilter === 'OFFLINE'
-              ? 'bg-gray-600 text-white'
-              : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 dark:bg-white/10 dark:text-white dark:border-white/20 dark:hover:bg-white/20'
-              }`}
+            className={`px-3 sm:px-4 py-2 rounded-lg font-medium cursor-pointer text-sm sm:text-base ${
+              statusFilter === 'OFFLINE'
+                ? 'bg-gray-600 text-white'
+                : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 dark:bg-white/10 dark:text-white dark:border-white/20 dark:hover:bg-white/20'
+            }`}
           >
             <span className="inline-block w-2 h-2 bg-gray-400 rounded-full mr-2"></span>
             {t('offline')}
@@ -341,7 +359,7 @@ const FriendsList = () => {
               Friend Requests
             </h2>
             <div className="space-y-3">
-              {filteredRequests.map((request: FriendRequest) => (
+              {sortedFilteredRequests.map((request: FriendRequest) => (
                 <div
                   key={request.userId}
                   className="bg-white p-3 sm:p-4 rounded-lg border border-gray-200 dark:bg-white/5 dark:border-white/10 dark:backdrop-blur-sm"
@@ -366,7 +384,7 @@ const FriendsList = () => {
               Suggestions
             </h2>
             <div className="space-y-3">
-              {filteredSuggestions.map((suggestion) => (
+              {sortedFilteredSuggestions.map((suggestion) => (
                 <div
                   key={suggestion.userId}
                   className="bg-white p-3 sm:p-4 rounded-lg border border-gray-200 dark:bg-white/5 dark:border-white/10 dark:backdrop-blur-sm"
