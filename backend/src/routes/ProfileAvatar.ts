@@ -80,7 +80,7 @@ export default async function avatarRoutes(app: FastifyInstance) {
 				}
 			});
 
-			return reply.status(200).send(profileAvatarSet());
+			return reply.status(200).send(profileAvatarSet(userData));
 		} catch (err) {
 
 			if (filepath) {
