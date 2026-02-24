@@ -8,18 +8,12 @@ export const LoginBodySchema = Type.Object({
 
 export const LoginResponseSchema = Type.Object({
     message: Type.String(),
-    //token: Type.String(),
-    data: Type.Object({
-        userId: Type.String(),
-        userName: Type.String(),
-    }),
 });
 
 export const LogoutResponseSchema = Type.Object({
     message: Type.String(),
     data: Type.Object({
-
-    userName: Type.String(),
+        userName: Type.String(),
     }),
 });
 
@@ -58,40 +52,6 @@ export const ProfileSelfResponseSchema = Type.Object({
     }),
 });
 
-// ALL Profile query and response schema
-export const ProfileAllfQuerySchema = Type.Object({
-    // Pagination
-    pageNo: Type.String(),
-    limit:  Type.String(),
-});
-
-export const ProfileAllResponseSchema = Type.Object({
-    message: Type.String(),
-    //token: Type.String(),
-    data: Type.Array(
-        Type.Object({
-            userId:     Type.String(),
-            userName:   Type.String(),
-            email:      Type.String(),
-            avatarUrl:  Type.String(),
-        }),
-    ),
-
-    pagination: Type.Object({
-        pageNo:     Type.Number(),
-        limit:      Type.Number(),
-        totalUser:  Type.Number(),
-        totalPage:  Type.Number(),
-    })
-
-});
-
-// AVATAR SCHEMA
-
-//export const ProfileAvatarSchema = Type.Object({
-//    file: Type.String(),
-//});
-
 export const ProfileAvatarResponseSchema = Type.Object({
     message: Type.String(),
     data: Type.Object({
@@ -100,7 +60,6 @@ export const ProfileAvatarResponseSchema = Type.Object({
         avatarName: Type.Union([Type.String(), Type.Null()]),
     }),
 });
-
 
 // Error Response
 export const ErrorResponseSchema = Type.Object({
