@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import Friend from './Friend';
-import FriendRequest from './FriendRequest';
-import FriendSuggestion from './FriendSuggestion';
+import Friend from '../components/Friend';
+import FriendRequest from '../components/FriendRequest';
+import FriendSuggestion from '../components/FriendSuggestion';
 import { friendsApi } from '../utils/friendsApi';
 import { FaSortAlphaDown, FaSortAlphaDownAlt } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';

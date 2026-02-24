@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next'
-import SettingsMenu from './SettingsMenu'
+import SettingsMenu from '../components/SettingsMenu'
 import { FaPlay, FaUserEdit, FaRobot } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import { useUser } from '../context/UserContext';
@@ -58,7 +58,7 @@ const Menu = () => {
       <SettingsMenu />
       <div
         className={`flex flex-col items-center justify-center p-4 w-full`}
-        style={{ height: 'calc(100vh - 80px)' }} // make sure content fits below header
+        style={{ height: 'calc(100vh - 11rem)' }}
       >
         <div className="mb-4 sm:mb-12 p-6 text-center max-w-5xl w-full z-10">
           <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight sm:pb-2 bg-clip-text text-transparent bg-linear-to-r from-indigo-700 to-blue-200">
@@ -76,7 +76,7 @@ const Menu = () => {
             title={t('ai_match')}
             colorClass={colorClasses.ai_match}
             icon={<FaRobot />}
-            to="/"
+            to="/aimatch"
           />
           <MenuCard
             title={t('profile')}

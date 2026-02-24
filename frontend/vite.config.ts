@@ -10,8 +10,7 @@ export default defineConfig({
     strictPort: true,
     hmr: {
 	  host: 'localhost',
-	  port: 8443,
-      clientPort: 443,    // The browser is visiting port 443, not 8443
+      clientPort: 8443,    // The browser is visiting port 8443, not 443
     },
   }
 });

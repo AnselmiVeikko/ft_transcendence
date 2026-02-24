@@ -1,7 +1,7 @@
 # Makefile for Docker Compose
 
 # File docker-compose
-DC=docker-compose
+DC=docker compose
 ENV_FILE=.env
 COMPOSE_FILE=docker-compose.yml
 

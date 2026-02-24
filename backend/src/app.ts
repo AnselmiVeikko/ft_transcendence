@@ -19,6 +19,7 @@ import deleteMatch from "./routes/DeleteMatch";
 import path from "path";
 import fastifyStatic from "@fastify/static";
 import matchResult from "./routes/MatchResult";
+import aiToken from "./routes/AIToken";
 
 dotenv.config();
 
@@ -65,6 +66,7 @@ async function buildServer() {
 	app.register(avatarRoutes);
 	app.register(deleteMatch);
 	app.register(matchResult);
+	app.register(aiToken);
 }
 
 const start = async () => {

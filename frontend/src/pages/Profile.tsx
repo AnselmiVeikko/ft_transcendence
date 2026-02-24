@@ -5,9 +5,9 @@ import { useUser } from '../context/UserContext';
 import { useGreetings } from '../hooks/useGreetings';
 import { useProfileUpdate } from '../hooks/useProfileUpdate';
 import { useAvatarUpdate } from '../hooks/useAvatarUpdate';
-import SettingsMenu from './SettingsMenu';
-import ProfileCard from './ProfileCard';
-import ProfileModal from './ProfileModal';
+import SettingsMenu from '../components/SettingsMenu';
+import ProfileCard from '../components/ProfileCard';
+import ProfileModal from '../components/ProfileModal';
 
 const colorClasses = {
   userName:
@@ -71,12 +71,12 @@ const ProfileSettings = () => {
   if (loading) return null;
 
   return (
-    <div className="relative">
+    <div className="min-h-screen relative">
       <SettingsMenu />
 
       <div
-        className={`flex flex-col items-center justify-center p-4 w-full`}
-        /* style={{ height: 'calc(100vh - 5rem)' }} */
+        className={`flex flex-col grow items-center justify-center p-4 w-full`}
+        style={{ height: 'calc(100vh - 11rem)' }}
       >
         <div className="mb-4 p-6 text-center max-w-5xl w-full z-10">
           <h1 className="text-2xl font-extrabold tracking-tight sm:pb-2 bg-clip-text text-transparent bg-linear-to-r from-indigo-700 to-blue-200 sm:text-4xl lg:text-5xl">
