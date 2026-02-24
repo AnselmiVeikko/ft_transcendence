@@ -22,9 +22,9 @@ import matchResult from "./routes/MatchResult";
 
 dotenv.config();
 
-const app = Fastify({ 
-    logger: true,
-    trustProxy: true
+const app = Fastify({
+	logger: true,
+	trustProxy: true
 }).withTypeProvider<TypeBoxTypeProvider>();
 
 const port = process.env.BACKEND_PORT? Number(process.env.BACKEND_PORT) : 3000;
