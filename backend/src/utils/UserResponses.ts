@@ -1,20 +1,12 @@
-export function loginSuccess(user: { userId: string, userName: string }) {
+export function loginSuccess() {
 	return {
 		message: "Login successful",
-		data: {
-			userId: user.userId,
-			userName: user.userName
-		},
 	};
 }
 
-export function logoutSuccess(user: { userId: string, userName: string }) {
+export function logoutSuccess() {
 	return {
 		message: "Logout successful",
-		data: {
-			userId: user.userId,
-			userName: user.userName
-		},
 	};
 }
 
@@ -31,7 +23,6 @@ export function registrationSuccess(user: { userId: string, userName: string }) 
 export function accessRefreshed() {
 	return {
 		message: "Access token refreshed",
-
 	};
 }
 
@@ -65,26 +56,6 @@ export function errorResponse(status: number, message: string) {
 		message: message,
 	};
 }
-
-
-export function profileAll(userProfile: any[], pageNo: number, limit: number, totalUser: number) {
-	return {
-		message: "All profiles retrieve successful",
-		data: userProfile.map(u => ({
-			userId: u.userId,
-			userName: u.userName,
-			email: u.email,
-			avatarUrl: u.avatarUrl
-		})),
-		pagination: {
-			pageNo,
-			limit,
-			totalUser,
-			totalPage: Math.ceil(totalUser / limit),
-		}
-	};
-}
-
 
 // AVATAR
 export function profileAvatarSet(user: { userId: string, userName: string, avatarName: string | null }){
