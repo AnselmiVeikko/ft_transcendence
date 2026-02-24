@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next'
-import SettingsMenu from '../components/SettingsMenu'
 import { FaPlay, FaUserEdit, FaRobot } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import { useUser } from '../context/UserContext';
@@ -33,7 +32,7 @@ const MenuCard = ({ title, colorClass, icon, to }: MenuCardProps) => (
 
 const Menu = () => {
   const { t } = useTranslation();
-  const { userName, loading: userLoading } = useUser();
+  const { userName } = useUser();
 
   const welcomePhrases = [
     'greeting_welcome',
@@ -55,7 +54,6 @@ const Menu = () => {
 
   return (
     <div className="relative">
-      <SettingsMenu />
       <div
         className={`flex flex-col items-center justify-center p-4 w-full`}
         style={{ height: 'calc(100vh - 11rem)' }}
