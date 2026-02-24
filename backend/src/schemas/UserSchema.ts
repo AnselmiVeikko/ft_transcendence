@@ -31,14 +31,11 @@ export const refreshAccessResponseSchema = Type.Object({
 
 // SELF Profile Query and response schema
 export const ProfileSelfQuerySchema = Type.Object({
-    //userId: Type.String(),
 });
 
 export const ProfileSelfResponseSchema = Type.Object({
     message: Type.String(),
-    //token: Type.String(),
     data: Type.Object({
-        userId:     Type.String(),
         userName:   Type.String(),
         email:      Type.String(),
         avatarUrl:  Type.String(),
