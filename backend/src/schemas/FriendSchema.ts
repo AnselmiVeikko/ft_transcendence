@@ -82,6 +82,7 @@ export const FLPendingResponseSchema = Type.Object({
 			userId: Type.String(),
 			userName: Type.String(),
 			avatarUrl: Type.String(),
+			status: Type.String(),
 		}),
 	),
 })
@@ -97,6 +98,7 @@ export const FLSuggestionResponseSchema = Type.Object({
 			userId: Type.String(),
 			userName: Type.String(),
 			avatarUrl: Type.String(),
+			status: Type.String(),
 		}),
 	),
 })

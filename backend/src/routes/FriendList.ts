@@ -178,6 +178,7 @@ export default async function friendList(app: FastifyInstance) {
 							userId: true,
 							userName: true,
 							avatarName: true,
+							status: true,
 						},
 					  },
 				}
@@ -188,6 +189,7 @@ export default async function friendList(app: FastifyInstance) {
 				userId: rel.sender.userId,
 				userName: rel.sender.userName,
 				avatarUrl: getAvatarUrl(rel.sender.avatarName),
+				status: rel.sender.status,
 			}));
 
 			return reply.status(200).send(pendingList(pendingRequests));
@@ -239,6 +241,7 @@ export default async function friendList(app: FastifyInstance) {
 					userId: true,
 					userName: true,
 					avatarName: true,
+					status: true,
 				},
 			});
 
@@ -246,7 +249,8 @@ export default async function friendList(app: FastifyInstance) {
 				userId: user.userId,
 				userName: user.userName,
 				avatarUrl: getAvatarUrl(user.avatarName),
-			  }));
+				status: user.status,
+			}));
 
 			return reply.status(200).send(suggestionList(suggestionsWithAvatar));
 
