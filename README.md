@@ -13,7 +13,8 @@ The project combines real-time gameplay with friends and AI, user management, se
 1. Docker ([install](https://docs.docker.com/get-started/))
 2. Docker Compose ([install](https://docs.docker.com/compose/))
 3. Make tool ([install](https://sp21.datastructur.es/materials/guides/make-install.html))
-4. Make sure port 3000 and 8443 are not in use
+4. Rename .env_example file as .env and update credentials
+5. Make sure port 3000 and 8443 are not in use
 
 ### Installation
 1. Clone git repository in your local directory
@@ -292,7 +293,7 @@ Enhances user experience by efficient filtering and discovery of users and frien
 WRITE HERE
 
 ### Contributors
-WRITE HERE
+fsolomon, shachowd
 
 ### Points
 +1
@@ -340,7 +341,7 @@ Provides essential account handling including registration, authentication, and 
 User schema design, authentication flow, and profile update endpoints.
 
 ### Contributors
-WRITE HERE
+eelaine, shachowd
 
 ### Points
 +2
