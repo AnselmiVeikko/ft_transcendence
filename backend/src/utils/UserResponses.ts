@@ -54,9 +54,14 @@ export function errorResponse(status: number, message: string) {
 }
 
 // AVATAR
-export function profileAvatarSet(){
+export function profileAvatarSet(user: { userId: string, userName: string, avatarName: string | null }){
 	return {
 		message: "Profile avatar change successful",
+		data: {
+			userId: user.userId,
+			userName: user.userName,
+			avatarName: user.avatarName,
+		},
 	};
 }
 
