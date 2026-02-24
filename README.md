@@ -63,12 +63,16 @@ To stop and remove all the containers and volumes run
 	- Learning trade-offs between different practices
 	- Seeking optimized solutions accomodating modern standards
 	- Repetitive tasks, like writing simple schemas etc.
+  - Structuring secure authentication flows across multiple services (JWT validation, HTTP-only cookies, token verification across WebSocket connections).
+  - Debugging assistance and conceptual clarification during development.
 
 ### Frontend
 FILL FRONTEND REFERENCES HERE
 
 ### Game
-FILL GAME REFERENCES HERE
+- [Websockets] (https://datatracker.ietf.org/doc/html/rfc6455)
+- [Express] (https://expressjs.com/)
+- [Canvas] (https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
 
 # Technical Stack
 ## Frontend
@@ -467,10 +471,19 @@ I faced many challenges during this project, here are the major ones listed:
 ### Contributions
 ### Challenges
 
-## hitran
+## hitran (Trung Tran)
 
 ### Contributions
+- Designed and implemented the real-time Pong game module.
+- Built game backend (Express + ws) with server-authoritative physics and state management.
+- Implemented WebSocket-based multiplayer synchronization.
+- Developed AI opponent using trajectory prediction with controlled reaction delay.
+- Integrated game service with main backend for authentication and match result persistence.
+
 ### Challenges
+- Real-time synchronization and fairness.
+- AI balancing.
+- Secure inter-service communication.
 
 ## eelaine
 
