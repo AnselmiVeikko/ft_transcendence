@@ -32,7 +32,17 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     setUser(initialState);
   }, []);
 
+    const hasLoggedInCookie = () => {
+		return document.cookie.split(';').some((item) => item.trim().startsWith('isLoggedIn='));
+	}
+
   const fetchUser = useCallback(async () => {
+	
+	if (!hasLoggedInCookie()) {
+		console.log("No LoggedInCookie found. Initializing guest mode");
+		setLoading(false);
+		return;
+	}
     try {
       const { data } = await apiClient.get('/api/user/profile/self');
       const { userName, userId, email, avatarUrl } = data.data;
@@ -56,7 +66,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     fetchUser();
-  }, [fetchUser]);
+  }, [fetchUser, hasLoggedInCookie]);
 
   return (
     <UserContext.Provider value={{ ...user, loading, refetch: fetchUser, logout }}>
