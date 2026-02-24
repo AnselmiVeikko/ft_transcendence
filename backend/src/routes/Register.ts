@@ -46,12 +46,7 @@ export default async function registrationRoutes(app: FastifyInstance) {
 						password: hashedPassword },
 			});
 
-			const responseUser = {
-				userId: user.userId,
-				userName: user.userName,
-			};
-
-			return reply.status(201).send(registrationSuccess(responseUser));
+			return reply.status(201).send(registrationSuccess());
 
 		} catch(error) {
 			if (error instanceof Prisma.PrismaClientKnownRequestError) {
