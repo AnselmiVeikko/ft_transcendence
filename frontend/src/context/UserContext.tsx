@@ -4,7 +4,6 @@ import axios from 'axios';
 
 interface UserData {
   userName: string;
-  userId: string;
   email: string;
   avatarUrl: string;
 }
@@ -20,7 +19,6 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const initialState: UserData = {
     userName: '',
-    userId: '',
     email: '',
     avatarUrl: '',
   };
@@ -35,11 +33,10 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const fetchUser = useCallback(async () => {
     try {
       const { data } = await apiClient.get('/api/user/profile/self');
-      const { userName, userId, email, avatarUrl } = data.data;
+      const { userName, email, avatarUrl } = data.data;
 
        setUser({
         userName,
-        userId,
         email,
         avatarUrl,
       });
