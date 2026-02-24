@@ -36,6 +36,7 @@ export const ProfileSelfQuerySchema = Type.Object({
 export const ProfileSelfResponseSchema = Type.Object({
     message: Type.String(),
     data: Type.Object({
+        userId:     Type.String(),
         userName:   Type.String(),
         email:      Type.String(),
         avatarUrl:  Type.String(),
