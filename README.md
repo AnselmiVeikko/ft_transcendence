@@ -59,7 +59,7 @@ To stop and remove all the containers and volumes run
 
 **AI usage:**
 
-  -  Learning standard practices in API building
+  - Learning standard practices in API building
   - Learning typescipt syntax
 	- Learning trade-offs between different practices
 	- Seeking optimized solutions accomodating modern standards
@@ -69,6 +69,10 @@ To stop and remove all the containers and volumes run
 
 ### Frontend
 FILL FRONTEND REFERENCES HERE
+- [React](https://react.dev/versions)
+- [TypeScript](https://react.dev/learn/typescript)
+- [TailwindCSS](https://v2.tailwindcss.com/docs)
+- [ReactIcons](https://react-icons.github.io/react-icons/)
 
 ### Game
 - [Websockets](https://datatracker.ietf.org/doc/html/rfc6455)
@@ -290,7 +294,7 @@ shachowd
 Enhances user experience by efficient filtering and discovery of users and friends.
 
 ### Implementation
-WRITE HERE
+Server-side pagination with keyword search, status filtering (online/offline), and sorting. Implements debounced search (300ms) to optimize performance.
 
 ### Contributors
 fsolomon, shachowd
@@ -508,4 +512,13 @@ I faced many challenges during this project, here are the major ones listed:
 ## fsolomon
 
 ### Contributions
+- Implemented a friends system on Frontend (add/remove friends, friends list, pending requests, and friend suggestions)
+- Advanced search functionality with pagination, status filters and sorting
+- JWT cookie refresh on frontend
+- Implemented reusable Header component and protected routes with 404 page redirection
+- Responsive UI components with dark mode support
+
 ### Challenges
+- Managing state across multiple asynchronous operations
+- learning Tailwind css and typescript
+- Addressing UI issues related to responsive design
