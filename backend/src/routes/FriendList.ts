@@ -16,70 +16,6 @@ type FriendPendingList = FastifyRequest<{ Querystring: Static<typeof FLPendingQu
 type FriendSuggestion = FastifyRequest<{ Querystring: Static<typeof FLSuggestionQuerySchema>}>;
 
 export default async function friendList(app: FastifyInstance) {
-	/*
-	app.get( "/api/friendlist/current", {
-		schema: {
-			querystring: FLCurrentQuerySchema,
-			response: {
-				200: FLCurrentResponseSchema,
-				default: ErrorResponseSchema,
-			},
-		},
-	},
-
-	async (request: FriendCurrentList, reply: FastifyReply) => {
-		try {
-			const userId = await verifyAccess(request, reply);
-			if (!userId) {
-				return;
-			}
-
-			const pageNo = request.query.pageNo? Math.max(1, Number(request.query.pageNo)) : 1;
-			const limit = request.query.limit? Math.max(1, Number(request.query.limit))	: 10;
-			const skip = (pageNo - 1) * limit;
-			const totalFriend = await prisma.friend_request.count({
-				where: {
-					requestStatus: "ACCEPTED",
-					OR: [ { senderId: userId }, {receiverId: userId } ],
-				},
-			});
-
-			const relationList = await prisma.friend_request.findMany({
-				where: {
-					requestStatus: "ACCEPTED",
-					OR: [
-						{ senderId: userId },
-						{ receiverId: userId }
-					]
-				},
-				include: {
-					sender: true,
-					receiver: true,
-				},
-				skip,
-				take: limit,
-				orderBy: {
-					updatedAt: "desc",
-				}
-			});
-
-			const friendsList = relationList.map((rel: any) => {
-				const friend = rel.senderId === userId? rel.receiver : rel.sender;
-
-				return {
-					friendRId: rel.friendRId,
-					userId: friend.userId,
-					userName: friend.userName,
-				};
-			});
-
-			return reply.status(200).send(currentList(friendsList, pageNo, limit, totalFriend));
-		} catch(error) {
-			return reply.status(500).send(errorResponse(500, "Internal server error"));
-		}
-	});
-	*/
-
 	app.get( "/api/friendlist/search", {
 		schema: {
 			querystring: FLSearchQuerySchema,
@@ -147,6 +83,7 @@ export default async function friendList(app: FastifyInstance) {
 
 			return reply.status(200).send(searchList(pagedFriends, pageNo, limit, totalFriend, totalPage));
 		} catch(error) {
+			app.log.error(error);
 			return reply.status(500).send(errorResponse(500, "Internal server error"));
 		}
 	});
@@ -195,6 +132,7 @@ export default async function friendList(app: FastifyInstance) {
 			return reply.status(200).send(pendingList(pendingRequests));
 
 		} catch(error) {
+			app.log.error(error);
 			return reply.status(500).send(errorResponse(500, "Internal server error"));
 		}
 	});
@@ -255,6 +193,7 @@ export default async function friendList(app: FastifyInstance) {
 			return reply.status(200).send(suggestionList(suggestionsWithAvatar));
 
 		} catch(error) {
+			app.log.error(error);
 			return reply.status(500).send(errorResponse(500, "Internal server error"));
 		}
 	});
