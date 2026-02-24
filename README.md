@@ -1,35 +1,46 @@
 # Online Pong Game Platform
 
-This is a full-stack web application built as part of the 42 curriculum, combining real-time gameplay with social networking features.
-The project focuses on modern web development practices, security, scalability, and clean architecture.
+A full-stack web application built as the final team project at Hive Helsinki (42 Network).
+
+The project combines real-time gameplay with friends and AI, user management, secure authentication and focuses on modern backend architecture, secure API design, and containerized deployment.
 
 # Project Feature
 
-- Manage profiles and avatars
-- Secure authentication
-- Play real-time Pong matches with AI
-- Play real-time Pong matches with friends
-- Add friends and manage friend requests
-- See online/offline status
-- Search friends
+- User management: Registration, login, profile update, avatar change.
+- Secure authentication: JWT + cookie based login and authentication.
+- Play real-time game: Pong matches with friends through real-time matchmaking and with AI.
+- Friend management: Manage friend requests, Search friends, See status.
+- Containerized deployment – Dockerized multi-service deployment
 
 # Tech Stack
-### Frontend
+## Frontend
  ![React](https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=black)
  ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
  ![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)
  ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-06B6D4?logo=tailwindcss&logoColor=white)
-### Backend
+## Backend
  ![Node.js](https://img.shields.io/badge/Node.js-339933?logo=node.js&logoColor=white)
  ![Fastify](https://img.shields.io/badge/Fastify-000000?logo=fastify&logoColor=white)
  ![Prisma](https://img.shields.io/badge/Prisma-2D3748?logo=prisma&logoColor=white)
  ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
  ![JWT](https://img.shields.io/badge/JWT-000000?logo=jsonwebtokens&logoColor=white)
-### Database
+## Database
  ![SQLite](https://img.shields.io/badge/SQLite-003B57?logo=sqlite&logoColor=white)
-### Infrastructure
+## Infrastructure
  ![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)
  ![Docker Compose](https://img.shields.io/badge/Docker_Compose-2496ED?logo=docker&logoColor=white)
+
+## Communication and Protocols
+
+**REST API:** Used for predictable CRUD operations (authentication, profiles, friends, avatar management).
+
+**WebSocket:** Used for real-time bidirectional communication during gameplay and matchmaking.
+
+**HTTP/HTTPS:** HTTPS is used for secure client-to-server communication and all backend operations via Nginx. Communication between frontend and game services within the Docker network uses HTTP.  HTTP is also responsible for carrying JWT authentication cookies.
+
+**Nginx:** Acts as a reverse proxy, routing requests to backend services and handling TLS termination.
+
+**Data Format (Notation):** JSON for API communication and Markdown for project documentation.
 
 
 # Installation and Usage
