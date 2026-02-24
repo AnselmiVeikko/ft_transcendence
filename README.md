@@ -56,7 +56,7 @@ To stop and remove all the containers and volumes run
 - [HTTP](https://devhints.io/http-status)
 - [HTTP Cookies](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Cookies)
 
-**AI usage:**  
+**AI usage:**
 
   -  Learning standard practices in API building
   - Learning typescipt syntax
@@ -211,7 +211,7 @@ model game_match {
 ```
 
 @unique keyword is used in combination with other methods to
-prevent possible data races in DB operations. 
+prevent possible data races in DB operations.
 cuid() is used to create unique ID's for matches, users and friend request.
 
 # Features List
@@ -376,7 +376,7 @@ The game is the core feature of the project, providing interactive real-time Pon
 ### Implementation
 The game architecture is separated into Frontend (FE) and Backend (BE) services.
 
-- Frontend (Game Client): Built using React + TypeScript, uses Canvas for rendering ball movement, paddle positions, score updates. 
+- Frontend (Game Client): Built using React + TypeScript, uses Canvas for rendering ball movement, paddle positions, score updates.
 
 - Backend (Game Server): Built using Express. It handles the ball physics, collision detection, score tracking, match state transitions. It communicates with the main backend to verify authenticated users, send final match results.
 
@@ -469,7 +469,21 @@ I faced many challenges during this project, here are the major ones listed:
 ## shachowd
 
 ### Contributions
+- Setting up and structuring the initial backend server.
+- Designing and implementing the database schema for user and friend management.
+- Integrating Prisma ORM into backend services.
+- Developing REST API endpoints for
+  - User management: registration, profile update, avatar change, profile view.
+  - Friend management: sending, accepting, declining, deleting friend requests, and friends search, suggestion, pending request.
+- Designing avatar upload handling with validation, image processing, and Docker volume based storage.
+- Containerizing the backend service using Docker and Docker Compose
+- Facilitating team meetings.
+
 ### Challenges
+- Structuring the backend architecture.
+- Working with Prisma ORM.
+- Designing consistent and maintainable REST APIs.
+- Handling secure file uploads and containerized storage environments.
 
 ## hitran (Trung Tran)
 
