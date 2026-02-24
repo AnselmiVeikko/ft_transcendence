@@ -2,7 +2,7 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import { verifyAccess, genGameToken } from "../utils/auth";
 import { errorResponse } from "../utils/UserResponses";
 import { ErrorResponseSchema } from "../schemas/UserSchema";
-import { AITokenResponseSchema } from "../schemas/GameSchema";
+import { AITokenBodySchema, AITokenResponseSchema } from "../schemas/GameSchema";
 import prisma from "../plugins/prisma";
 import { aiTokenResponse } from "../utils/GameResponses";
 
@@ -11,6 +11,7 @@ type AITokenRequest = FastifyRequest<{ Body: { matchId: string } }>;
 export default async function aiToken(app: FastifyInstance) {
     app.post( "/api/game/aiToken", {
             schema: {
+                body: AITokenBodySchema,
                 response: {
                     200: AITokenResponseSchema,
                     default: ErrorResponseSchema,
