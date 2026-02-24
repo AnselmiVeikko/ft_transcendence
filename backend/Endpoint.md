@@ -44,13 +44,8 @@ Success Response: 201 CREATED
 ```json
 {
 	"message": "Registration succesful",
-	"data": {
-		"userId": "ID as string(cuid)",
-		"userName": "username",
-	},
 }
 ```
-
 
 
 ## USER LOGIN
