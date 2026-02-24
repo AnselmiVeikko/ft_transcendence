@@ -1,14 +1,7 @@
 import { useTranslation } from 'react-i18next';
-import SettingsMenu from '../components/SettingsMenu';
 import { useMatchmaking } from '../hooks/useMatchmaking';
 import { useRef, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-const colorClasses = {
-  start:
-    'bg-gradient-to-b from-indigo-700 to-blue-300 hover:bg-gradient-to-r hover:to-indigo-200',
-  bgGlow: 'bg-glow [animation:blob-drift_20s_ease-in-out_infinite]',
-};
 
 const CURRENT_HOST = window.location.hostname;
 
@@ -88,7 +81,6 @@ const SingleMatch = () => {
 
   return (
     <div className="relative">
-      <SettingsMenu />
 
 	 {isGameFinished && (
         <div className="absolute top-20 left-1/2 -translate-x-1/2 z-50 animate-fade-in">
@@ -109,7 +101,7 @@ const SingleMatch = () => {
         style={{ height: 'calc(100vh - 11rem)' }}
       >
         {isWaiting && (
-          <div className="absolute inset-0 flex items-center justify-center bg-gray-900/10 backdrop-blur-sm z-10">
+          <div className="absolute inset-0 flex items-center justify-center backdrop-blur-sm z-10">
             <div className="bg-white p-8 rounded-2xl shadow-2xl text-center animate-bounce-slow">
               <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-indigo-600 mb-4"></div>
               <h2 className="text-2xl font-bold text-gray-800">
