@@ -170,7 +170,9 @@ const FriendsList = () => {
   if (initialLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg text-gray-600 dark:text-gray-300">Loading friends...</div>
+        <div className="text-lg text-gray-600 dark:text-gray-300">
+          Loading friends...
+        </div>
       </div>
     );
   }
@@ -230,7 +232,7 @@ const FriendsList = () => {
   return (
     <div className="min-h-screen p-4 sm:p-6">
       <div className="max-w-2xl mx-auto">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 sm:mb-8">
+        <h1 className="text-2xl font-bold mb-6 sm:mb-8 bg-clip-text text-transparent bg-linear-to-r from-indigo-500 dark:from-indigo-400 to-blue-400 hover:bg-linear-to-bl transition-colors active:scale-95">
           {t('friends')}
         </h1>
 
@@ -305,8 +307,8 @@ const FriendsList = () => {
         {/* Friends List */}
         {friends.length > 0 && (
           <div className="mb-8">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              {t('my_friends')}({totalFriends})
+            <h2 className="text-lg font-semibold  mb-4 bg-clip-text text-transparent bg-linear-to-r from-indigo-500 dark:from-indigo-400 to-blue-400 hover:bg-linear-to-bl transition-colors active:scale-95">
+              {t('my_friends')}  ({totalFriends})
             </h2>
             <div className="space-y-3">
               {sortedFriends.map((friend) => (
@@ -355,7 +357,7 @@ const FriendsList = () => {
         {/* Friend Requests */}
         {filteredRequests.length > 0 && (
           <div className="mb-8">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            <h2 className="text-lg font-semibold mb-4 bg-clip-text text-transparent bg-linear-to-r from-indigo-500 dark:from-indigo-400 to-blue-400 hover:bg-linear-to-bl transition-colors active:scale-95">
               {t('friend_requests')}
             </h2>
             <div className="space-y-3">
@@ -380,7 +382,7 @@ const FriendsList = () => {
         {/* Suggestions */}
         {filteredSuggestions.length > 0 && (
           <div>
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            <h2 className="text-lg font-semibold mb-4 bg-clip-text text-transparent bg-linear-to-r from-indigo-500 dark:from-indigo-400 to-blue-400 hover:bg-linear-to-bl transition-colors active:scale-95">
               {t('suggestions')}
             </h2>
             <div className="space-y-3">
