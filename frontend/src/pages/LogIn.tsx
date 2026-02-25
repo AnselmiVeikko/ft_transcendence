@@ -1,6 +1,5 @@
-import { useTranslation, Trans } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
-import SettingsMenu from '../components/SettingsMenu.tsx'
 import LogInForm from '../components/LogInForm.tsx'
 import PongBG from '../../public/PongBG.png'
 
@@ -13,7 +12,6 @@ const LogIn = ()=> {
 			<div className="hidden lg:block lg:w-1/2 relative">
 				<img src={PongBG} className="w-full h-screen object-cover" alt="Background image with a Pong game"/>
 			</div>
-			<SettingsMenu />
 			<div className="flex-1 lg:w-1/2 bg-glow2 animate-[blob-drift2_20s_ease-in-out_infinite] flex items-center justify-center p-4 sm:p-6 lg:p-8">
 				<div className="text-center w-full max-w-md">
 					<h1 className="dark:text-white text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 sm:mb-6 lg:mb-8">
