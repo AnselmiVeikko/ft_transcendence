@@ -40,6 +40,7 @@ interface GameInitData {
 let ws: WebSocket | null = null;
 let currentState: GameState | null = null;
 let isConnected = false;
+let isGameOver = false;
 let gameInitData: GameInitData | null = null;
 let gameStrings: GameInitData["strings"] = undefined;
 const leftKeys = new Set<string>();
@@ -69,6 +70,7 @@ function connectWebSocket(data: GameInitData) {
     ws.onopen = () => {
       console.log("Connected to game server");
       isConnected = true;
+      isGameOver = false;
       updateConnectionStatus();
     };
 
@@ -83,6 +85,7 @@ function connectWebSocket(data: GameInitData) {
         } else if (message.type === "GAME_OVER") {
           // console.log("Game Over!", message.result);
           console.log("Game Over!");
+          isGameOver = true;
           const result = message.result as { winnerId: string; score: Record<string, number> };
           const isWinner = result.winnerId === gameInitData?.player.id;
           const translatedMessage = isWinner
@@ -110,6 +113,10 @@ function connectWebSocket(data: GameInitData) {
       // console.log(`WebSocket connection closed. Code: ${event.code}, Reason: ${event.reason || 'No reason provided'}`);
       console.log("WebSocket connection closed.");
       isConnected = false;
+      // For normal closures (e.g. match finished) ensure game is treated as over on FE side
+      if (event.code === 1000) {
+        isGameOver = true;
+      }
       updateConnectionStatus();
       
       // Only reconnect if not a normal closure (code 1000)
@@ -132,17 +139,22 @@ function connectWebSocket(data: GameInitData) {
  * paddle specifies which paddle - both browsers can control both paddles (local co-op on same computer)
  */
 function sendInput(action: 'MOVE_UP' | 'MOVE_DOWN' | 'STOP', paddle: 'left' | 'right') {
-  if (ws && ws.readyState === WebSocket.OPEN) {
-    ws.send(JSON.stringify({ type: "INPUT", action, paddle }));
-  } else {
-    console.warn("Cannot send input: WebSocket not connected");
+  // Ignore input when there is no active game connection
+  if (!isConnected || isGameOver || !ws || ws.readyState !== WebSocket.OPEN) {
+    return;
   }
+
+  ws.send(JSON.stringify({ type: "INPUT", action, paddle }));
 }
 
 // Handle keyboard input
 // Left paddle: W/S, Right paddle: ArrowUp/ArrowDown
 // Both browsers can control both paddles (local co-op on same computer)
 window.addEventListener("keydown", (e) => {
+  if (isGameOver) {
+    return;
+  }
+
   const key = e.key.toLowerCase();
 
   // Prevent default to avoid scrolling
@@ -174,6 +186,10 @@ window.addEventListener("keydown", (e) => {
 });
 
 window.addEventListener("keyup", (e) => {
+  if (isGameOver) {
+    return;
+  }
+
   const key = e.key.toLowerCase();
 
   if (key === 'w' || key === 's') {
