@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
+import apiClient from '../utils/apiClient';
 
 export const useLogout = () => {
   const navigate = useNavigate();
@@ -7,22 +8,9 @@ export const useLogout = () => {
 
   const logout = async () => {
     try {
-      const response = await fetch('/api/user/logout', {
-        method: 'POST',
-        credentials: 'include',
-      });
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          clearUserContext();
-          navigate("/");
-        }
-        throw new Error("Logout failed");
-      }
-
-      const result = await response.json();
+      const response = await apiClient.post('/api/user/logout');
       
-      if (result.message.toLowerCase().includes("succes")) {
+      if (response.data?.message?.toLowerCase().includes("success")) {
         clearUserContext();
         navigate("/");
       }
