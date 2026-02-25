@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useTranslation, Trans } from 'react-i18next'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import PolicyModal from './PolicyModal.tsx'
 
 const RegisterForm = ()=> {
@@ -13,8 +13,7 @@ const RegisterForm = ()=> {
 	const [modalConfig, setModalConfig] = useState({ isOpen: false, title: '', htmlContent: '' });
 	const RegisterAPI = '/api/user/registration';
 
-	// 't' is for translation, 'i18n' is the instance for control
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 	const navigate = useNavigate();
 
 	const fetchAndOpenModal = async (type: 'tos' | 'privacy') => {
@@ -109,8 +108,7 @@ const RegisterForm = ()=> {
 			navigate('/');
 
 		} catch (err: unknown) {
-			//const message = err instanceof Error ? err.message : String(err);
-			setError(/* message ||  */t('registration_failed'));
+			setError(t('registration_failed'));
 		} finally {
 			setLoading(false);
 		}
@@ -126,11 +124,11 @@ const RegisterForm = ()=> {
 					{error}
 				</div>
 			)}
-			{/* {success && (
+			{success && !loading && (
 				<div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
 					{success}
 				</div>
-			)} */}
+			)}
 			<div className="space-y-4">
 				<div>
 					<label htmlFor="username" className={`${formStyle}`}>
