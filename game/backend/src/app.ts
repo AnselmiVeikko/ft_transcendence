@@ -45,7 +45,7 @@ const wss = new WebSocketServer({
 
 wss.on('connection', (ws: WebSocket, request) => {
   const origin = request.headers.origin || 'unknown';
-  console.log('📡 New WebSocket connection attempt from:', origin);
+  console.log('New WebSocket connection attempt from:', origin);
   console.log('Connection URL:', request.url);
 
   // Extract matchId and token from query params
@@ -53,7 +53,7 @@ wss.on('connection', (ws: WebSocket, request) => {
   const { matchId, token } = extractAuthParams(request.url || '');
 
   if (!matchId || !token) {
-    console.error('❌ Missing matchId or token in WebSocket URL');
+    console.error('Missing matchId or token in WebSocket URL');
     ws.close(1008, 'Missing matchId or token');
     return;
   }
@@ -61,7 +61,7 @@ wss.on('connection', (ws: WebSocket, request) => {
   // Verify JWT token
   const payload = verifyJWT(token);
   if (!payload) {
-    console.error('❌ JWT verification failed');
+    console.error('JWT verification failed');
     ws.close(1008, 'Authentication failed');
     return;
   }
@@ -72,13 +72,13 @@ wss.on('connection', (ws: WebSocket, request) => {
   // Detect AI match from matchId pattern (starts with "ai-")
   const gameMode: 'PVP' | 'AI' = matchId.startsWith('ai-') ? 'AI' : 'PVP';
 
-  console.log(`✅ Authenticated user: ${username} (${userId}) for match: ${matchId} (mode: ${gameMode})`);
+  console.log(`Authenticated user: ${username} (${userId}) for match: ${matchId} (mode: ${gameMode})`);
 
   // Create or get match and verify user belongs to it
   const match = matchManager.createOrGetMatch(matchId, userId, username, gameMode);
   
   if (!matchManager.isUserInMatch(matchId, userId)) {
-    console.error(`❌ User ${userId} not authorized for match ${matchId}`);
+    console.error(`User ${userId} not authorized for match ${matchId}`);
     ws.close(1008, 'Not authorized for this match');
     return;
   }
@@ -111,19 +111,20 @@ wss.on('connection', (ws: WebSocket, request) => {
   });
 
   ws.on('close', (code, reason) => {
-    console.log(`🔌 WebSocket connection closed. Code: ${code}, Reason: ${reason.toString()}`);
+    // console.log(`WebSocket connection closed. Code: ${code}, Reason: ${reason.toString()}`);
+    console.log("WebSocket connection closed");
     session.removeSocket(userId);
   });
 
   ws.on('error', (error: Error) => {
-    console.error('❌ WebSocket error:', error);
+    console.error('WebSocket error:', error);
     session.removeSocket(userId);
   });
 });
 
 // Log when upgrade requests are received
 server.on('upgrade', (request, socket, head) => {
-  console.log('📡 WebSocket upgrade request:', request.url);
+  console.log('WebSocket upgrade request:', request.url);
   console.log('Headers:', JSON.stringify(request.headers, null, 2));
 });
 
