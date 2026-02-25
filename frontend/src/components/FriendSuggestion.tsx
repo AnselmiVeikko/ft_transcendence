@@ -17,7 +17,7 @@ const FriendSuggestion = ({
     <div className="flex items-center justify-between gap-3">
       <div className="flex items-center gap-3 min-w-0 flex-1">
         <div className="relative shrink-0">
-        <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-medium shrink-0">
+        <div className="w-11 h-11 flex items-center justify-center text-white font-thin text-xs">
           <img src={avatarUrl} alt={`${name} avatar`} />
         </div>
          {status && (
