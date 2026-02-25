@@ -6,7 +6,7 @@ import { FLCurrentResponseSchema, FLSearchResponseSchema, FLPendingResponseSchem
 import { currentList, searchList, pendingList, suggestionList } from "../utils/FriendResponses";
 import { ErrorResponseSchema } from "../schemas/UserSchema";
 import { getAvatarUrl, errorResponse } from "../utils/UserResponses";
-import { verifyAccess } from "../utils/auth";
+import { verifyAccess } from "../authentication/auth";
 import prisma from "../plugins/prisma";
 
 

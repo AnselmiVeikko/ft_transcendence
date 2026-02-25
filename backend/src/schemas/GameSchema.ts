@@ -1,5 +1,5 @@
 import { Type } from "@sinclair/typebox"
-import { genGameToken } from "../utils/auth";
+import { genGameToken } from "../authentication/auth";
 
 
 export const MatchmakingResponseSchema = Type.Object({

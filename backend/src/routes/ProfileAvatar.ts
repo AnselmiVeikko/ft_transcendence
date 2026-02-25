@@ -5,7 +5,7 @@ import { ErrorResponseSchema } from "../schemas/UserSchema";
 import { profileAvatarSet } from "../utils/UserResponses";
 import { errorResponse } from "../utils/UserResponses";
 import { Static } from "@sinclair/typebox";
-import { verifyAccess } from "../utils/auth";
+import { verifyAccess } from "../authentication/auth";
 import { request } from "http";
 import path from "path";
 import fs from "fs/promises";
