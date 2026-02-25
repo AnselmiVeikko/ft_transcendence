@@ -2,7 +2,7 @@ import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { ErrorResponseSchema } from "../schemas/UserSchema";
 import { errorResponse } from "../utils/UserResponses";
 import jwt from "jsonwebtoken";
-import { setCookies } from "../utils/auth";
+import { setCookies } from "../authentication/auth";
 import { refreshAccessResponseSchema } from "../schemas/UserSchema";
 import { accessRefreshed } from "../utils/UserResponses";
 

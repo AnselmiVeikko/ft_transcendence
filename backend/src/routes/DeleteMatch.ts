@@ -1,7 +1,7 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { DeleteMatchBodySchema, DeleteMatchResponseSchema } from "../schemas/GameSchema";
 import { ErrorResponseSchema } from "../schemas/UserSchema";
-import { verifyAccess } from "../utils/auth";
+import { verifyAccess } from "../authentication/auth";
 import { Static } from "@sinclair/typebox";
 import { errorResponse } from "../utils/UserResponses";
 import prisma from "../plugins/prisma";

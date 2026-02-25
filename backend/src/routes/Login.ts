@@ -4,7 +4,7 @@ import { Static } from "@sinclair/typebox";
 import { prisma } from "../plugins/prisma";
 import { loginSuccess, errorResponse } from "../utils/UserResponses";
 import { LoginBodySchema, LoginResponseSchema, ErrorResponseSchema } from "../schemas/UserSchema";
-import { setCookies } from "../utils/auth";
+import { setCookies } from "../authentication/auth";
 
 type LoginRequest = FastifyRequest<{ Body: Static<typeof LoginBodySchema> }>;
 

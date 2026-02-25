@@ -7,7 +7,7 @@ import { errorResponse } from "../utils/UserResponses";
 import { Static } from "@fastify/type-provider-typebox";
 import prisma from "../plugins/prisma";
 
-import { verifyAccess } from "../utils/auth";
+import { verifyAccess } from "../authentication/auth";
 
 type FriendRequestSend = FastifyRequest<{ Body: Static<typeof FRSendBodySchema> }>;
 type FriendRequestAccept = FastifyRequest<{ Body: Static<typeof FRAcceptBodySchema> }>;

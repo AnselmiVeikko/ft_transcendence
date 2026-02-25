@@ -4,7 +4,7 @@ import { Static } from "@sinclair/typebox";
 import { ProfileSelfQuerySchema, ProfileSelfResponseSchema, ErrorResponseSchema } from "../schemas/UserSchema";
 import { ProfileAllfQuerySchema, ProfileAllResponseSchema } from "../schemas/UserSchema";
 import { profileSelf, profileAll, getAvatarUrl, errorResponse } from "../utils/UserResponses";
-import { verifyAccess } from "../utils/auth";
+import { verifyAccess } from "../authentication/auth";
 
 type ProfileSelfRequest = FastifyRequest<{ Querystring: Static<typeof ProfileSelfQuerySchema> }>;
 type ProfileAllRequest = FastifyRequest<{ Querystring: Static<typeof ProfileAllfQuerySchema> }>;
