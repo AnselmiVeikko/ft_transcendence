@@ -11,12 +11,12 @@ The project combines real-time gameplay with friends and AI, user and friend man
 
 | Feature | Description | Responsible User(s) |
 |---------|-------------|-------------------|
-| **User Management** | Registration, login, profile update, avatar change | `shachowd, fsolomon, eelaine` |
-| **Secure Authentication** | JWT + cookie-based login and authentication | `ahentton, hitran, eelaine` |
-| **Play Real-Time Game** | Pong matches with friends through real-time matchmaking and AI opponents | `hitran, eelaine, ahentton` |
-| **Friend Management** | Manage friend requests, search friends, see online status | `fsolomon, shachowd` |
-| **Containerized Deployment** | Dockerized multi-service deployment for easy setup | `hitran, shachowd` |
-| **Deployment Infrastructure** | Reverse proxy and https/tls termination | `ahentton` |
+| **User Management** | Registration, login, profile update, avatar change | `Shahnaj, Finnan, Eetu` |
+| **Secure Authentication** | JWT + cookie-based login and authentication | `Anselmi, Trung, Eetu` |
+| **Play Real-Time Game** | Pong matches with friends through real-time matchmaking and AI opponents | `Trung, Eetu, Anselmi` |
+| **Friend Management** | Manage friend requests, search friends, see online status | `Finnan, Shahnaj` |
+| **Containerized Deployment** | Dockerized multi-service deployment for easy setup | `Trung, Shahnaj` |
+| **Deployment Infrastructure** | Reverse proxy and https/tls termination | `Anselmi` |
 
 
 
@@ -107,7 +107,7 @@ We used GitHub Projects for logging progress and current tasks.
 
 # Individual Contributions
 
-## ahentton
+## Anselmi
 
 ### Contributions
 - Designing the schema/response infrastructure for the backend.
@@ -124,7 +124,7 @@ I faced many challenges during this project, here are the major ones listed:
 - Reviewing others code on an unfamiliar stack.
 
 
-## shachowd
+## Shahnaj
 
 ### Contributions
 - Setting up and structuring the initial backend server.
@@ -143,7 +143,7 @@ I faced many challenges during this project, here are the major ones listed:
 - Designing consistent and maintainable REST APIs.
 - Handling secure file uploads and containerized storage environments.
 
-## hitran (Trung Tran)
+## Trung
 
 ### Contributions
 - Designed and implemented the real-time Pong game module.
@@ -157,7 +157,7 @@ I faced many challenges during this project, here are the major ones listed:
 - AI balancing.
 - Secure inter-service communication.
 
-## eelaine
+## Eetu
 
 ### Contributions
 - Implemented frontend anguage switching support
@@ -172,7 +172,7 @@ I faced many challenges during this project, here are the major ones listed:
 - Understanding browser compatibility issues
 - Integrating authentication and user management securely on the frontend
 
-## fsolomon
+## Finnan
 
 ### Contributions
 - Implemented a friends system on Frontend (add/remove friends, friends list, pending requests, and friend suggestions)
