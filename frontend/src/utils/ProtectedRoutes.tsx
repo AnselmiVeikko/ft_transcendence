@@ -2,6 +2,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useUser } from '../context/UserContext';
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import SettingsMenu from "../components/SettingsMenu";
 
 const ProtectedRoutes = () => {
   const { userName, loading } = useUser();
@@ -22,7 +23,10 @@ const ProtectedRoutes = () => {
     <>
       <Header />
       <Outlet />
-      <Footer />
+	  <div className="flex mt-12">
+        <Footer />
+	    <SettingsMenu />
+	  </div>
     </>
   );
 };

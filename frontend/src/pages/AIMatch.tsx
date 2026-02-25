@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import SettingsMenu from '../components/SettingsMenu';
 import { useRef, useEffect, useState } from 'react';
 import { useUser } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
@@ -8,7 +7,9 @@ const colorClasses = {
   bgGlow: 'bg-glow [animation:blob-drift_20s_ease-in-out_infinite]',
 };
 
-const GAME_ORIGIN = "https://localhost:8443/game/";
+const CURRENT_HOST = window.location.hostname;
+
+const GAME_ORIGIN = `https://${CURRENT_HOST}:8443/game/`;
 
 const getGameStrings = (t: (key: string) => string) => ({
   welcome: t('landing_welcome_message'),
@@ -84,7 +85,7 @@ const AIMatch = () => {
           id: userId,
           username: userName,
         },
-        gameWsUrl: 'wss://localhost:8443/game-ws/ws',
+        gameWsUrl: `wss://${CURRENT_HOST}:8443/game-ws/ws`,
         accessToken: gameToken,
         strings: getGameStrings(t),
         gameMode: 'AI', // Signal this is an AI match
@@ -104,7 +105,6 @@ const AIMatch = () => {
   if (userLoading || !userId) {
     return (
       <div className="relative">
-        <SettingsMenu />
         <div className={`${colorClasses.bgGlow} flex items-center justify-center p-4`} style={{ height: 'calc(100vh - 80px)' }}>
           <div className="text-center">
             <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-indigo-600 mb-4"></div>
@@ -116,11 +116,9 @@ const AIMatch = () => {
   }
 
   return (
-    <div className="relative">
-      <SettingsMenu />
+    <div className="flex flex-col grow">
       <div
-        className={`${colorClasses.bgGlow} flex items-center justify-center p-4`}
-        style={{ height: 'calc(100vh - 80px)' }}
+        className="flex items-center justify-center p-4"
       >
         <div className="flex lg:flex-row bg-opacity-50 backdrop-blur-sm items-center max-w-full mx-auto z-0">
           <iframe
@@ -128,7 +126,7 @@ const AIMatch = () => {
             id="game"
             title="Pong AI Game"
             width="2400"
-            height="1200"
+            height="1100"
             onLoad={handleIframeLoad}
             src={GAME_ORIGIN}
           />

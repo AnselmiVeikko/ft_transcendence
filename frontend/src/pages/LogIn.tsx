@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useTranslation, Trans } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import SettingsMenu from '../components/SettingsMenu.tsx'
@@ -6,13 +5,8 @@ import LogInForm from '../components/LogInForm.tsx'
 import PongBG from '../../public/PongBG.png'
 
 const LogIn = ()=> {
-	const [username, setUsername] = useState('')
-	const [email, setEmail] = useState('')
-	const [password, setPassword] = useState('')
-	const [error, setError] = useState('')
-	//const [loading, setLoading] = useState(false)
 
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	return (
 		<div className="flex flex-col lg:flex-row min-h-screen">

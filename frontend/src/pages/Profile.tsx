@@ -5,7 +5,6 @@ import { useUser } from '../context/UserContext';
 import { useGreetings } from '../hooks/useGreetings';
 import { useProfileUpdate } from '../hooks/useProfileUpdate';
 import { useAvatarUpdate } from '../hooks/useAvatarUpdate';
-import SettingsMenu from '../components/SettingsMenu';
 import ProfileCard from '../components/ProfileCard';
 import ProfileModal from '../components/ProfileModal';
 
@@ -71,14 +70,12 @@ const ProfileSettings = () => {
   if (loading) return null;
 
   return (
-    <div className="min-h-screen relative">
-      <SettingsMenu />
+    <div className="flex flex-col min-h-screen">
 
       <div
         className={`flex flex-col grow items-center justify-center p-4 w-full`}
-        style={{ height: 'calc(100vh - 11rem)' }}
       >
-        <div className="mb-4 p-6 text-center max-w-5xl w-full z-10">
+        <div className="mb-4 pt-8 md:pt-0 p-6 text-center max-w-5xl w-full z-10">
           <h1 className="text-2xl font-extrabold tracking-tight sm:pb-2 bg-clip-text text-transparent bg-linear-to-r from-indigo-700 to-blue-200 sm:text-4xl lg:text-5xl">
             {t('profile_settings')}
           </h1>
@@ -86,7 +83,7 @@ const ProfileSettings = () => {
 
         <div className="mb-12 p-6 text-center max-w-5xl w-full z-10 flex items-center justify-center">
           <div
-            className={`w-70 lg:w-90 h-80 md:h-90 lg:h-90 flex flex-col items-center justify-center p-8 bg-gradient-to-br from-indigo-100/10 via-blue-100/10 to-violet-100/10 hover:bg-gradient-to-t hover:from-blue-100/20 hover:via-indigo-100/20 hover:to-violet-100/30
+            className={`w-70 lg:w-90 h-80 md:h-90 lg:h-90 flex flex-col items-center justify-center p-8 bg-linear-to-br from-indigo-100/10 via-blue-100/10 to-violet-100/10 hover:bg-linear-to-t hover:from-blue-100/20 hover:via-indigo-100/20 hover:to-violet-100/30
 			backdrop-blur-md border dark:border-white/20 border-black/10 rounded-2xl shadow-2xl transition duration-300 transform hover:scale-[1.03]`}>
             <img 
 		   		src={avatarUrl || '/avatars/default/default.webp'}
@@ -96,9 +93,6 @@ const ProfileSettings = () => {
 			/>
             <h2 className="text-2xl font-black text-slate-700 dark:text-white">{userName}</h2>
 		    <p className="text-xl font-medium bg-clip-text text-transparent bg-linear-to-r from-indigo-500 to-blue-400 hover:bg-linear-to-bl">{email}</p>
-              <div className="mt-4 px-4 py-1 bg-black/10 dark:bg-white/10 rounded-full text-xs font-bold uppercase tracking-widest border border-white/10">
-                5 Friends
-              </div>
 		</div>
 		</div>
 		<p className="mt-2 mb-12 text-xl font-bold text-indigo-300/80">
@@ -111,7 +105,7 @@ const ProfileSettings = () => {
             icon={<FaUserEdit />}
             colorClass={colorClasses.userName}
             onClick={() => {
-                setTempUsername(userName); // Initialize input with current name
+                setTempUsername(userName);
                 setIsUsernameModalOpen(true);
             }}
           />
@@ -176,9 +170,9 @@ const ProfileSettings = () => {
           </button>
 
           <div className="relative flex items-center py-2">
-            <div className="flex-grow border-t border-white/10"></div>
-            <span className="flex-shrink mx-4 text-gray-500 text-xs uppercase">{t('or_upload')}</span>
-            <div className="flex-grow border-t border-white/10"></div>
+            <div className="grow border-t border-white/10"></div>
+            <span className="shrink mx-4 text-gray-500 text-xs uppercase">{t('or_upload')}</span>
+            <div className="grow border-t border-white/10"></div>
           </div>
 
           <input
