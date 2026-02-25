@@ -20,6 +20,7 @@ import path from "path";
 import fastifyStatic from "@fastify/static";
 import matchResult from "./routes/MatchResult";
 import aiToken from "./routes/AIToken";
+import './utils/validateEnv';
 
 dotenv.config();
 
