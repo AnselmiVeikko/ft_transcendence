@@ -6,7 +6,7 @@ import { ProfileUpdateSchema, ProfileUpdateResponseSchema } from "../schemas/Pro
 import { profileUpdate } from "../utils/ProfileResponses";
 import { ErrorResponseSchema } from "../schemas/UserSchema";
 import { errorResponse } from "../utils/UserResponses";
-import { verifyAccess } from "../utils/auth";
+import { verifyAccess } from "../authentication/auth";
 
 type ProfileUpdate = FastifyRequest<{ Body: Static<typeof ProfileUpdateSchema> }>;
 

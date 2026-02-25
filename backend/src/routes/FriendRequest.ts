@@ -5,9 +5,8 @@ import { frAcceptSuccess, frDeclineSuccess, frSendSuccess, frDeleteSuccess } fro
 import { ErrorResponseSchema } from "../schemas/UserSchema";
 import { errorResponse } from "../utils/UserResponses";
 import { Static } from "@fastify/type-provider-typebox";
+import { verifyAccess } from "../authentication/auth";
 import prisma from "../plugins/prisma";
-
-import { verifyAccess } from "../utils/auth";
 import { Prisma } from ".prisma/client/default";
 
 type FriendRequestSend = FastifyRequest<{ Body: Static<typeof FRSendBodySchema> }>;

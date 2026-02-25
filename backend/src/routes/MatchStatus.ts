@@ -2,7 +2,7 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import { MatchStatusQuerySchema, MatchStatusResponseSchema } from "../schemas/GameSchema";
 import { ErrorResponseSchema } from "../schemas/UserSchema";
 import { Static } from "@sinclair/typebox";
-import { verifyAccess } from "../utils/auth";
+import { verifyAccess } from "../authentication/auth";
 import { errorResponse } from "../utils/UserResponses";
 import prisma from "../plugins/prisma"
 import { matchStatusResponse } from "../utils/GameResponses";

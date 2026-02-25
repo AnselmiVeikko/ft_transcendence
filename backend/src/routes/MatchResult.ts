@@ -3,7 +3,7 @@ import prisma from "../plugins/prisma";
 import { errorResponse } from "../utils/UserResponses";
 import { ErrorResponseSchema } from "../schemas/UserSchema";
 import { FinishMatchBodySchema, FinishMatchResponseSchema } from "../schemas/GameSchema";
-import { verifyGameServiceToken } from "../utils/auth";
+import { verifyGameServiceToken } from "../authentication/auth";
 
 type FinishMatchRequest = FastifyRequest<{ Body: { matchId: string; winnerId: string; score: Record<string, number>; } }>;
 

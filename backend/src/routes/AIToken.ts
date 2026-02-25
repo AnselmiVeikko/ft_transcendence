@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
-import { verifyAccess, genGameToken } from "../utils/auth";
+import { verifyAccess, genGameToken } from "../authentication/auth";
 import { errorResponse } from "../utils/UserResponses";
 import { ErrorResponseSchema } from "../schemas/UserSchema";
 import { AITokenBodySchema, AITokenResponseSchema } from "../schemas/GameSchema";

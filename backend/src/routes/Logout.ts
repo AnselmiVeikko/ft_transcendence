@@ -2,8 +2,8 @@ import { prisma } from "../plugins/prisma";
 import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import { LogoutResponseSchema, ErrorResponseSchema } from "../schemas/UserSchema";
 import { logoutSuccess, errorResponse } from "../utils/UserResponses";
-import { verifyAccess } from "../utils/auth";
-import { clearCookies } from "../utils/auth";
+import { verifyAccess } from "../authentication/auth";
+import { clearCookies } from "../authentication/auth";
 
 export default async function logoutRoutes(app: FastifyInstance) {
 	app.post( "/api/user/logout", {

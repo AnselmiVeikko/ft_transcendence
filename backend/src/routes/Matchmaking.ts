@@ -1,6 +1,6 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import { ErrorResponseSchema } from "../schemas/UserSchema";
-import { genGameToken, verifyAccess } from "../utils/auth";
+import { genGameToken, verifyAccess } from "../authentication/auth";
 import { errorResponse } from "../utils/UserResponses";
 import { MatchmakingResponseSchema } from "../schemas/GameSchema";
 import prisma from "../plugins/prisma";

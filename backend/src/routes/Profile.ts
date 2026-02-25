@@ -3,7 +3,8 @@ import { prisma } from "../plugins/prisma";
 import { Static } from "@sinclair/typebox";
 import { ProfileSelfQuerySchema, ProfileSelfResponseSchema, ErrorResponseSchema } from "../schemas/UserSchema";
 import { profileSelf, getAvatarUrl, errorResponse } from "../utils/UserResponses";
-import { verifyAccess } from "../utils/auth";
+import { profileSelf, getAvatarUrl, errorResponse } from "../utils/UserResponses";
+import { verifyAccess } from "../authentication/auth";
 
 type ProfileSelfRequest = FastifyRequest<{ Querystring: Static<typeof ProfileSelfQuerySchema> }>;
 
