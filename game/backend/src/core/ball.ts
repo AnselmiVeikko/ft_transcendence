@@ -18,10 +18,10 @@ export class Ball {
   bounce(canvasHeight: number) {
     if (this.y - this.radius < 0) {
       this.y = this.radius;
-      this.speedY *= -1;
+      this.speedY *= -1.10;
     } else if (this.y + this.radius > canvasHeight) {
       this.y = canvasHeight - this.radius;
-      this.speedY *= -1;
+      this.speedY *= -1.10;
     }
   }
 }
