@@ -45,7 +45,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       .some((item) => item.trim().startsWith('isLoggedIn='));
 
     if (!hasLoggedInCookie) {
-      console.log('No LoggedInCookie found. Initializing guest mode');
       setLoading(false);
       return;
     }
