@@ -14,7 +14,7 @@ export async function verifyAccess(request: FastifyRequest, reply: FastifyReply)
   }
   let payload: JWTPayload | undefined;
   try {
-      payload = jwt.verify(token, process.env.JWT_ACCESS_SECRET || "access-secret") as JWTPayload;
+      payload = jwt.verify(token, process.env.JWT_ACCESS_SECRET!) as JWTPayload;
   } catch (err) {
       return reply.status(401).send({ message: "Invalid token" });
   }
@@ -25,13 +25,13 @@ export function setCookies(reply: FastifyReply, userId: string) {
 
     const accessJWT = jwt.sign(
         { userId },
-        process.env.JWT_ACCESS_SECRET || "access-secret",
+        process.env.JWT_ACCESS_SECRET!,
         { expiresIn: "15m" }
     );
 
     const refreshJWT = jwt.sign(
         { userId },
-        process.env.JWT_REFRESH_SECRET || "refresh-secret",
+        process.env.JWT_REFRESH_SECRET!,
         { expiresIn: "7d" }
     );
     reply
@@ -74,7 +74,7 @@ export function genGameToken(matchId: string, userId: string, username: string) 
             iss: "main-be",     // issuer
             aud: "game-be",     // audience
         },
-        process.env.GAME_TOKEN_SECRET || "game-secret-change-this",
+        process.env.GAME_TOKEN_SECRET!,
         { 
             algorithm: "HS256",
             expiresIn: "15m" 
@@ -90,7 +90,7 @@ export function genGameToken(matchId: string, userId: string, username: string) 
  */
 export function verifyGameServiceToken(token: string): boolean {
     try {
-        const secret = process.env.GAME_TOKEN_SECRET || "game-secret-change-this";
+        const secret = process.env.GAME_TOKEN_SECRET!;
         jwt.verify(token, secret, {
             algorithms: ['HS256'],
             issuer: 'game-be',

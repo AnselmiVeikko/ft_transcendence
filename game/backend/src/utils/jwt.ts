@@ -46,7 +46,7 @@ export function verifyJWT(token: string): JWTPayload | null {
  * - exp: 5 minutes
  */
 export function signServiceJWT(): string {
-  const secret = process.env.GAME_TOKEN_SECRET || "game-secret-change-this";
+  const secret = process.env.GAME_TOKEN_SECRET!;
   
   const payload = {
     sub: 'game-service',
