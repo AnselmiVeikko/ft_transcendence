@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import apiClient from '../utils/apiClient';
 
 interface Player {
   userId: string;
@@ -45,16 +46,13 @@ export const useMatchmaking = () => {
 
   const startMatchmaking = async () => {
     try {
-      const response = await fetch(MATCHMAKING_API, {
-        method: 'POST',
-        credentials: 'include',
-      });
-      if (response.status === 409) {
+      const { data } = await apiClient.post(MATCHMAKING_API);
+      if (data.status === 409) {
 		setIsAbandoned(true);
         setIsWaiting(true);
         return;
       }
-      const result = await response.json();
+      const result = await data;
       if (result.data?.player) setPlayer(result.data.player);
 
       console.log(result.message);
@@ -71,12 +69,8 @@ export const useMatchmaking = () => {
     if (!matchId) return;
     try {
       const urlWithQuery = `${STATUS_API}?matchId=${encodeURIComponent(matchId)}`;
-      const response = await fetch(urlWithQuery, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-      });
-      const result = await response.json();
+      const { data } = await apiClient.get(urlWithQuery);
+      const result = await data;
       console.log(result.data?.matchStatus);
       if (
         result.data?.matchStatus === 'STARTING' ||
@@ -104,7 +98,7 @@ export const useMatchmaking = () => {
 
       if (abandoned || (waiting && !started && id)) {
         const data = JSON.stringify({ matchId: id });
-		console.log('Deleting match: ', id);
+		console.log('DELETING MATCH');
         const blob = new Blob([data], { type: 'application/json' });
 
         navigator.sendBeacon(DELETEMATCH_API, blob);
