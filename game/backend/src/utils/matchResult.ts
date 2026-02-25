@@ -58,9 +58,9 @@ export async function reportResultToMainBE(
     });
     if (!res.ok) {
       const text = await res.text();
-      console.error(`Failed to report result: ${res.status} ${res.statusText}`, text);
+      console.error("Failed to report result", text);
     } else {
-      console.log(`Reported match result to Main BE for match ${matchId}`);
+      console.log("Reported match result to Main BE");
     }
   } catch (e) {
     console.error("Error reporting result to Main BE:", e);
