@@ -3,9 +3,20 @@ of the 42 curriculum by ahentton, shachowd, eelaine, fsolomon, hitran .*
 
 # Description
 
-(PROJECT NAME HERE_) is a full-stack web application built as the final team project at Hive Helsinki (42 Network).
+Pong is a full-stack web application built as the final team project at Hive Helsinki (42 Network).
 
 The project combines real-time gameplay with friends and AI, user management, secure authentication and focuses on modern backend architecture, secure API design, and containerized deployment.
+
+# Features List
+
+| Feature | Description | Responsible User(s) |
+|---------|-------------|-------------------|
+| **User Management** | Registration, login, profile update, avatar change | `shachowd, fsolomon, eelaine` |
+| **Secure Authentication** | JWT + cookie-based login and authentication | `ahentton, hitran, eelaine` |
+| **Play Real-Time Game** | Pong matches with friends through real-time matchmaking and AI opponents | `hitran, eelaine, ahentton` |
+| **Friend Management** | Manage friend requests, search friends, see online status | `fsolomon, shachowd` |
+| **Containerized Deployment** | Dockerized multi-service deployment for easy setup | `hitran, shachowd` |
+| **Deployment Infrastructure** | Reverse proxy and https/tls termination | `ahentton` |
 
 # Instructions
 
@@ -57,16 +68,6 @@ To stop and remove all the containers and volumes run
 - [HTTP](https://devhints.io/http-status)
 - [HTTP Cookies](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Cookies)
 
-**AI usage:**
-
-  - Learning standard practices in API building
-  - Learning typescipt syntax
-	- Learning trade-offs between different practices
-	- Seeking optimized solutions accomodating modern standards
-	- Repetitive tasks, like writing simple schemas etc.
-  - Structuring secure authentication flows across multiple services (JWT validation, HTTP-only cookies, token verification across WebSocket connections).
-  - Debugging assistance and conceptual clarification during development.
-
 ### Frontend
 FILL FRONTEND REFERENCES HERE
 - [React](https://react.dev/versions)
@@ -78,6 +79,16 @@ FILL FRONTEND REFERENCES HERE
 - [Websockets](https://datatracker.ietf.org/doc/html/rfc6455)
 - [Express](https://expressjs.com/)
 - [Canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
+
+**AI usage:**
+
+  - Learning standard practices in API building.
+  - Learning typescipt syntax.
+	- Learning trade-offs between different practices.
+	- Seeking optimized solutions accomodating modern standards.
+	- Repetitive tasks, like writing simple schemas etc.
+  - Structuring secure authentication across multiple services (JWT validation, HTTP-only cookies, token verification across WebSocket connections).
+  - Debugging assistance and concept clarification during development.
 
 # Technical Stack
 ## Frontend
@@ -108,44 +119,6 @@ FILL FRONTEND REFERENCES HERE
 **Nginx:** Acts as a reverse proxy, routing requests to backend services and handling TLS termination.
 
 **Data Format (Notation):** JSON for API communication and Markdown for project documentation.
-
-
-# Installation and Usage
-
-### Prerequisites
-1. Docker ([install](https://docs.docker.com/get-started/))
-2. Docker Compose ([install](https://docs.docker.com/compose/))
-3. Make tool ([install](https://sp21.datastructur.es/materials/guides/make-install.html))
-4. Make sure port 3000 and 8443 are not in use
-
-### Installation
-1. Clone git repository in your local directory
-```bash
-	git clone git@github.com:AnselmiVeikko/ft_transcendence.git
-```
-
-2. Build and start all the docker containers
-
-```bash
-	cd ft_transcendence
-
-	make run
-```
-
-### Usage
-
-Navigate (Note: You may receive a security warning because the site uses a self-signed TLS certificate. Click “Advanced” and then “Proceed to localhost (unsafe)” to continue browsing)
-```
-	https://localhost:8443
-```
-
-
-### Clean
-To stop and remove all the containers and volumes run
-
-```
-	make clean
-```
 
  # Team Information
 
@@ -219,16 +192,6 @@ model game_match {
 prevent possible data races in DB operations.
 cuid() is used to create unique ID's for matches, users and friend request.
 
-# Features List
-
-| Feature | Description | Responsible User(s) |
-|---------|-------------|-------------------|
-| **User Management** | Registration, login, profile update, avatar change | `shachowd, fsolomon, eelaine` |
-| **Secure Authentication** | JWT + cookie-based login and authentication | `ahentton, hitran, eelaine` |
-| **Play Real-Time Game** | Pong matches with friends through real-time matchmaking and AI opponents | `hitran, eelaine, ahentton` |
-| **Friend Management** | Manage friend requests, search friends, see online status | `fsolomon, shachowd` |
-| **Containerized Deployment** | Dockerized multi-service deployment for easy setup | `hitran, shachowd` |
-| **Deployment Infrastructure** | Reverse proxy and https/tls termination | `ahentton` |
 
 # Modules
 
@@ -313,7 +276,7 @@ Improves accessibility and usability for international users.
 Frontend internationalization (i18n) with language switching support.
 
 ### Contributors
-WRITE HERE
+eelaine
 
 ### Points
 +1
@@ -329,7 +292,7 @@ Ensures compatibility and consistent experience across major browsers.
 Cross-browser testing and compatibility fixes.
 
 ### Contributors
-WRITE HERE
+eelaine
 
 ### Points
 +1
@@ -410,7 +373,7 @@ Enables multiplayer functionality across separate machines over the network.
 WebSocket-based real-time synchronization between clients.
 
 ### Contributors
-WRITE HERE
+hitran
 
 ### Points
 +2
@@ -426,7 +389,7 @@ Improves scalability, modularity, and separation of concerns.
 Service separation with containerized deployment and internal networking.
 
 ### Contributors
-WRITE HERE
+ahentton, hitran
 
 ### Points
 +2
@@ -507,7 +470,17 @@ I faced many challenges during this project, here are the major ones listed:
 ## eelaine
 
 ### Contributions
+- Implemented frontend anguage switching support
+- Fixed cross-browser compatibility
+- Contributed to user management features on the frontend
+- Worked on authentication flows (JWT + cookie-based login)
+- Developed responsive UI components
+
 ### Challenges
+- Learning to use typescript in a large frontend project
+- Ensuring accessibility and usability for international users
+- Understanding browser compatibility issues
+- Integrating authentication and user management securely on the frontend
 
 ## fsolomon
 
