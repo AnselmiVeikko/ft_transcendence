@@ -5,7 +5,7 @@ import { ErrorResponseSchema } from "../schemas/UserSchema";
 import { profileAvatarSet } from "../utils/UserResponses";
 import { errorResponse } from "../utils/UserResponses";
 import { Static } from "@sinclair/typebox";
-import { verifyAccess } from "../utils/auth";
+import { verifyAccess } from "../authentication/auth";
 import { request } from "http";
 import path from "path";
 import fs from "fs/promises";
@@ -13,16 +13,12 @@ import sharp from "sharp";
 import { v4 as uuidv4 } from "uuid";
 import { cwd } from 'node:process';
 
-//type ProfileAvatarSet = FastifyRequest<{ Body: Static<typeof ProfileAvatarSchema>}>;
-
-// const AVATAR_DIR = path.resolve(process.cwd(), "uploads", "avatars");
 const AVATAR_DIR = process.env.UPLOAD_DIR || path.join(process.cwd(), "uploads", "avatars");
 
 const ALLOWED_FORMATS = ["image/jpeg", "image/png", "image/webp"];
 const MAX_SIZE = 4 * 1024 * 1024;
 
 export default async function avatarRoutes(app: FastifyInstance) {
-	// Ensure avatar directory exists
 
 	app.put("/api/user/avatar/set", {
 		schema: {
@@ -86,10 +82,11 @@ export default async function avatarRoutes(app: FastifyInstance) {
 
 			return reply.status(200).send(profileAvatarSet(userData));
 		} catch (err) {
-			console.log(err);
+
 			if (filepath) {
 				await fs.unlink(filepath).catch(() => {});
 			}
+			app.log.error(err);
 			return reply.status(500).send(errorResponse(500, "Internal server error"));
 		}
 	}
