@@ -51,7 +51,7 @@ const rightKeys = new Set<string>();
  */
 function connectWebSocket(data: GameInitData) {
   if (!data.gameWsUrl || !data.matchId || !data.accessToken) {
-    console.error("❌ Missing required data to connect:", data);
+    console.error("Missing required data to connect:", data);
     return;
   }
 
@@ -61,13 +61,13 @@ function connectWebSocket(data: GameInitData) {
   url.searchParams.set('token', data.accessToken);
   
   const wsUrl = url.toString();
-  console.log(`🔌 Attempting to connect to WebSocket: ${wsUrl.replace(/token=[^&]+/, 'token=***')}`);
+  // console.log(`Attempting to connect to WebSocket: ${wsUrl.replace(/token=[^&]+/, 'token=***')}`);
   
   try {
     ws = new WebSocket(wsUrl);
 
     ws.onopen = () => {
-      console.log("✅ Connected to game server");
+      console.log("Connected to game server");
       isConnected = true;
       updateConnectionStatus();
     };
@@ -81,7 +81,8 @@ function connectWebSocket(data: GameInitData) {
           // Trigger render (always pass welcome text even if state exists, for consistency)
           render(ctx, currentState, gameStrings?.welcome);
         } else if (message.type === "GAME_OVER") {
-          console.log("🎮 Game Over!", message.result);
+          // console.log("Game Over!", message.result);
+          console.log("Game Over!");
           const result = message.result as { winnerId: string; score: Record<string, number> };
           const isWinner = result.winnerId === gameInitData?.player.id;
           const translatedMessage = isWinner
@@ -92,7 +93,7 @@ function connectWebSocket(data: GameInitData) {
           }
           if (ctx) render(ctx, currentState, gameStrings?.welcome);
         } else {
-          console.log("📨 Received message:", message.type);
+          console.log("Received message:", message.type);
         }
       } catch (error) {
         console.error("Error parsing message:", error);
@@ -100,20 +101,21 @@ function connectWebSocket(data: GameInitData) {
     };
 
     ws.onerror = (error) => {
-      console.error("❌ WebSocket error:", error);
+      console.error("WebSocket error:", error);
       isConnected = false;
       updateConnectionStatus();
     };
 
     ws.onclose = (event) => {
-      console.log(`🔌 WebSocket connection closed. Code: ${event.code}, Reason: ${event.reason || 'No reason provided'}`);
+      // console.log(`WebSocket connection closed. Code: ${event.code}, Reason: ${event.reason || 'No reason provided'}`);
+      console.log("WebSocket connection closed.");
       isConnected = false;
       updateConnectionStatus();
       
       // Only reconnect if not a normal closure (code 1000)
       if (event.code !== 1000 && gameInitData) {
         setTimeout(() => {
-          console.log("🔄 Attempting to reconnect...");
+          console.log("Attempting to reconnect...");
           connectWebSocket(gameInitData!);
         }, 3000);
       }
@@ -213,11 +215,11 @@ window.addEventListener("message", (event) => {
       return;
     }
 
-    console.log("✅ Received game init data:", {
-      matchId: data.matchId,
-      player: data.player.username,
-      gameWsUrl: data.gameWsUrl
-    });
+    // console.log("Received game init data:", {
+    //   matchId: data.matchId,
+    //   player: data.player.username,
+    //   gameWsUrl: data.gameWsUrl
+    // });
 
     gameInitData = data;
     gameStrings = data.strings;
@@ -261,10 +263,10 @@ function updateConnectionStatus() {
   const statusEl = document.getElementById('connection-status');
   if (statusEl) {
     if (isConnected) {
-      statusEl.textContent = `🟢 ${gameStrings?.connected ?? 'Connected'}`;
+      statusEl.textContent = `${gameStrings?.connected ?? 'Connected'}`;
       statusEl.style.color = '#4ade80';
     } else {
-      statusEl.textContent = `🔴 ${gameStrings?.disconnected ?? 'Disconnected'}`;
+      statusEl.textContent = `${gameStrings?.disconnected ?? 'Disconnected'}`;
       statusEl.style.color = '#ef4444';
     }
   }
@@ -283,13 +285,13 @@ if (!document.getElementById('connection-status')) {
   statusEl.style.borderRadius = '4px';
   statusEl.style.fontSize = '14px';
   statusEl.style.zIndex = '1000';
-  statusEl.textContent = `🔴 ${gameStrings?.waiting ?? 'Waiting for game data...'}`;
+  statusEl.textContent = `${gameStrings?.waiting ?? 'Waiting for game data...'}`;
   document.body.appendChild(statusEl);
   // Update initial status text when strings are received
   const updateInitialStatus = () => {
     const waiting = gameStrings?.waiting;
     if (waiting && statusEl.textContent?.includes('Waiting')) {
-      statusEl.textContent = `🔴 ${waiting}`;
+      statusEl.textContent = `${waiting}`;
     }
   };
   // Check periodically until strings are loaded

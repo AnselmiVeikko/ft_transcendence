@@ -133,7 +133,7 @@ export class MatchGameSession {
 
     this.gameStarted = true;
     matchManager.updateMatchState(this.matchId, "playing");
-    console.log(`Game started for match ${this.matchId} (both players connected)`);
+    console.log("Game started for the match");
   }
 
   private broadcastState(state: GameState): void {
