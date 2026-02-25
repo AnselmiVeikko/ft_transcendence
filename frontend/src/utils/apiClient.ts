@@ -3,9 +3,6 @@ import axios from 'axios';
 const apiClient = axios.create({
 	baseURL: '',
 	withCredentials: true,
-	headers: {
-		'Content-Type': 'application/json',
-	},
 });
 
 let isRefreshing = false;
@@ -46,7 +43,6 @@ apiClient.interceptors.response.use(
 			}
 
 			if (isRefreshing) {
-				// If already refreshing, queue this request
 				return new Promise((resolve, reject) => {
 					failedQueue.push({ resolve, reject });
 				})
@@ -60,14 +56,11 @@ apiClient.interceptors.response.use(
 			try {
 				await apiClient.post('/api/user/refreshAccess');
 
-				// Success! Process queued requests
 				isRefreshing = false;
 				processQueue(null);
 
-				// Retry the original request
 				return apiClient(originalRequest);
 			} catch (refreshError) {
-				// Refresh failed - user needs to log in again
 				isRefreshing = false;
 				processQueue(refreshError as Error);
 

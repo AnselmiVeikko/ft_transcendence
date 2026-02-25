@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useTranslation, Trans } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { useUser } from '../context/UserContext'
 
@@ -11,7 +11,7 @@ const LogInForm = ()=> {
 	const LogInAPI = '/api/user/login';
 	const { refetch } = useUser();
 
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 	const navigate = useNavigate();
 
 	const handleSubmit = async (e: React.FormEvent) => {
@@ -71,11 +71,11 @@ const LogInForm = ()=> {
 					{error}
 				</div>
 			)}
-			{/* {success && (
+			{success && (
 				<div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
 					{success}
 				</div>
-			)} */}
+			)}
 			<div className="space-y-4">
 				<div>
 					<label htmlFor="email" className={`${formStyle}`}>

@@ -73,7 +73,6 @@ const SingleMatch = () => {
         strings: getGameStrings(t),
       };
       iframeRef.current.contentWindow?.postMessage(message, GAME_ORIGIN);
-      console.log("INITIALIZING GAME WITH ", matchId, player.userId, player.username, gameToken);
       // Resend strings after a short delay so game gets correct locale if translations loaded async (e.g. Swedish)
       setTimeout(sendStringsToGame, 150);
     }

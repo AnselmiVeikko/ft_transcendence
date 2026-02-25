@@ -28,7 +28,6 @@ const MenuCard = ({ title, colorClass, icon, to }: MenuCardProps) => (
         <span className="text-sm md:text-xl font-bold uppercase tracking-wider">{title}</span>
     </Link>
 );
-// ---------------------------------------
 
 const Menu = () => {
   const { t } = useTranslation();

@@ -25,8 +25,6 @@ const AppContent: React.FC = () => {
     );
   }
 
-  //if (!userName) return <Navigate to="/" replace />;
-
   return (
     <div className={`app-container min-h-screen ${themeColor} flex flex-col`}>
       <main className="grow">

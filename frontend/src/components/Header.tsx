@@ -1,10 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { GrClose } from 'react-icons/gr';
 import { GiHamburgerMenu } from 'react-icons/gi';
-import { FaUser, FaUserFriends, FaSignOutAlt } from 'react-icons/fa';
+import { FaUserFriends, FaSignOutAlt } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
-import { HandHelping } from 'lucide-react';
 import { useLogout } from '../hooks/useLogout';
 import { useUser } from '../context/UserContext';
 
