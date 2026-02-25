@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useRef, useEffect, useState } from 'react';
 import { useUser } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
+import apiClient from '../utils/apiClient';
 
 const colorClasses = {
   bgGlow: 'bg-glow [animation:blob-drift_20s_ease-in-out_infinite]',
@@ -61,23 +62,11 @@ const AIMatch = () => {
     try {
       // Get game token from main BE (reuse existing endpoint or create simple one)
       // For now, we'll create a simple token request
-      const tokenResponse = await fetch('/api/game/aiToken', {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ matchId }),
+      const response = await apiClient.post('/api/game/aiToken', {
+        matchId
       });
 
-      let gameToken: string;
-      if (tokenResponse.ok) {
-        const result = await tokenResponse.json();
-        gameToken = result.data?.gameToken || '';
-      } else {
-        // Fallback: use a simple token (game BE will verify it)
-        // In production, this should always succeed
-        console.warn('Failed to get AI token, using fallback');
-        gameToken = '';
-      }
+      const gameToken = response.data?.data?.gameToken || '';
 
       const message = {
         matchId: matchId,
@@ -88,11 +77,10 @@ const AIMatch = () => {
         gameWsUrl: `wss://${CURRENT_HOST}:8443/game-ws/ws`,
         accessToken: gameToken,
         strings: getGameStrings(t),
-        gameMode: 'AI', // Signal this is an AI match
+        gameMode: 'AI',
       };
       
       iframeRef.current.contentWindow?.postMessage(message, GAME_ORIGIN);
-      console.log("INITIALIZING AI MATCH WITH ", matchId, userId, userName);
       setGameStarted(true);
       
       // Resend strings after a short delay

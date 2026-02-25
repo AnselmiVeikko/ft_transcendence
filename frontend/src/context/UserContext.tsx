@@ -1,4 +1,11 @@
-import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  type ReactNode,
+} from 'react';
 import apiClient from '../utils/apiClient';
 import axios from 'axios';
 
@@ -28,27 +35,35 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<UserData>(initialState);
   const [loading, setLoading] = useState<boolean>(true);
 
-	const logout = useCallback(() => {
+  const logout = useCallback(() => {
     setUser(initialState);
   }, []);
 
   const fetchUser = useCallback(async () => {
+    const hasLoggedInCookie = document.cookie
+      .split(';')
+      .some((item) => item.trim().startsWith('isLoggedIn='));
+
+    if (!hasLoggedInCookie) {
+      setLoading(false);
+      return;
+    }
     try {
       const { data } = await apiClient.get('/api/user/profile/self');
       const { userName, userId, email, avatarUrl } = data.data;
 
-       setUser({
+      setUser({
         userName,
         userId,
         email,
         avatarUrl,
       });
     } catch (e) {
-		if (axios.isAxiosError(e) && e.response?.status === 401) {
-      	  setUser(initialState);
-		} else {
-		  console.error('Unexpected user fetch error:', e);
-		}
+      if (axios.isAxiosError(e) && e.response?.status === 401) {
+        setUser(initialState);
+      } else {
+        console.error('Unexpected user fetch error:', e);
+      }
     } finally {
       setLoading(false);
     }
@@ -59,10 +74,14 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   }, [fetchUser]);
 
   return (
-    <UserContext.Provider value={{ ...user, loading, refetch: fetchUser, logout }}>
-	  <div className={`transition-opacity duration-300 ${loading ? 'opacity-70' : 'opacity-100'}`}>
+    <UserContext.Provider
+      value={{ ...user, loading, refetch: fetchUser, logout }}
+    >
+      <div
+        className={`transition-opacity duration-300 ${loading ? 'opacity-70' : 'opacity-100'}`}
+      >
         {children}
-	  </div>
+      </div>
     </UserContext.Provider>
   );
 };

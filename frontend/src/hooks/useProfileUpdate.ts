@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import apiClient from '../utils/apiClient';
 
 export const useProfileUpdate = (onSuccess: (name: string) => void) => {
   const [isSaving, setIsSaving] = useState(false);
@@ -6,20 +7,17 @@ export const useProfileUpdate = (onSuccess: (name: string) => void) => {
   const updateUsername = async (newUsername: string) => {
     setIsSaving(true);
     try {
-      const response = await fetch('/api/user/profile/update', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userName: newUsername }),
+      const response = await apiClient.put('/api/user/profile/update', {
+        userName: newUsername,
       });
 
-      const data = await response.json();
+      const updatedName = response.data.data.userName;
 
-      if (!response.ok) throw new Error(data.message || 'Update failed');
-
-      onSuccess(data.data.userName);
+      onSuccess(updatedName);
       return { success: true };
     } catch (err: any) {
-      alert(err.message);
+	  const message = err.response?.data?.message || err.message || "Update failed";
+      alert(message);
       return { success: false };
     } finally {
       setIsSaving(false);

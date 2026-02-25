@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useUser } from '../context/UserContext';
+import apiClient from '../utils/apiClient';
 
 interface AvatarUpdateResponse {
   message: string;
@@ -21,17 +22,9 @@ export const useAvatarUpdate = (onSuccess: (newUrl: string) => void) => {
     formData.append('avatar', file);
 
     try {
-      const response = await fetch('/api/user/avatar/set', {
-        method: 'PUT',
-        body: formData,
-      });
+      const response = await apiClient.put<AvatarUpdateResponse>('/api/user/avatar/set', formData);
 
-      const result: AvatarUpdateResponse = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.message || 'Upload failed');
-      }
-
+      const result = response.data;
       const newAvatarUrl = `/avatars/${result.data.avatarName}?t=${Date.now()}`;
 
       onSuccess(newAvatarUrl);

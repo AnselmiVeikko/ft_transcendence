@@ -48,6 +48,13 @@ export function setCookies(reply: FastifyReply, userId: string) {
             sameSite: "strict",
             path: "/",
             maxAge: 7 * 24 * 60 * 60 // 7 days
+		})
+		.setCookie("isLoggedIn", "true", {
+			httpOnly: false,
+			secure: true,
+			sameSite: "none",
+			path: "/",
+			maxAge: 7 * 24 * 60 * 60
         });
 
     return reply;
@@ -59,6 +66,9 @@ export function clearCookies(reply: FastifyReply)
         path: "/",
     });
     reply.clearCookie("refreshJWT", {
+        path: "/",
+    });
+	reply.clearCookie("isLoggedIn", {
         path: "/",
     });
 }
