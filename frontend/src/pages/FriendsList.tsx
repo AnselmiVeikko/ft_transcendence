@@ -356,7 +356,7 @@ const FriendsList = () => {
         {filteredRequests.length > 0 && (
           <div className="mb-8">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              Friend Requests
+              {t('friend_requests')}
             </h2>
             <div className="space-y-3">
               {sortedFilteredRequests.map((request: FriendRequest) => (
@@ -381,7 +381,7 @@ const FriendsList = () => {
         {filteredSuggestions.length > 0 && (
           <div>
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              Suggestions
+              {t('suggestions')}
             </h2>
             <div className="space-y-3">
               {sortedFilteredSuggestions.map((suggestion) => (
