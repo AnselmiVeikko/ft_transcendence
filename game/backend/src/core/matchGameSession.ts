@@ -189,16 +189,29 @@ export class MatchGameSession {
   }
 
   private handleGameEndByWinner(winnerName: string): void {
+    const match = matchManager.getMatch(this.matchId);
     const players = matchManager.getMatchPlayers(this.matchId);
     const player1 = players[0];
     const player2 = players[1];
     if (!player1) return;
 
-    const winnerId = getWinnerIdFromWinnerName(players, winnerName);
-    if (!winnerId) return;
-
     const state = this.game?.getState();
     if (!state) return;
+
+    // Special handling for AI matches:
+    // - When AI wins, winnerName === "AI", which does not map to a userId
+    if (match?.gameMode === "AI") {
+      const humanPlayer = player1;
+      const humanWon = winnerName === humanPlayer.username;
+      const winnerId = humanWon ? humanPlayer.userId : "AI";
+
+      const score = buildScoreFromState(state, humanPlayer, undefined);
+      this.finalizeMatch(winnerId, score, "normal");
+      return;
+    }
+
+    const winnerId = getWinnerIdFromWinnerName(players, winnerName);
+    if (!winnerId) return;
 
     const score = buildScoreFromState(state, player1, player2);
     this.finalizeMatch(winnerId, score, "normal");
