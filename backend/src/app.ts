@@ -1,6 +1,5 @@
 import Fastify from "fastify";
 import multipart from "@fastify/multipart";
-import dotenv from "dotenv";
 import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import cors from "@fastify/cors";
 import fastifyCookie from "@fastify/cookie";
@@ -20,15 +19,14 @@ import path from "path";
 import fastifyStatic from "@fastify/static";
 import matchResult from "./routes/MatchResult";
 import aiToken from "./routes/AIToken";
-
-dotenv.config();
+import { env } from "./utils/validateEnv";
 
 const app = Fastify({
 	logger: true,
 	trustProxy: true
 }).withTypeProvider<TypeBoxTypeProvider>();
 
-const port = process.env.BACKEND_PORT? Number(process.env.BACKEND_PORT) : 3000;
+const port = env.BACKEND_PORT;
 
 async function buildServer() {
 	// Register CORS plugin
